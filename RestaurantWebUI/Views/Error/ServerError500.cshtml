@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Sunucu Hatası</title>
+    <link rel="icon" href="/userThema/assets/img/favicon.png">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Bir şeyler ters gitti. Sunucu hatası nedeniyle işleminiz gerçekleştirilemedi. Lütfen daha sonra tekrar deneyin.">
+    <meta name="author" content="Doğukan Koşan">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <style>
+        ::selection {
+            background-color: #e63946;
+            color: white;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fff0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-container {
+            max-width: 600px;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: 700;
+            color: #e63946;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            margin: 1rem 0;
+        }
+        .suggestion {
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        .home-btn {
+            display: inline-block;
+            background-color: #e63946;
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+            .home-btn:hover {
+                background-color: #d62828;
+            }
+        @@media (max-width: 480px) {
+            .error-code
+
+        {
+            font-size: 4rem;
+        }
+        .error-message {
+            font-size: 1.25rem;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">500</div>
+        <div class="error-message">Sunucuda bir hata oluştu.</div>
+        <div class="suggestion">Şu an bir sorun yaşıyoruz. Lütfen daha sonra tekrar deneyin veya ana sayfaya dönebilirsiniz.</div>
+        <a href="/" class="home-btn">Ana Sayfaya Dön</a>
+    </div>
+</body>
+</html>

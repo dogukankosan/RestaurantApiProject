@@ -1,0 +1,20 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace RestaurantAPI.Entities
+{
+    public class Service
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ServiceID { get; set; } 
+        [Required]
+        [MaxLength(100)]
+        public string ServiceTitle { get; set; }
+        [MaxLength(1000)]
+        public string ServiceDescription { get; set; }
+        [Required]
+        [MaxLength(200)]
+        public string ServiceIconUrl { get; set; }
+    }
+}

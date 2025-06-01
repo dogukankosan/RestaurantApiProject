@@ -1,0 +1,92 @@
+﻿    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+        @* <meta property="og:url" content="https://www.seninrestorant.com">  bunu düzenliyecez *@ 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Restorant | En Lezzetli Yemekler Burada</title>
+        <meta name="description" content="Restoranımızda hamburger, balık, patates kızartması ve daha fazlası! Hızlı servis ve lezzetli menüler.">
+        <meta name="keywords" content="Restoran, Yemek Siparişi, Hamburger, Balık, Patates Kızartması, Fast Food, Menü">
+        <meta name="author" content="Doğukan Koşan">
+        <meta property="og:title" content="Restoran | En Lezzetli Yemekler">
+        <meta property="og:description" content="Restoranımızda hızlı ve lezzetli yemekler sizi bekliyor.">
+        <link rel="apple-touch-icon" href="/userThema/assets/img/favicon.png">
+        <meta property="og:image" content="/userThema/assets/img/favicon.png">
+        <meta property="og:type" content="website">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy"
+          content="
+        default-src 'self';
+        script-src 'self' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maps.googleapis.com;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
+        font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;
+        img-src 'self' data: https:;
+        frame-src 'self' https://www.google.com https://maps.googleapis.com;
+        child-src 'self' https://www.google.com https://maps.googleapis.com;
+        connect-src 'self';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+">
+        <meta http-equiv="X-Content-Type-Options" content="nosniff">
+        <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+        <meta name="robots" content="index, follow">
+        <link rel="icon" href="/userThema/assets/img/favicon.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Inter:wght@400;600;700&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/userThema/assets/vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/userThema/assets/vendor/bootstrap-icons/bootstrap-icons.css">
+        <link rel="stylesheet" href="/userThema/assets/vendor/aos/aos.css">
+        <link rel="stylesheet" href="/userThema/assets/vendor/glightbox/css/glightbox.min.css">
+        <link rel="stylesheet" href="/userThema/assets/vendor/swiper/swiper-bundle.min.css">
+        <link rel="stylesheet" href="/userThema/assets/css/main.css">          
+    </head>
+    <body class="index-page">
+        <header id="header" class="header d-flex align-items-center sticky-top">
+            <div class="container position-relative d-flex align-items-center justify-content-between">
+                <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
+                    <h1 class="sitename">Restoran</h1>
+                    <span>.</span>
+                </a>
+                <nav id="navmenu" class="navmenu">
+                    <ul>
+                        <li><a href="#hero" class="active">Anasayfa<br></a></li>
+                        <li><a href="#about">Hakkımızda</a></li>
+                        <li><a href="#menu">Menüler</a></li>
+                        <li><a href="#events">Etkinlikler</a></li>
+                        <li><a href="#chefs">Şefler</a></li>
+                        <li><a href="#gallery">Galeri</a></li>
+                        <li><a href="#contact">İletişim</a></li>
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                </nav>
+                <a class="btn-getstarted" href="#book-a-table">Rezervasyon Yap</a>
+            </div>
+        </header>
+        <main class="main">
+            @await Component.InvokeAsync("FeatureComponentPartial")
+            @await Component.InvokeAsync("AboutComponentPartial")
+            @await Component.InvokeAsync("ServiceComponentPartial")
+            @await Component.InvokeAsync("ReportComponentPartial")
+            @await Component.InvokeAsync("MenuComponentPartial")
+            @await Component.InvokeAsync("TestimonialComponentPartial")
+            @await Component.InvokeAsync("EventsComponentPartial")
+            @await Component.InvokeAsync("ChefsComponentPartial")
+            @await Component.InvokeAsync("GalleryComponentPartial")
+            @await Component.InvokeAsync("ReservationComponentPartial")
+            @await Component.InvokeAsync("ContactComponentPartial")
+    @RenderBody()
+        </main>
+            @await Component.InvokeAsync("FooterComponentPartial")
+        <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+        <div id="preloader"></div>
+        <script src="/userThema/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/userThema/assets/vendor/php-email-form/validate.js"></script>
+        <script src="/userThema/assets/vendor/aos/aos.js"></script>
+        <script src="/userThema/assets/vendor/glightbox/js/glightbox.min.js"></script>
+        <script src="/userThema/assets/vendor/purecounter/purecounter_vanilla.js"></script>
+        <script src="/userThema/assets/vendor/swiper/swiper-bundle.min.js"></script>
+        <script src="/userThema/assets/js/main.js"></script>
+    </body>
+    </html>
