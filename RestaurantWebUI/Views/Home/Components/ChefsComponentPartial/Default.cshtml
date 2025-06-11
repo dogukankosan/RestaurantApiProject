@@ -1,64 +1,86 @@
-﻿<section id="chefs" class="chefs section">
+﻿@using RestaurantWebUI.Dtos.ChefDtos
+@model List<ResultChefDto>
+
+@{
+    if (Model == null || !Model.Any())
+    {
+        <div class="chefs section">
+            <div class="container section-title">
+                <h2>Gastronomi Ustalarımız</h2>
+                <p>Şu anda gösterilecek şef bulunmuyor.</p>
+            </div>
+        </div>
+        return;
+    }
+    string placeholder = "/userThema/assets/img/gallery/placeholder.jpg";
+}
+<section id="chefs" class="chefs section">
     <div class="container section-title" data-aos="fade-up">
-        <h2>Şefler</h2>
-        <p><span>Bizim</span> <span class="description-title">Profesyonel Şefler<br></span></p>
+        <h2>Gastronomi Ustalarımız</h2>
+        <p><span>Lezzetin</span> <span class="description-title">Yaratıcıları</span></p>
     </div>
     <div class="container">
         <div class="row gy-4">
-            <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                <div class="team-member">
-                    <div class="member-img">
-                        <img src="/userThema/assets/img/chefs/chefs-1.jpg" class="img-fluid" alt="">
-                        <div class="social">
-                            <a href=""><i class="bi bi-twitter-x"></i></a>
-                            <a href=""><i class="bi bi-facebook"></i></a>
-                            <a href=""><i class="bi bi-instagram"></i></a>
-                            <a href=""><i class="bi bi-linkedin"></i></a>
+            @foreach (var item in Model)
+            {
+                string imgSrc = placeholder;
+                if (item.ChefImage?.Length > 0)
+                {
+                    try
+                    {
+                        imgSrc = $"data:image/jpeg;base64,{Convert.ToBase64String(item.ChefImage)}";
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-member">
+                        <div class="member-img">
+                            <img src="@imgSrc"
+                                 alt="@item.ChefNameSurname"
+                                 class="img-fluid"
+                                 loading="lazy" />
+                            <div class="social">
+                                @if (!string.IsNullOrWhiteSpace(item.ChefTwitterLink))
+                                {
+                                    <a target="_blank" rel="noopener"
+                                       href="@item.ChefTwitterLink">
+                                        <i class="bi bi-twitter"></i>
+                                    </a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.ChefFacebookLink))
+                                {
+                                    <a target="_blank" rel="noopener"
+                                       href="@item.ChefFacebookLink">
+                                        <i class="bi bi-facebook"></i>
+                                    </a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.ChefInstagramLink))
+                                {
+                                    <a target="_blank" rel="noopener"
+                                       href="@item.ChefInstagramLink">
+                                        <i class="bi bi-instagram"></i>
+                                    </a>
+                                }
+                                @if (!string.IsNullOrWhiteSpace(item.ChefLinkedinLink))
+                                {
+                                    <a target="_blank" rel="noopener"
+                                       href="@item.ChefLinkedinLink">
+                                        <i class="bi bi-linkedin"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                        <div class="member-info">
+                            <h4>@(item.ChefNameSurname ?? "İsim Belirtilmemiş")</h4>
+                            <span>@(item.ChefTitle ?? "")</span>
+                            <p>@(item.ChefDescription ?? "")</p>
                         </div>
                     </div>
-                    <div class="member-info">
-                        <h4>Walter White</h4>
-                        <span>Master Chef</span>
-                        <p>Velit aut quia fugit et et. Dolorum ea voluptate vel tempore tenetur ipsa quae aut. Ipsum exercitationem iure minima enim corporis et voluptate.</p>
-                    </div>
                 </div>
-            </div>
-            <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                <div class="team-member">
-                    <div class="member-img">
-                        <img src="/userThema/assets/img/chefs/chefs-2.jpg" class="img-fluid" alt="">
-                        <div class="social">
-                            <a href=""><i class="bi bi-twitter-x"></i></a>
-                            <a href=""><i class="bi bi-facebook"></i></a>
-                            <a href=""><i class="bi bi-instagram"></i></a>
-                            <a href=""><i class="bi bi-linkedin"></i></a>
-                        </div>
-                    </div>
-                    <div class="member-info">
-                        <h4>Sarah Jhonson</h4>
-                        <span>Patissier</span>
-                        <p>Quo esse repellendus quia id. Est eum et accusantium pariatur fugit nihil minima suscipit corporis. Voluptate sed quas reiciendis animi neque sapiente.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                <div class="team-member">
-                    <div class="member-img">
-                        <img src="/userThema/assets/img/chefs/chefs-3.jpg" class="img-fluid" alt="">
-                        <div class="social">
-                            <a href="" target="_blank"><i class="bi bi-twitter-x"></i></a>
-                            <a href="" target="_blank" ><i class="bi bi-facebook"></i></a>
-                            <a href="" target="_blank" ><i class="bi bi-instagram"></i></a>
-                            <a href="" target="_blank" ><i class="bi bi-linkedin"></i></a>
-                        </div>
-                    </div>
-                    <div class="member-info">
-                        <h4>William Anderson</h4>
-                        <span>Cook</span>
-                        <p>Vero omnis enim consequatur. Voluptas consectetur unde qui molestiae deserunt. Voluptates enim aut architecto porro aspernatur molestiae modi.</p>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>

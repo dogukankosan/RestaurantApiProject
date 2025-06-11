@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantAPI.Entities
@@ -16,5 +17,8 @@ namespace RestaurantAPI.Entities
         [Required]
         [MaxLength(200)]
         public string ServiceIconUrl { get; set; }
+
+        [DefaultValue(true)] 
+        public bool ServiceStatus { get; set; } = true;
     }
 }

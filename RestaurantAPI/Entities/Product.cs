@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantAPI.Entities
@@ -15,9 +16,10 @@ namespace RestaurantAPI.Entities
         public string ProductDescription { get; set; }
         [Required]
         [Range(1, 999999)]
-        public decimal Price { get; set; }
+        public decimal ProductPrice { get; set; }
         [Required]
         public byte[] ProductImageData { get; set; }
+        [DefaultValue(true)]
         public bool ProductStatus { get; set; } = true;
         [Required]
         public int CategoryID { get; set; }

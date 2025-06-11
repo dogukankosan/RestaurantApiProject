@@ -1,55 +1,113 @@
-﻿<footer id="footer" class="footer dark-background">
+﻿@using System.Web
+@model RestaurantWebUI.Dtos.CompanyInfoDtos.ResultCompanyInfoDto
+
+@{
+    if (Model == null)
+    {
+        <footer id="footer" class="footer dark-background">
+            <div class="container text-center py-4">
+                <p>Bilgi mevcut değil.</p>
+            </div>
+        </footer>
+        return;
+    }
+    string FormatMultiline(string text) =>
+        string.IsNullOrWhiteSpace(text)
+            ? ""
+            : HttpUtility.HtmlEncode(text)
+                 .Replace("\r\n", "<br />")
+                 .Replace("\n", "<br />");
+
+    string rawPhone = Model.CompanyInfoPhone ?? "";
+    string phoneDigits = new string(rawPhone.Where(char.IsDigit).ToArray());
+    string prettyPhone;
+    try
+    {
+        prettyPhone = RestaurantWebUI.HelpersMethod.PhoneFormatter
+                          .ToPrettyPhone(rawPhone);
+    }
+    catch
+    {
+        prettyPhone = HttpUtility.HtmlEncode(rawPhone);
+    }
+
+    string SafeUrl(string url) =>
+        Uri.TryCreate(url, UriKind.Absolute, out var u)
+            && (u.Scheme == Uri.UriSchemeHttp || u.Scheme == Uri.UriSchemeHttps)
+        ? url
+        : "#";
+    string githubUrl = SafeUrl(Model.CompanyInfoGithubLink ?? "");
+    string siteUrl = SafeUrl(Model.CompanyInfoWebSiteLink ?? "");
+    string instagramUrl = SafeUrl(Model.CompanyInfoInstagramLink ?? "");
+    string linkedinUrl = SafeUrl(Model.CompanyInfoLinkedinLink ?? "");
+}
+<footer id="footer" class="footer dark-background">
     <div class="container">
         <div class="row gy-3">
             <div class="col-lg-3 col-md-6 d-flex">
                 <i class="bi bi-geo-alt icon"></i>
                 <div class="address">
                     <h4>Adres</h4>
-                    <p>A108 Adam Street</p>
-                    <p>New York, NY 535022</p>
-                    <p></p>
+                    <p>@Html.Raw(FormatMultiline(Model.CompanyInfoAddress))</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 d-flex">
                 <i class="bi bi-telephone icon"></i>
                 <div>
                     <h4>İletişim</h4>
-                    <p>
-                        <strong>Telefon: </strong>  <a href="https://wa.me/155895548855" target="_blank">
-                            <span>+1 5589 55488 55</span>                 
-                        </a><br>
-                        <strong>Email :</strong>    <a href="mailto:info@example.com">
-                            <span>info@example.com</span>
-                        </a>
-                            <br>
-                    </p>
+                    @if (!string.IsNullOrEmpty(phoneDigits))
+                    {
+                        <p class="mb-1">
+                            <strong>Telefon: </strong>
+                            <a href="tel:@phoneDigits">@prettyPhone</a>
+                        </p>
+                        <p>
+                            <strong>WhatsApp: </strong>
+                            <a href="https://wa.me/@phoneDigits" target="_blank" rel="noopener">
+                                @prettyPhone
+                            </a>
+                        </p>
+                    }
+                    else
+                    {
+                        <p>Telefon bilgisi yok.</p>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoMail))
+                    {
+                        <p>
+                            <strong>Email: </strong>
+                            <a href="mailto:@Html.Encode(Model.CompanyInfoMail)">
+                                @Html.Encode(Model.CompanyInfoMail)
+                            </a>
+                        </p>
+                    }
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 d-flex">
                 <i class="bi bi-clock icon"></i>
                 <div>
                     <h4>Açılış Saati</h4>
-                    <p>
-                        <strong>Mon-Sat:</strong> <span>11AM - 23PM</span><br>
-                        <strong>Sunday</strong>: <span>Closed</span>
-                    </p>
+                    <p>@Html.Raw(FormatMultiline(Model.CompanyInfoOpenClosed))</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4>Takip Et</h4>
                 <div class="social-links d-flex">
-                    <a href="#" target="_blank" class="twitter"><i class="bi bi-twitter-x"></i></a>
-                    <a href="#" target="_blank" class="facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="#" target="_blank" class="instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="#" target="_blank" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    <a href="@Html.Encode(githubUrl)" target="_blank" rel="noopener" class="github"><i class="bi bi-github"></i></a>
+                    <a href="@Html.Encode(siteUrl)" target="_blank" rel="noopener" class="site"><i class="bi bi-globe"></i></a>
+                    <a href="@Html.Encode(instagramUrl)" target="_blank" rel="noopener" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="@Html.Encode(linkedinUrl)" target="_blank" rel="noopener" class="linkedin"><i class="bi bi-linkedin"></i></a>
                 </div>
             </div>
         </div>
     </div>
     <div class="container copyright text-center mt-4">
-        <p>© <span>Copyright</span> <strong class="px-1 sitename">Restoran</strong> <span>All Rights Reserved</span></p>
+        @await Component.InvokeAsync("FooterCompanyNameComponentPartial")
         <div class="credits">
-            Designed by <a target="_blank" href="https://www.linkedin.com/in/dogukan-kosan/">Doğukan Koşan</a>
+            Designed by
+            <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/dogukan-kosan/">
+                Doğukan Koşan
+            </a>
         </div>
     </div>
 </footer>

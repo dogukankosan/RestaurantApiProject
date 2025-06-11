@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantAPI.Entities
@@ -18,12 +19,14 @@ namespace RestaurantAPI.Entities
         [Required]
         [MaxLength(20)]
         public string ReservationPhone { get; set; }
+        [Column(TypeName = "smalldatetime")]
         [Required]
         public DateTime ReservationDate { get; set; }
         [Required]
         [Range(1, 999999)]
         public int ReservationCountOfPeople { get; set; }
         public string ReservationMessage { get; set; }
-        public bool ReservationStatus { get; set; } = true;
+        [DefaultValue(false)]
+        public bool ReservationStatus { get; set; } = false;
     }
 }

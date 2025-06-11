@@ -1,5 +1,46 @@
-﻿<section id="events" class="events section">
+﻿@using RestaurantWebUI.Dtos.EventDtos
+@model List<RestaurantWebUI.Dtos.EventDtos.ResultEventDto>
+
+@{
+    if (Model == null || !Model.Any())
+    {
+        <section id="events" class="events section">
+            <div class="container section-title">
+                <h2>Gurme Etkinliklerimiz</h2>
+                <p>Henüz etkinlik bulunmuyor.</p>
+            </div>
+        </section>
+        return;
+    }
+    string placeholderImageUrl = Url.Content("~/userThema/assets/img/events-1.jpg");
+    List<string> slideBackgrounds = new();
+    foreach (ResultEventDto evt in Model)
+    {
+        string bg;
+        if (evt.EventImage?.Length > 0)
+        {
+            try
+            {
+                bg = $"data:image/jpeg;base64,{Convert.ToBase64String(evt.EventImage)}";
+            }
+            catch
+            {
+                bg = placeholderImageUrl;
+            }
+        }
+        else
+        {
+            bg = placeholderImageUrl;
+        }
+        slideBackgrounds.Add(bg);
+    }
+}
+<section id="events" class="events section">
     <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Gurme Etkinliklerimiz</h2>
+            <p>Lezzetin <span class="description-title">Eşsiz Etkinlikleri</span></p>
+        </div>
         <div class="swiper init-swiper">
             <script type="application/json" class="swiper-config">
                 {
@@ -27,34 +68,22 @@
                 }
             </script>
             <div class="swiper-wrapper">
-                <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(/userThema/assets/img/events-1.jpg)">
-                    <h3>Custom Parties</h3>
-                    <div class="price align-self-start">$99</div>
-                    <p class="description">
-                        Quo corporis voluptas ea ad. Consectetur inventore sapiente ipsum voluptas eos omnis facere. Enim facilis veritatis id est rem repudiandae nulla expedita quas.
-                    </p>
-                </div>
-                <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(/userThema/assets/img/events-2.jpg)">
-                    <h3>Private Parties</h3>
-                    <div class="price align-self-start">$289</div>
-                    <p class="description">
-                        In delectus sint qui et enim. Et ab repudiandae inventore quaerat doloribus. Facere nemo vero est ut dolores ea assumenda et. Delectus saepe accusamus aspernatur.
-                    </p>
-                </div>
-                <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(/userThema/assets/img/events-3.jpg)">
-                    <h3>Birthday Parties</h3>
-                    <div class="price align-self-start">$499</div>
-                    <p class="description">
-                        Laborum aperiam atque omnis minus omnis est qui assumenda quos. Quis id sit quibusdam. Esse quisquam ducimus officia ipsum ut quibusdam maxime. Non enim perspiciatis.
-                    </p>
-                </div>
-                <div class="swiper-slide event-item d-flex flex-column justify-content-end" style="background-image: url(/userThema/assets/img/events-4.jpg)">
-                    <h3>Wedding Parties</h3>
-                    <div class="price align-self-start">$899</div>
-                    <p class="description">
-                        Laborum aperiam atque omnis minus omnis est qui assumenda quos. Quis id sit quibusdam. Esse quisquam ducimus officia ipsum ut quibusdam maxime. Non enim perspiciatis.
-                    </p>
-                </div>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    ResultEventDto item = Model[i];
+                    string bgUrl = slideBackgrounds[i];
+                    <div class="swiper-slide event-item d-flex flex-column justify-content-end"
+                         style="background-image: url('@bgUrl'); background-size: cover;"
+                         loading="lazy">
+                        <h3>@Html.Encode(item.EventName ?? "")</h3>
+                        <div class="price align-self-start">
+                            ₺ @item.EventPrice.ToString("N2")
+                        </div>
+                        <p class="description">
+                            @Html.Encode(item.EventDetails ?? "")
+                        </p>
+                    </div>
+                }
             </div>
             <div class="swiper-pagination"></div>
         </div>

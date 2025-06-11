@@ -1,7 +1,42 @@
-﻿<section id="gallery" class="gallery section light-background">
+﻿@using RestaurantWebUI.Dtos.GalleryImageDtos
+@model List<ResultGalleryImageDto>
+
+@{
+    if (Model == null || !Model.Any())
+    {
+        <section id="gallery" class="gallery section light-background">
+            <div class="container section-title">
+                <h2>Galeri</h2>
+                <p>Görüntü bulunmuyor.</p>
+            </div>
+        </section>
+        return;
+    }
+    string placeholderUrl = Url.Content("~/userThema/assets/img/gallery/placeholder.jpg");
+    List<string> slides = new List<string>();
+    foreach (var img in Model)
+    {
+        if (img.ImageByte?.Length > 0)
+        {
+            try
+            {
+                slides.Add($"data:image/jpeg;base64,{Convert.ToBase64String(img.ImageByte)}");
+            }
+            catch
+            {
+                slides.Add(placeholderUrl);
+            }
+        }
+        else
+        {
+            slides.Add(placeholderUrl);
+        }
+    }
+}
+<section id="gallery" class="gallery section light-background">
     <div class="container section-title" data-aos="fade-up">
         <h2>Galeri</h2>
-        <p><span>Bizim</span> <span class="description-title">Restoranımız</span></p>
+        <p><span>Restoranımızdan</span> <span class="description-title">Görüntüler</span></p>
     </div>
     <div class="container" data-aos="fade-up" data-aos-delay="100">
         <div class="swiper init-swiper">
@@ -9,9 +44,7 @@
                 {
                   "loop": true,
                   "speed": 600,
-                  "autoplay": {
-                    "delay": 5000
-                  },
+                  "autoplay": { "delay": 5000 },
                   "slidesPerView": "auto",
                   "centeredSlides": true,
                   "pagination": {
@@ -20,30 +53,27 @@
                     "clickable": true
                   },
                   "breakpoints": {
-                    "320": {
-                      "slidesPerView": 1,
-                      "spaceBetween": 0
-                    },
-                    "768": {
-                      "slidesPerView": 3,
-                      "spaceBetween": 20
-                    },
-                    "1200": {
-                      "slidesPerView": 5,
-                      "spaceBetween": 20
-                    }
+                    "320": { "slidesPerView": 1, "spaceBetween": 0 },
+                    "768": { "slidesPerView": 3, "spaceBetween": 20 },
+                    "1200": { "slidesPerView": 5, "spaceBetween": 20 }
                   }
                 }
             </script>
             <div class="swiper-wrapper align-items-center">
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-1.jpg"><img src="/userThema/assets/img/gallery/gallery-1.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-2.jpg"><img src="/userThema/assets/img/gallery/gallery-2.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-3.jpg"><img src="/userThema/assets/img/gallery/gallery-3.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-4.jpg"><img src="/userThema/assets/img/gallery/gallery-4.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-5.jpg"><img src="/userThema/assets/img/gallery/gallery-5.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-6.jpg"><img src="/userThema/assets/img/gallery/gallery-6.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-7.jpg"><img src="/userThema/assets/img/gallery/gallery-7.jpg" class="img-fluid" alt=""></a></div>
-                <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="/userThema/assets/img/gallery/gallery-8.jpg"><img src="/userThema/assets/img/gallery/gallery-8.jpg" class="img-fluid" alt=""></a></div>
+                @for (int i = 0; i < slides.Count; i++)
+                {
+                    var src = slides[i];
+                    <div class="swiper-slide">
+                        <a class="glightbox"
+                           data-gallery="images-gallery"
+                           href="@src">
+                            <img src="@src"
+                                 class="img-fluid"
+                                 alt="Gallery image"
+                                 loading="lazy" />
+                        </a>
+                    </div>
+                }
             </div>
             <div class="swiper-pagination"></div>
         </div>

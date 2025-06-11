@@ -5,7 +5,7 @@
     </div>
     <div class="container">
         <div class="row g-0" data-aos="fade-up" data-aos-delay="100">
-            <div class="col-lg-4 reservation-img" style="background-image: url(userThema/assets/img/reservation.jpg);"></div>
+            @await Component.InvokeAsync("ReservationImageComponentPartial")
             <div class="col-lg-8 d-flex align-items-center reservation-form-bg" data-aos="fade-up" data-aos-delay="200">
                 <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form">
                     <div class="row gy-4">
@@ -16,7 +16,7 @@
                             <input type="email" class="form-control" name="email" id="email" placeholder="Mail Adresi" required="">
                         </div>
                         <div class="col-lg-4 col-md-6">
-                            <input type="tel" class="form-control" name="phone" id="phone" placeholder="Telefon" required="">
+                            <input type="text" class="form-control" name="phone" id="phone" placeholder="Telefon" required="">
                         </div>
                         <div class="col-lg-4 col-md-6">
                             <input type="date" name="date" class="form-control" id="date" placeholder="Rezervasyon Tarihi" required="">

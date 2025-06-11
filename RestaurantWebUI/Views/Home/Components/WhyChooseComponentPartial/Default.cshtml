@@ -1,0 +1,21 @@
+﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+
+@{
+    if (Model == null || string.IsNullOrWhiteSpace(Model.AboutWhyChoose))
+    {
+        <div class="why-box">
+            <h3>Neden Biz ?</h3>
+            <p>Henüz içerik eklenmemiş.</p>
+        </div>
+        return;
+    }
+    string rawText = Model.AboutWhyChoose.Trim();
+    string encoded = System.Net.WebUtility.HtmlEncode(rawText);
+    string formattedText = encoded
+        .Replace("\r\n", "<br/>")
+        .Replace("\n", "<br/>");
+}
+<div class="why-box" data-aos="fade-up" data-aos-delay="100">
+    <h3>Neden Biz ?</h3>
+    <p>@Html.Raw(formattedText)</p>
+</div>

@@ -865,17 +865,7 @@
       }
     }, {
       key: "shouldChange",
-      value: function shouldChange() {
-        var doChange = false;
-        var currentXInt = Math.abs(this.currentX);
-        if (currentXInt >= this.toleranceX) {
-          var dragDir = this.currentX > 0 ? 'right' : 'left';
-          if (dragDir == 'left' && this.slide !== this.slide.parentNode.lastChild || dragDir == 'right' && this.slide !== this.slide.parentNode.firstChild) {
-            doChange = dragDir;
-          }
-        }
-        return doChange;
-      }
+
     }, {
       key: "shouldClose",
       value: function shouldClose() {

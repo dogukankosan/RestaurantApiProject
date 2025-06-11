@@ -1,0 +1,17 @@
+﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+
+@{
+    if (Model == null)
+    {
+        <div class="company-name">
+            Şirket bilgileri yüklenemedi.
+        </div>
+        return;
+    }
+    string companyName = string.IsNullOrWhiteSpace(Model.AboutCompanyName)
+        ? "Restoran"
+        : Model.AboutCompanyName;
+}
+<div class="company-name" data-aos="fade-up" data-aos-delay="100">
+    <h1>@companyName</h1>
+</div>

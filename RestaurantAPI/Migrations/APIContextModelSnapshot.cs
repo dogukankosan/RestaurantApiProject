@@ -22,6 +22,89 @@ namespace RestaurantAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("RestaurantAPI.Entities.About", b =>
+                {
+                    b.Property<int>("AboutID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutID"), 1L, 1);
+
+                    b.Property<string>("AboutCompanyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("AboutDesc")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("AboutImage1")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("AboutImage2")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("AboutReportImage")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("AboutRezervationImage")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("AboutWhyChoose")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("AboutID");
+
+                    b.ToTable("Abouts");
+                });
+
+            modelBuilder.Entity("RestaurantAPI.Entities.AdminLog", b =>
+                {
+                    b.Property<int>("LogID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogID"), 1L, 1);
+
+                    b.Property<DateTime>("LogDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("LogMessage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LogType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LogUserGeo")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
+
+                    b.Property<string>("LogUserIPAdress")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("LogUserInfo")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("LogID");
+
+                    b.ToTable("AdminLogs");
+                });
+
             modelBuilder.Entity("RestaurantAPI.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryID")
@@ -55,9 +138,24 @@ namespace RestaurantAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ChefFacebookLink")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<byte[]>("ChefImage")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ChefInstagramLink")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ChefLinkedinLink")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ChefNameSurname")
                         .IsRequired()
@@ -72,46 +170,105 @@ namespace RestaurantAPI.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("ChefTwitterLink")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.HasKey("ChefID");
 
                     b.ToTable("Chefs");
                 });
 
-            modelBuilder.Entity("RestaurantAPI.Entities.Contact", b =>
+            modelBuilder.Entity("RestaurantAPI.Entities.CompanyInfo", b =>
                 {
-                    b.Property<int>("ContactID")
+                    b.Property<int>("CompanyInfoID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyInfoID"), 1L, 1);
 
-                    b.Property<string>("ContactAddress")
+                    b.Property<string>("CompanyInfoAddress")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("ContactEmail")
+                    b.Property<string>("CompanyInfoGithubLink")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ContactMapLocation")
+                    b.Property<string>("CompanyInfoIFrame")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("ContactOpenHours")
+                    b.Property<string>("CompanyInfoInstagramLink")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ContactPhone")
+                    b.Property<string>("CompanyInfoLinkedinLink")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CompanyInfoMail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CompanyInfoOpenClosed")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CompanyInfoPhone")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("ContactID");
+                    b.Property<string>("CompanyInfoWebSiteLink")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.ToTable("Contacts");
+                    b.HasKey("CompanyInfoID");
+
+                    b.ToTable("CompanyInfos");
+                });
+
+            modelBuilder.Entity("RestaurantAPI.Entities.Event", b =>
+                {
+                    b.Property<int>("EventID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EventID"), 1L, 1);
+
+                    b.Property<string>("EventDetails")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<byte[]>("EventImage")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("EventName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("EventPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("EventStatus")
+                        .HasColumnType("bit");
+
+                    b.HasKey("EventID");
+
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.Feature", b =>
@@ -163,6 +320,9 @@ namespace RestaurantAPI.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<bool>("ImageStatus")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ImageTitle")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -198,8 +358,13 @@ namespace RestaurantAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("MessagePhone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<DateTime>("MessageSendDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("MessageSubject")
                         .IsRequired()
@@ -222,9 +387,6 @@ namespace RestaurantAPI.Migrations
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("ProductDescription")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -238,6 +400,9 @@ namespace RestaurantAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("ProductPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("ProductStatus")
                         .HasColumnType("bit");
@@ -261,7 +426,7 @@ namespace RestaurantAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ReservationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("smalldatetime");
 
                     b.Property<string>("ReservationEmail")
                         .IsRequired()
@@ -308,6 +473,9 @@ namespace RestaurantAPI.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<bool>("ServiceStatus")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ServiceTitle")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -340,6 +508,9 @@ namespace RestaurantAPI.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("TestimonialStatus")
+                        .HasColumnType("bit");
+
                     b.Property<string>("TestimonialTitle")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -348,6 +519,37 @@ namespace RestaurantAPI.Migrations
                     b.HasKey("TestimonialID");
 
                     b.ToTable("Testimonials");
+                });
+
+            modelBuilder.Entity("RestaurantAPI.Entities.WebLog", b =>
+                {
+                    b.Property<int>("WebLogID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WebLogID"), 1L, 1);
+
+                    b.Property<DateTime>("WebLogDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("WebLogUserGeo")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("nvarchar(75)");
+
+                    b.Property<string>("WebLogUserIPAdress")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("WebLogUserInfo")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.HasKey("WebLogID");
+
+                    b.ToTable("WebLogs");
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.Product", b =>

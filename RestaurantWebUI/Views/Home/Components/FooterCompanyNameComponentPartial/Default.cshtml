@@ -1,0 +1,16 @@
+﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+
+@{
+    string companyName = string.IsNullOrWhiteSpace(Model?.AboutCompanyName)
+        ? "Restoran"
+        : Model.AboutCompanyName;  
+int year = DateTime.Now.Year;
+}
+<div class="container copyright text-center mt-4">
+    <p>
+        © @year 
+        <span>Copyright</span> 
+        <strong class="px-1 sitename">@companyName</strong> 
+        <span>All Rights Reserved</span>
+    </p>
+</div>

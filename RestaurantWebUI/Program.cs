@@ -1,6 +1,11 @@
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
-var app = builder.Build();
+builder.Services.AddHttpClient("RestaurantApiClient", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7154/");
+});
+builder.Services.AddMemoryCache();
+WebApplication app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error/NotFound404");

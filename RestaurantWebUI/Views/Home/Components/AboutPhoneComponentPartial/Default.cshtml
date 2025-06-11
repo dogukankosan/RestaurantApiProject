@@ -1,0 +1,36 @@
+﻿@model RestaurantWebUI.Dtos.CompanyInfoDtos.ResultCompanyInfoDto
+
+@{
+    if (Model?.CompanyInfoPhone == null)
+    {
+        <div class="book-a-table">
+            <h3>Rezervasyon</h3>
+            <p>Telefon bilgisi henüz eklenmemiş.</p>
+        </div>
+        return;
+    }
+    string formattedPhone = Model.CompanyInfoPhone;
+    try
+    {
+        formattedPhone = RestaurantWebUI.HelpersMethod.PhoneFormatter
+            .ToPrettyPhone(Model.CompanyInfoPhone);
+    }
+    catch
+    {
+
+    }
+    string phoneDigits = new string(
+        (formattedPhone ?? Model.CompanyInfoPhone)
+        .Where(char.IsDigit)
+        .ToArray());
+}
+<div class="book-a-table">
+    <h3>Rezervasyon</h3>
+    <p>
+        <a href="https://wa.me/@phoneDigits"
+           target="_blank"
+           rel="noopener">
+            @formattedPhone
+        </a>
+    </p>
+</div>

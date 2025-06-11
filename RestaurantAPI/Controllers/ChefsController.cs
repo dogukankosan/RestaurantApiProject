@@ -21,14 +21,18 @@ namespace RestaurantAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<Chef> chefs = await _context.Chefs.AsNoTracking().ToListAsync();
+            List<Chef> chefs = await _context.Chefs
+                .AsNoTracking()
+                .ToListAsync();
             List<ResultChefDto> result = _mapper.Map<List<ResultChefDto>>(chefs);
             return Ok(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            Chef? chef = await _context.Chefs.FindAsync(id);
+            Chef? chef = await _context.Chefs
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.ChefID == id);
             if (chef == null)
                 return NotFound("Şef bulunamadı.");
             ResultChefDto result = _mapper.Map<ResultChefDto>(chef);
@@ -37,25 +41,31 @@ namespace RestaurantAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateChefDto dto)
         {
-            Chef chef = _mapper.Map<Chef>(dto);
-            await _context.Chefs.AddAsync(chef);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            Chef entity = _mapper.Map<Chef>(dto);
+            await _context.Chefs.AddAsync(entity);
             await _context.SaveChangesAsync();
             return Ok("Şef ekleme işlemi başarılı");
         }
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateChefDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateChefDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (id != dto.ChefID)
+                return BadRequest("Gönderilen ID ile DTO içindeki ID eşleşmiyor.");
             Chef? exists = await _context.Chefs
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.ChefID == dto.ChefID);
+                .FirstOrDefaultAsync(x => x.ChefID == id);
             if (exists == null)
                 return NotFound("Şef bulunamadı.");
-            Chef updatedChef = _mapper.Map<Chef>(dto);
-            _context.Entry(updatedChef).State = EntityState.Modified;
+            Chef entity = await _context.Chefs.FindAsync(id)!;
+            _mapper.Map(dto, entity);
             await _context.SaveChangesAsync();
-            return Ok("Şef güncelleme işlemi başarılı.");
+            return Ok("Şef güncelleme işlemi başarılı");
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             Chef? entity = await _context.Chefs.FindAsync(id);

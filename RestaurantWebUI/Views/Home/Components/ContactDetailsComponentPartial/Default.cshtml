@@ -1,0 +1,106 @@
+﻿@using System.Web
+@model RestaurantWebUI.Dtos.CompanyInfoDtos.ResultCompanyInfoDto
+
+@{
+    if (Model == null)
+    {
+        <div class="mb-5">
+            <p>Harita bilgisi mevcut değil.</p>
+        </div>
+        return;
+    }
+    string iframeSrc = Model.CompanyInfoIFrame?.Trim() ?? "";
+    string FormatMultiline(string text) =>
+        string.IsNullOrWhiteSpace(text)
+            ? ""
+            : Html.Raw(HttpUtility.HtmlEncode(text)
+                  .Replace("\r\n", "<br />")
+                  .Replace("\n", "<br />"))
+              .ToString();
+    string rawPhone = Model.CompanyInfoPhone ?? "";
+    string phoneDigits = new string(rawPhone.Where(char.IsDigit).ToArray());
+    string formattedPhone;
+    try
+    {
+        formattedPhone = RestaurantWebUI.HelpersMethod.PhoneFormatter.ToPrettyPhone(rawPhone);
+    }
+    catch
+    {
+        formattedPhone = rawPhone;
+    }
+}
+<div class="mb-5">
+    @if (!string.IsNullOrEmpty(iframeSrc))
+    {
+        <iframe src="@iframeSrc"
+                style="width:100%; height:400px;"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                frameborder="0"
+                allowfullscreen>
+        </iframe>
+    }
+    else
+    {
+        <p>Harita embed kodu bulunamadı.</p>
+    }
+</div>
+<div class="row gy-4">
+    <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="200">
+            <i class="icon bi bi-geo-alt flex-shrink-0"></i>
+            <div>
+                <h3>Adres</h3>
+                <p>@Html.Raw(FormatMultiline(Model.CompanyInfoAddress))</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="300">
+            <i class="icon bi bi-telephone flex-shrink-0"></i>
+            <div>
+                <h3>Telefon</h3>
+                @if (!string.IsNullOrWhiteSpace(phoneDigits))
+                {
+                    <a href="tel:@phoneDigits" class="d-block mb-1">
+                        <span>@formattedPhone</span>
+                    </a>
+                    <a href="https://wa.me/@phoneDigits" target="_blank" rel="noopener">
+                        <i class="bi bi-whatsapp"></i> WhatsApp ile Ara
+                    </a>
+                }
+                else
+                {
+                    <span>Telefon bilgisi mevcut değil.</span>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="400">
+            <i class="icon bi bi-envelope flex-shrink-0"></i>
+            <div>
+                <h3>Email</h3>
+                @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoMail))
+                {
+                    <a href="mailto:@Html.Encode(Model.CompanyInfoMail)">
+                        <span>@Html.Encode(Model.CompanyInfoMail)</span>
+                    </a>
+                }
+                else
+                {
+                    <span>E-posta bilgisi mevcut değil.</span>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="info-item d-flex align-items-center" data-aos="fade-up" data-aos-delay="500">
+            <i class="icon bi bi-clock flex-shrink-0"></i>
+            <div>
+                <h3>Açılış Saatleri</h3>
+                <p>@Html.Raw(FormatMultiline(Model.CompanyInfoOpenClosed))</p>
+            </div>
+        </div>
+    </div>
+</div>

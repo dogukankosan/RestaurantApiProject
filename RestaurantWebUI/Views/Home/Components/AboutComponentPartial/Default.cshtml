@@ -1,35 +1,42 @@
-﻿<section id="about" class="about section">
+﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+
+@{
+    if (Model == null)
+    {
+        <div class="about section">
+        </div>
+        return;
+    }
+    string placeholder = "/userThema/assets/img/gallery/placeholder.jpg";
+    string img1Src = Model.AboutImage1 != null && Model.AboutImage1.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutImage1)}"
+        : placeholder;
+    string img2Src = Model.AboutImage2 != null && Model.AboutImage2.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutImage2)}"
+        : placeholder;
+}
+<section id="about" class="about section">
     <div class="container section-title" data-aos="fade-up">
-        <h2>Hakkımızda<br></h2>
+        <h2>Hakkımızda<br /></h2>
         <p><span>Daha Fazla</span> <span class="description-title">Öğren</span></p>
     </div>
     <div class="container">
         <div class="row gy-4">
             <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
-                <img src="/userThema/assets/img/about.jpg" class="img-fluid mb-4" alt="">
-                <div class="book-a-table">
-                    <h3>Rezervasyon</h3>
-                    <p>+1 5589 55488 55</p>
-                </div>
+                <img src="@img1Src"
+                     class="img-fluid mb-4"
+                     alt="About Image 1"
+                     loading="lazy" />
+                    @await Component.InvokeAsync("AboutPhoneComponentPartial")
             </div>
             <div class="col-lg-5" data-aos="fade-up" data-aos-delay="250">
                 <div class="content ps-0 ps-lg-5">
-                    <p class="fst-italic">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua.
-                    </p>
-                    <ul>
-                        <li><i class="bi bi-check-circle-fill"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-                        <li><i class="bi bi-check-circle-fill"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-                        <li><i class="bi bi-check-circle-fill"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
-                    </ul>
-                    <p>
-                        Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident
-                    </p>
+                    <p>@(Model.AboutDesc ?? "")</p>
                     <div class="position-relative mt-4">
-                        <img src="/userThema/assets/img/about-2.jpg" class="img-fluid" alt="">
-                        <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+                        <img src="@img2Src"
+                             class="img-fluid"
+                             alt="About Image 2"
+                             loading="lazy" />
                     </div>
                 </div>
             </div>

@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using RestaurantAPI.Dtos.AboutDtos;
+using RestaurantAPI.Dtos.AdminLogDtos;
 using RestaurantAPI.Dtos.CategoryDtos;
 using RestaurantAPI.Dtos.ChefDtos;
-using RestaurantAPI.Dtos.ContactDtos;
+using RestaurantAPI.Dtos.CompanyInfoDtos;
+using RestaurantAPI.Dtos.EventDtos;
 using RestaurantAPI.Dtos.FeatureDtos;
 using RestaurantAPI.Dtos.GalleryImageDtos;
 using RestaurantAPI.Dtos.MessageDtos;
@@ -9,7 +12,9 @@ using RestaurantAPI.Dtos.ProductDtos;
 using RestaurantAPI.Dtos.ReservationDtos;
 using RestaurantAPI.Dtos.ServiceDtos;
 using RestaurantAPI.Dtos.TestimonialDtos;
+using RestaurantAPI.Dtos.WebLogDtos;
 using RestaurantAPI.Entities;
+using ResultCompanyInfoDto = RestaurantAPI.Dtos.CompanyInfoDtos.ResultCompanyInfoDto;
 
 namespace RestaurantAPI.Mapping
 {
@@ -27,15 +32,8 @@ namespace RestaurantAPI.Mapping
             CreateMap<Chef, UpdateChefDto>().ReverseMap();
             CreateMap<Chef, GetByIDChefDto>().ReverseMap();
 
-            CreateMap<Contact, ResultContactDto>().ReverseMap();
-            CreateMap<Contact, CreateContactDto>().ReverseMap();
-            CreateMap<Contact, UpdateContactDto>().ReverseMap();
-            CreateMap<Contact, GetByIDContactDto>().ReverseMap();
-
             CreateMap<Feature, ResultFeatureDto>().ReverseMap();
-            CreateMap<Feature, CreateFeatureDto>().ReverseMap();
             CreateMap<Feature, UpdateFeatureDto>().ReverseMap();
-            CreateMap<Feature, GetByIDFeatureDto>().ReverseMap();
 
             CreateMap<GalleryImage, ResultGalleryImageDto>().ReverseMap();
             CreateMap<GalleryImage, CreateGalleryImageDto>().ReverseMap();
@@ -65,7 +63,24 @@ namespace RestaurantAPI.Mapping
             CreateMap<Testimonial, ResultTestimonialDto>().ReverseMap();
             CreateMap<Testimonial, CreateTestimonialDto>().ReverseMap();
             CreateMap<Testimonial, UpdateTestimonialDto>().ReverseMap();
-            CreateMap<Testimonial, GetByIDTestimonialDto>().ReverseMap(); 
+            CreateMap<Testimonial, GetByIDTestimonialDto>().ReverseMap();
+
+            CreateMap<CompanyInfo, ResultCompanyInfoDto>().ReverseMap();
+            CreateMap<CompanyInfo, UpdateCompanyInfoDto>().ReverseMap();
+
+            CreateMap<Event, ResultEventDto>().ReverseMap();
+            CreateMap<Event, CreateEventDto>().ReverseMap();
+            CreateMap<Event, UpdateEventDto>().ReverseMap();
+            CreateMap<Event, GetByIDEventDto>().ReverseMap();
+
+            CreateMap<About, ResultAboutDto>().ReverseMap();
+            CreateMap<About, UpdateAboutDto>().ReverseMap();
+
+            CreateMap<AdminLog, ResultAdminLogDto>().ReverseMap();
+            CreateMap<AdminLog, CreateAdminLogDto>().ReverseMap();
+
+            CreateMap<WebLog, CreateWebLogDto>().ReverseMap();
+            CreateMap<WebLog, ResultWebLogDto>().ReverseMap();
         }
     }
 }

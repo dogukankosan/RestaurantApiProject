@@ -13,7 +13,6 @@ namespace RestaurantAPI.Controllers
     {
         private readonly APIContext _context;
         private readonly IMapper _mapper;
-
         public CategoriesController(APIContext context, IMapper mapper)
         {
             _context = context;
@@ -28,40 +27,45 @@ namespace RestaurantAPI.Controllers
             List<ResultCategoryDto> result = _mapper.Map<List<ResultCategoryDto>>(categories);
             return Ok(result);
         }
-
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            Category category = await _context.Categories.FindAsync(id);
+            Category? category = await _context.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.CategoryID == id);
             if (category == null)
                 return NotFound("Kategori bulunamadı");
             GetByIDCategoryDto result = _mapper.Map<GetByIDCategoryDto>(category);
             return Ok(result);
         }
-
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateCategoryDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
             Category entity = _mapper.Map<Category>(dto);
             await _context.Categories.AddAsync(entity);
             await _context.SaveChangesAsync();
             return Ok("Kategori ekleme işlemi başarılı");
         }
-
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UpdateCategoryDto dto)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateCategoryDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            if (id != dto.CategoryID)
+                return BadRequest("Gönderilen ID ile DTO içindeki ID eşleşmiyor.");
             Category? exists = await _context.Categories
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.CategoryID == dto.CategoryID);
+                .FirstOrDefaultAsync(x => x.CategoryID == id);
             if (exists == null)
                 return NotFound("Kategori bulunamadı");
-            Category updatedEntity = _mapper.Map<Category>(dto);
-            _context.Entry(updatedEntity).State = EntityState.Modified;
+            Category entity = await _context.Categories.FindAsync(id)!;
+            _mapper.Map(dto, entity);
             await _context.SaveChangesAsync();
             return Ok("Kategori güncelleme işlemi başarılı");
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             Category? entity = await _context.Categories.FindAsync(id);

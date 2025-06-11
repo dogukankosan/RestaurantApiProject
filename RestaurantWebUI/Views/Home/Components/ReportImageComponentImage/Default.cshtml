@@ -1,0 +1,22 @@
+﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+
+@{
+    string placeholder = Url.Content("~/userThema/assets/img/stats-bg.jpg");
+    string reportImgSrc = placeholder;
+    if (Model?.AboutReportImage != null && Model.AboutReportImage.Length > 0)
+    {
+        try
+        {
+            reportImgSrc = $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutReportImage)}";
+        }
+        catch
+        {
+            reportImgSrc = placeholder;
+        }
+    }
+}
+<img src="@reportImgSrc"
+     alt="Rapor Görseli"
+     class="img-fluid"
+     data-aos="fade-in"
+     loading="lazy" />

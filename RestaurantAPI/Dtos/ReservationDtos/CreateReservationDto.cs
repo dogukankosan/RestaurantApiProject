@@ -8,6 +8,6 @@
         public DateTime ReservationDate { get; set; }
         public int ReservationCountOfPeople { get; set; }
         public string ReservationMessage { get; set; }
-        public bool ReservationStatus { get; set; } = true;
+        public bool ReservationStatus { get; set; } 
     }
 }

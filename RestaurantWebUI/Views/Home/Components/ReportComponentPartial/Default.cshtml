@@ -1,29 +1,62 @@
-﻿<section id="stats" class="stats section dark-background">
-    <img src="/userThema/assets/img/stats-bg.jpg" alt="" data-aos="fade-in">
+﻿@model RestaurantWebUI.Models.Report
+
+@{
+    if (Model == null)
+    {
+        <section id="stats" class="stats section dark-background">
+            <div class="container text-center py-5">
+                <p>İstatistik bilgisi bulunamadı.</p>
+            </div>
+        </section>
+        return;
+    }
+    int safeRezCount = Model.RezervationCount < 0 ? 0 : Model.RezervationCount;
+    int safeFoodCount = Model.FoodCount < 0 ? 0 : Model.FoodCount;
+    int safeEventCount = Model.EventCount < 0 ? 0 : Model.EventCount;
+    int safeChefCount = Model.ChefCount < 0 ? 0 : Model.ChefCount;
+}
+<section id="stats" class="stats section dark-background">
+   @await Component.InvokeAsync("ReportImageComponentImage")
     <div class="container position-relative" data-aos="fade-up" data-aos-delay="100">
         <div class="row gy-4">
             <div class="col-lg-3 col-md-6">
                 <div class="stats-item text-center w-100 h-100">
-                    <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
-                    <p>Clients</p>
+                    <span data-purecounter-start="0"
+                          data-purecounter-end="@safeRezCount"
+                          data-purecounter-duration="1"
+                          class="purecounter">
+                    </span>
+                    <p>Rezervasyon Sayısı</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="stats-item text-center w-100 h-100">
-                    <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
-                    <p>Projects</p>
+                    <span data-purecounter-start="0"
+                          data-purecounter-end="@safeFoodCount"
+                          data-purecounter-duration="1"
+                          class="purecounter">
+                    </span>
+                    <p>Yemek Sayısı</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="stats-item text-center w-100 h-100">
-                    <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
-                    <p>Hours Of Support</p>
+                    <span data-purecounter-start="0"
+                          data-purecounter-end="@safeEventCount"
+                          data-purecounter-duration="1"
+                          class="purecounter">
+                    </span>
+                    <p>Etkinlik Sayısı</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="stats-item text-center w-100 h-100">
-                    <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
-                    <p>Workers</p>
+                    <span data-purecounter-start="0"
+                          data-purecounter-end="@safeChefCount"
+                          data-purecounter-duration="1"
+                          class="purecounter">
+                    </span>
+                    <p>Şef Sayısı</p>
                 </div>
             </div>
         </div>

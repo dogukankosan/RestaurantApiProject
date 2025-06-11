@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestaurantAPI.Entities
@@ -18,5 +19,8 @@ namespace RestaurantAPI.Entities
         public string TestimonialComment { get; set; }
         [Required]
         public byte[] TestimonialImage { get; set; }
+
+        [DefaultValue(true)] 
+        public bool TestimonialStatus { get; set; } = true;
     }
 }
