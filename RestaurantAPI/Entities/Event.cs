@@ -10,13 +10,13 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EventID { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string EventName { get; set; }
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         [Range(0.01, 999999)]
         public decimal EventPrice { get; set; }
-        [MaxLength(500)]
+        [Column(TypeName = "nvarchar(500)")]
         public string EventDetails { get; set; }
         [Required]
         [Column(TypeName = "varbinary(max)")]

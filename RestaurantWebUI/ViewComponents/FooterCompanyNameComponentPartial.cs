@@ -1,40 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using RestaurantWebUI.Dtos.AboutDtos;
 
 namespace RestaurantWebUI.ViewComponents
 {
-    public class FooterCompanyNameComponentPartial:ViewComponent
+    public class FooterCompanyNameComponentPartial : ViewComponent
     {
-        private const string CacheKey = "FooterComponentName";
-        private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(30);
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IMemoryCache _cache;
-        public FooterCompanyNameComponentPartial(
-            IHttpClientFactory httpClientFactory,
-            IMemoryCache cache)
+        public FooterCompanyNameComponentPartial(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-            _cache = cache;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            if (!_cache.TryGetValue<ResultAboutDto>(CacheKey, out var aboutDto))
+            ResultAboutDto? aboutDto;
+            HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
+            try
             {
-                HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
-                try
-                {
-                    aboutDto = await client.GetFromJsonAsync<ResultAboutDto>("api/Abouts");
-                    if (aboutDto != null)
-                        _cache.Set(CacheKey, aboutDto, CacheDuration);
-                }
-                catch (HttpRequestException)
-                {
-                    //todo loglamalar yapılacak
-                    aboutDto = null;
-                }
+                aboutDto = await client.GetFromJsonAsync<ResultAboutDto>("api/Abouts");
             }
-            return View(aboutDto);
+            catch (HttpRequestException)
+            {
+                // TODO: loglama ekle
+                aboutDto = null;
+            }
+            string? companyName = aboutDto?.AboutCompanyName;
+            return View("Default",companyName);
         }
     }
 }

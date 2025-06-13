@@ -51,7 +51,14 @@
             <i class="icon bi bi-geo-alt flex-shrink-0"></i>
             <div>
                 <h3>Adres</h3>
-                <p>@Html.Raw(FormatMultiline(Model.CompanyInfoAddress))</p>
+                @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoOpenClosed))
+                {
+                    <p>@Html.Raw(FormatMultiline(Model.CompanyInfoAddress))</p>
+                }
+                else
+                {
+                    <p>Adres bilgisi mevcut değil.</p>
+                }
             </div>
         </div>
     </div>
@@ -99,7 +106,14 @@
             <i class="icon bi bi-clock flex-shrink-0"></i>
             <div>
                 <h3>Açılış Saatleri</h3>
-                <p>@Html.Raw(FormatMultiline(Model.CompanyInfoOpenClosed))</p>
+                @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoOpenClosed))
+                {
+                    <p>@Html.Raw(FormatMultiline(Model.CompanyInfoOpenClosed))</p>
+                }
+                else
+                {
+                    <p>Açılış saatleri bilgisi mevcut değil.</p>
+                }
             </div>
         </div>
     </div>

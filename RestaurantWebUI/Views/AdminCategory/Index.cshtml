@@ -1,0 +1,75 @@
+﻿@using RestaurantWebUI.Dtos.CategoryDtos
+@model List<ResultCategoryDto>
+
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Admin Kategori Listesi</title>
+<br />
+<h4 class="card-title">Kategori Listesi</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered" id="yourTableId">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Kategori Adı</th>
+            <th>Kategori Durum</th>
+            <th class="no-export">İşlemler</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CategoryID</td>
+                <td>@item.CategoryName</td>
+                <td>
+                    @if (item.CategoryStatus)
+                    {
+                        <a href=""><span style="color:white" class="badge bg-success">Aktif</span></a>
+                    }
+                    else
+                    {
+                        <a href=""><span style="color:white" class="badge bg-danger">Pasif</span></a>
+                    }
+                </td>
+                <td>
+                    <a class="btn btn-outline-info btn-sm"
+                           href="@Url.Action("Guncelle", "AdminKategori", new { id = item.CategoryID })"
+                       title="Güncelle">
+                        <i data-feather="edit-2"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <br/>
+    <a href="/AdminKategori/Ekle" class="btn btn-success">Yeni Kategori Ekle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>

@@ -15,6 +15,11 @@ namespace RestaurantAPI.ValidationRules
                 .MinimumLength(3).WithMessage("Şirket adı en az 3 karakter olmalı")
                 .MaximumLength(100).WithMessage("Şirket adı en fazla 100 karakter olabilir");
 
+            RuleFor(x => x.AboutCompanyLogo)
+                .NotNull().WithMessage("Şirket logosu görseli seçilmelidir.")
+                .Must(ValidatorMethod.BeValidImage)
+                .WithMessage("Şirket logosu dosyası geçersiz (.jpg/.png/.gif, max 5 MB)");
+
             RuleFor(x => x.AboutDesc)
                 .NotEmpty().WithMessage("Açıklama alanı boş olamaz.")
                 .Must(desc => !string.IsNullOrWhiteSpace(desc))

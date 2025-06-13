@@ -10,12 +10,12 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TestimonialID { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string TestimonialNameSurname { get; set; }
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string TestimonialTitle { get; set; }
         [Required]
-        [MaxLength(1000)]
+        [Column(TypeName = "nvarchar(1000)")]
         public string TestimonialComment { get; set; }
         [Required]
         public byte[] TestimonialImage { get; set; }

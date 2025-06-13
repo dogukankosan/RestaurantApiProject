@@ -1,14 +1,206 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 <!DOCTYPE html>
-
-<html>
+<html lang="tr">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>_adminLayout</title>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="/adminThema/assets/css/app.min.css">
+  <link rel="stylesheet" href="/adminThema/assets/css/style.css">
+  <link rel="stylesheet" href="/adminThema/assets/css/components.css">
+  <link rel="stylesheet" href="/adminThema/assets/css/custom.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel='shortcut icon' type='image/x-icon' href='/adminThema/assets/img/favicon.ico' />
+  <link href="~/AdminThema/table/style.css" rel="stylesheet" />
+  <link href="~/adminthema/table/datatables.bootstrap4.min.css" rel="stylesheet" />
+  <style>
+        ::selection {
+            background-color: #6777EF;
+            color: black;
+        }
+  </style>
 </head>
 <body>
+  <div style="background-color:transparent" class="loader"></div>
+<div id="app">
+    <div class="main-wrapper main-wrapper-1">
+        <div class="navbar-bg"></div>
+        <nav class="navbar navbar-expand-lg main-navbar sticky">
+            <div class="form-inline mr-auto">
+                <ul class="navbar-nav mr-3">
+                    <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg
+									collapse-btn"> <i data-feather="align-justify"></i></a></li>
+                    <li><a href="#" class="nav-link nav-link-lg fullscreen-btn">
+                        <i data-feather="maximize"></i>
+                    </a></li>
+                    @await Component.InvokeAsync("_AdminSearchComponentPartial")
+                </ul>
+            </div>
+            <ul class="navbar-nav navbar-right">
+                @await Component.InvokeAsync("_AdminMessageComponentPartial")
+                @await Component.InvokeAsync("_AdminNotificationComponentPartial")
+                @await Component.InvokeAsync("_AdminUserNavbarComponentPartial")
+            </ul>
+        </nav>
+        <div class="main-sidebar sidebar-style-2">
+            <aside id="sidebar-wrapper">
+                @await Component.InvokeAsync("_AdminCompanyNameComponentPartial")
+                <br/>
+                <hr/>
+                <ul class="sidebar-menu">
+                    <li class="menu-header">Menüler</li>
+                    <li class="dropdown active">
+                        <a href="index.html" class="nav-link"><i data-feather="monitor"></i><span>Ana Sayfa</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="copy"></i><span>Sayfalar
+                        </span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="/AdminKategori/Liste">Kategoriler</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </aside>
+        </div>
+        <div class="main-content">
+            <section class="section">
+                @RenderBody()
+            </section>
+            @await Component.InvokeAsync("_AdminSettingThemaComponentPartial")
+        </div>
+        <footer class="main-footer">
+            <div class="footer-left">
+                <span>Design by </span>
+                <a href="https://www.linkedin.com/in/dogukan-kosan/" style="color:#6777EF" target="_blank" rel="noopener">
+                    Doğukan Koşan
+                </a>
+            </div>
+        </footer>
+    </div>
+</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
+    <script src="/adminThema/assets/js/app.min.js"></script>
+    <script src="/adminThema/assets/bundles/apexcharts/apexcharts.min.js"></script>
+    <script src="/adminThema/assets/js/page/index.js"></script>
+    <script src="/adminThema/assets/js/scripts.js"></script>
+    <script src="/adminThema/assets/js/custom.js"></script>
+    <script src="/adminThema/table/jquery.dataTables.min.js"></script>
+    <script src="/adminThema/table/dataTables.bootstrap4.min.js"></script>
+    <script src="/adminThema/table/datatable-basic.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script>
+        $(document).ready(function () {
+            const titleText = $('h4.card-title').text().trim();
+            const table = $('#yourTableId').DataTable();
+            new $.fn.dataTable.Buttons(table, {
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        className: 'buttons-excel',
+                        text: 'Excel',
+                        filename: titleText.replace(/\s+/g, '_') + '_rapor',
+                        title: titleText,
+                        exportOptions: {
+                            columns: ':not(.no-export)'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        className: 'buttons-pdf',
+                        text: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'A4',
+                        filename: titleText.replace(/\s+/g, '_') + '_rapor',
+                        title: titleText,
+                        exportOptions: {
+                            columns: ':not(.no-export)'
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        className: 'buttons-print',
+                        text: 'Yazdır',
+                        title: titleText,
+                        exportOptions: {
+                            columns: ':not(.no-export)'
+                        }
+                    }
+                ]
+            });
+            $('#exportOptions').on('change', function () {
+                const val = this.value;
+                if (val === 'excel') table.button('.buttons-excel').trigger();
+                else if (val === 'pdf') table.button('.buttons-pdf').trigger();
+                else if (val === 'print') table.button('.buttons-print').trigger();
+                this.selectedIndex = 0;
+            });
+        });
+    </script>
+<script>
+        $('#yourTableId').DataTable({
+            responsive: true,
+            language: {
+                "sDecimal": ",",
+                "sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+                "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arası gösteriliyor",
+                "sInfoEmpty": "Kayıt yok",
+                "sInfoFiltered": "(_MAX_ kayıt içerisinden filtrelendi)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "Sayfada _MENU_ kayıt göster",
+                "sLoadingRecords": "Yükleniyor...",
+                "sProcessing": "İşleniyor...",
+                "sSearch": "Ara:",
+                "sZeroRecords": "Eşleşen kayıt bulunamadı",
+                "oPaginate": {
+                    "sFirst": "İlk",
+                    "sLast": "Son",
+                    "sNext": "Sonraki",
+                    "sPrevious": "Önceki"
+                },
+                "oAria": {
+                    "sSortAscending": ": artan sütun sıralamasını aktifleştir",
+                    "sSortDescending": ": azalan sütun sıralamasını aktifleştir"
+                }
+            }
+        });
+    </script>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dataTable = new simpleDatatables.DataTable("#datatablesSimple", {
+                labels: {
+                    placeholder: "Ara...",
+                    perPage: "Kayıt göster",
+                    noRows: "Gösterilecek kayıt yok",
+                    noResults: "Arama kriterlerinize uygun sonuç bulunamadı",
+                    info: "Toplam {rows} kayıttan {start} - {end} arası gösteriliyor",
+                    loading: "Yükleniyor...",
+                    infoFiltered: "{rows} kayıttan filtrelenmiş {filtered} kayıt gösteriliyor",
+                    infoEmpty: "Gösterilecek kayıt yok",
+                    select: {
+                        rows: " {count} kayıt seçildi"
+                    },
+                    pagination: {
+                        previous: "Önceki",
+                        next: "Sonraki",
+                        navigate: "Sayfalarda gezin",
+                        page: "Sayfa",
+                        showing: "Gösteriliyor",
+                        of: " / {pages}"
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>

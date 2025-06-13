@@ -30,9 +30,12 @@ namespace RestaurantAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AboutID"), 1L, 1);
 
+                    b.Property<byte[]>("AboutCompanyLogo")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("AboutCompanyName")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("AboutDesc")
@@ -57,12 +60,25 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("AboutWhyChoose")
                         .IsRequired()
-                        .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.HasKey("AboutID");
 
                     b.ToTable("Abouts");
+
+                    b.HasData(
+                        new
+                        {
+                            AboutID = 1,
+                            AboutCompanyLogo = new byte[0],
+                            AboutCompanyName = "",
+                            AboutDesc = "",
+                            AboutImage1 = new byte[0],
+                            AboutImage2 = new byte[0],
+                            AboutReportImage = new byte[0],
+                            AboutRezervationImage = new byte[0],
+                            AboutWhyChoose = ""
+                        });
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.AdminLog", b =>
@@ -82,7 +98,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("LogType")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LogUserGeo")
@@ -92,12 +107,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("LogUserIPAdress")
                         .IsRequired()
-                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("LogUserInfo")
                         .IsRequired()
-                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("LogID");
@@ -115,7 +128,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("CategoryStatus")
@@ -140,7 +152,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ChefFacebookLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<byte[]>("ChefImage")
@@ -149,17 +160,14 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ChefInstagramLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ChefLinkedinLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ChefNameSurname")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("ChefStatus")
@@ -167,12 +175,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ChefTitle")
                         .IsRequired()
-                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("ChefTwitterLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ChefID");
@@ -190,52 +196,58 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("CompanyInfoAddress")
                         .IsRequired()
-                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("CompanyInfoGithubLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CompanyInfoIFrame")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("CompanyInfoInstagramLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CompanyInfoLinkedinLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CompanyInfoMail")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CompanyInfoOpenClosed")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("CompanyInfoPhone")
                         .IsRequired()
-                        .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("CompanyInfoWebSiteLink")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("CompanyInfoID");
 
                     b.ToTable("CompanyInfos");
+
+                    b.HasData(
+                        new
+                        {
+                            CompanyInfoID = 1,
+                            CompanyInfoAddress = "",
+                            CompanyInfoGithubLink = "",
+                            CompanyInfoIFrame = "",
+                            CompanyInfoInstagramLink = "",
+                            CompanyInfoLinkedinLink = "",
+                            CompanyInfoMail = "",
+                            CompanyInfoOpenClosed = "",
+                            CompanyInfoPhone = "",
+                            CompanyInfoWebSiteLink = ""
+                        });
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.Event", b =>
@@ -248,7 +260,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("EventDetails")
                         .IsRequired()
-                        .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<byte[]>("EventImage")
@@ -257,7 +268,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("EventName")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("EventPrice")
@@ -281,7 +291,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("FeatureDescription")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<byte[]>("FeatureImageData")
@@ -290,22 +299,30 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("FeatureSubTitle")
                         .IsRequired()
-                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("FeatureTitle")
                         .IsRequired()
-                        .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("FeatureVideoUrl")
                         .IsRequired()
-                        .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
                     b.HasKey("FeatureID");
 
                     b.ToTable("Features");
+
+                    b.HasData(
+                        new
+                        {
+                            FeatureID = 1,
+                            FeatureDescription = "",
+                            FeatureImageData = new byte[0],
+                            FeatureSubTitle = "",
+                            FeatureTitle = "",
+                            FeatureVideoUrl = ""
+                        });
                 });
 
             modelBuilder.Entity("RestaurantAPI.Entities.GalleryImage", b =>
@@ -325,7 +342,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ImageTitle")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ImageID");
@@ -347,7 +363,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("MessageEmail")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("MessageIsRead")
@@ -355,12 +370,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("MessageNameSurname")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MessagePhone")
                         .IsRequired()
-                        .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("MessageSendDate")
@@ -368,7 +381,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("MessageSubject")
                         .IsRequired()
-                        .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
                     b.HasKey("MessageID");
@@ -389,7 +401,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ProductDescription")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<byte[]>("ProductImageData")
@@ -398,7 +409,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("ProductPrice")
@@ -430,8 +440,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ReservationEmail")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("ReservationIsRead")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ReservationMessage")
                         .IsRequired()
@@ -439,12 +451,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ReservationNameSurname")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ReservationPhone")
                         .IsRequired()
-                        .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("ReservationStatus")
@@ -465,12 +475,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ServiceDescription")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ServiceIconUrl")
                         .IsRequired()
-                        .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<bool>("ServiceStatus")
@@ -478,7 +486,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ServiceTitle")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("ServiceID");
@@ -496,7 +503,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("TestimonialComment")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<byte[]>("TestimonialImage")
@@ -505,7 +511,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("TestimonialNameSurname")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("TestimonialStatus")
@@ -513,7 +518,6 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("TestimonialTitle")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("TestimonialID");
@@ -534,17 +538,14 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("WebLogUserGeo")
                         .IsRequired()
-                        .HasMaxLength(75)
                         .HasColumnType("nvarchar(75)");
 
                     b.Property<string>("WebLogUserIPAdress")
                         .IsRequired()
-                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("WebLogUserInfo")
                         .IsRequired()
-                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
                     b.HasKey("WebLogID");

@@ -10,17 +10,17 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MessageID { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string MessageNameSurname { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         [EmailAddress]
         public string MessageEmail { get; set; }
         [Required]
-        [MaxLength(20)]
+        [Column(TypeName = "nvarchar(20)")]
         public string MessagePhone { get; set; }
         [Required]
-        [MaxLength(300)]
+        [Column(TypeName = "nvarchar(300)")]
         public string MessageSubject { get; set; }
         [Required]
         public string MessageDetails { get; set; }

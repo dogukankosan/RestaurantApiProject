@@ -2,16 +2,16 @@
 @model ResultFeatureDto
 
 @{
-    if (Model == null)
+    if (Model == null || string.IsNullOrEmpty(Model.FeatureTitle))
     {
         <section id="hero" class="hero section light-background">
-            <div class="container">
-                <p>Özellik bilgisi bulunamadı.</p>
+            <div class="container section-title" data-aos="fade-up">
+                <p style="font-size:55px">Özellik bilgisi bulunamadı.</p>
             </div>
         </section>
         return;
     }
-    var placeholderImg = Url.Content("~/userThema/assets/img/placeholder-feature.jpg");
+    string placeholderImg = Url.Content("~/userThema/assets/img/gallery/gallery-4.jpg");
     string heroImgSrc = placeholderImg;
     if (Model.FeatureImageData?.Length > 0)
     {
@@ -21,7 +21,7 @@
         }
         catch { }
     }
-    var videoUrl = Model.FeatureVideoUrl?.Trim() ?? "";
+    string videoUrl = Model.FeatureVideoUrl?.Trim() ?? "";
     bool isValidVideoUrl = Uri.TryCreate(videoUrl, UriKind.Absolute, out var uriResult)
                            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 }

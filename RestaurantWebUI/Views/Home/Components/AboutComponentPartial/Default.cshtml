@@ -1,45 +1,56 @@
 ﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
 
 @{
-    if (Model == null)
-    {
-        <div class="about section">
-        </div>
-        return;
-    }
-    string placeholder = "/userThema/assets/img/gallery/placeholder.jpg";
-    string img1Src = Model.AboutImage1 != null && Model.AboutImage1.Length > 0
+    string placeholder = "/userThema/assets/img/gallery/gallery-1.jpg";
+    string placeholder2 = "/userThema/assets/img/gallery/gallery-2.jpg";
+    bool isEmpty = Model == null
+                   || string.IsNullOrWhiteSpace(Model.AboutDesc)
+                   && (Model.AboutImage1 == null || Model.AboutImage1.Length == 0)
+                   && (Model.AboutImage2 == null || Model.AboutImage2.Length == 0);
+    string img1Src = Model?.AboutImage1?.Length > 0
         ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutImage1)}"
         : placeholder;
-    string img2Src = Model.AboutImage2 != null && Model.AboutImage2.Length > 0
+    string img2Src = Model?.AboutImage2?.Length > 0
         ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutImage2)}"
-        : placeholder;
+        : placeholder2;
 }
-<section id="about" class="about section">
-    <div class="container section-title" data-aos="fade-up">
-        <h2>Hakkımızda<br /></h2>
-        <p><span>Daha Fazla</span> <span class="description-title">Öğren</span></p>
-    </div>
-    <div class="container">
-        <div class="row gy-4">
-            <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
-                <img src="@img1Src"
-                     class="img-fluid mb-4"
-                     alt="About Image 1"
-                     loading="lazy" />
+@if (isEmpty)
+{
+    <section id="about" class="about section">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Hakkımızda</h2>
+            <p>Hakkında bilgisi girilmemiştir.</p>
+        </div>
+    </section>
+}
+else
+{
+    <section id="about" class="about section">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Hakkımızda<br /></h2>
+            <p><span>Daha Fazla</span> <span class="description-title">Öğren</span></p>
+        </div>
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
+                    <img src="@img1Src"
+                         class="img-fluid mb-4"
+                         alt="About Image 1"
+                         loading="lazy" />
                     @await Component.InvokeAsync("AboutPhoneComponentPartial")
-            </div>
-            <div class="col-lg-5" data-aos="fade-up" data-aos-delay="250">
-                <div class="content ps-0 ps-lg-5">
-                    <p>@(Model.AboutDesc ?? "")</p>
-                    <div class="position-relative mt-4">
-                        <img src="@img2Src"
-                             class="img-fluid"
-                             alt="About Image 2"
-                             loading="lazy" />
+                </div>
+                <div class="col-lg-5" data-aos="fade-up" data-aos-delay="250">
+                    <div class="content ps-0 ps-lg-5">
+                        <p>@Model.AboutDesc</p>
+                        <div class="position-relative mt-4">
+                            <img src="@img2Src"
+                                 class="img-fluid"
+                                 alt="About Image 2"
+                                 loading="lazy" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+}

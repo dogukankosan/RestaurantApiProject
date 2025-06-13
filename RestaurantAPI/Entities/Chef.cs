@@ -10,19 +10,19 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ChefID { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ChefNameSurname { get; set; }
         [Required]
-        [MaxLength(200)]
+        [Column(TypeName = "nvarchar(200)")]
         public string ChefTitle { get; set; }
         public string ChefDescription { get; set; }
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ChefTwitterLink { get; set; }
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ChefFacebookLink { get; set; }
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ChefInstagramLink { get; set; }
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ChefLinkedinLink { get; set; }
         [Required]
         public byte[] ChefImage { get; set; }

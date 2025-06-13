@@ -1,0 +1,67 @@
+﻿@using RestaurantWebUI.Dtos.ReservationDtos
+@model List<ResultReservationDto>
+<style>
+    .notification-toggle {
+        position: relative;
+    }
+        .notification-toggle .headerBadge1 {
+            position: absolute;
+            /* top’u % değil px ile ayarlayalım */
+            top: 8px; /* burayı deneyerek artırıp/azaltabilirsin */
+            right: 4px; /* istersen hafif sola da çekebilirsin */
+            transform: translate(50%, 0); /* sadece sağa biraz taşı, dikeyde zaten px ile ayarladık */
+            background-color: #e74c3c;
+            color: #fff;
+            border-radius: 50%;
+            padding: 0.25em 0.5em;
+            font-size: 0.75rem;
+        }
+</style>
+<li class="dropdown dropdown-list-toggle">
+    <a href="#" data-toggle="dropdown"
+       class="nav-link notification-toggle nav-link-lg">
+        <i data-feather="bell" class="bell"></i>
+        <span class="badge headerBadge1">
+            @Model.Count
+        </span>
+    </a>
+    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+        <div class="dropdown-header">
+            Yeni Rezervasyonlar (@Model.Count)
+        </div>
+        <div class="dropdown-list-content dropdown-list-icons">
+            @if (!Model.Any())
+            {
+                <div class="dropdown-item text-center">
+                    <em>Yeni rezervasyon yok.</em>
+                </div>
+            }
+            else
+            {
+                @foreach (var r in Model)
+                {
+                    <a asp-controller=""
+                       asp-action=""
+                       asp-route-id="@r.ReservationID"
+                       class="dropdown-item dropdown-item-unread">
+                        <span class="dropdown-item-icon bg-primary text-white">
+                            <i class="fas fa-calendar-alt"></i>
+                        </span>
+                        <span class="dropdown-item-desc">
+                            <strong>@r.ReservationNameSurname</strong><br />
+                            @r.ReservationPhone
+                            <span class="time">
+                                @r.ReservationDate.ToString("g")
+                            </span>
+                        </span>
+                    </a>
+                }
+            }
+        </div>
+        <div class="dropdown-footer text-center">
+            <a asp-controller="" asp-action="">
+                Tüm Rezervasyonlar <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</li>

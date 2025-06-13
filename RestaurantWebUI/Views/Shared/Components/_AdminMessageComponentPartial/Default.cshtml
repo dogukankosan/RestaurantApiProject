@@ -1,0 +1,59 @@
+﻿@using RestaurantWebUI.Dtos.MessageDtos
+@model List<ResultMessageDto>
+
+<li class="dropdown dropdown-list-toggle">
+    <a href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle">
+        <i data-feather="mail"></i>
+        <span class="badge headerBadge1">
+            @Model.Count
+        </span>
+    </a>
+    <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
+        <div class="dropdown-header">
+            Mesajlar
+            <div class="float-right">
+                <a asp-controller="" asp-action="">Tümünü Okundu İşaretle</a>
+            </div>
+        </div>
+        <div class="dropdown-list-content dropdown-list-message">
+            @if (!Model.Any())
+            {
+                <div class="dropdown-item text-center">
+                    <em>Okunmamış mesaj yok.</em>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <a asp-controller=""
+                       asp-action=""
+                       asp-route-id="@item.MessageID"
+                       class="dropdown-item">
+                        <span class="dropdown-item-avatar text-white">
+                            <img alt="image"
+                                 src="/adminThema/assets/img/users/user-1.png"
+                                 class="rounded-circle" />
+                        </span>
+                        <span class="dropdown-item-desc">
+                            <span class="message-user">
+                                @item.MessageNameSurname
+                            </span>
+                            <span class="time message-text">
+                                @item.MessageSubject
+                            </span>
+                            <span class="time">
+                                @item.MessageSendDate.ToString("g")
+                            </span>
+                        </span>
+                    </a>
+                }
+            }
+        </div>
+        <div class="dropdown-footer text-center">
+            <a asp-controller="" asp-action="">
+                Tüm Mesajlar <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</li>

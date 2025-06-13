@@ -9,7 +9,9 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AboutID { get; set; }
         [Required]
-        [MaxLength(100)]
+        public byte[] AboutCompanyLogo { get; set; }
+        [Required]
+        [Column(TypeName = "nvarchar(100)")]
         public string AboutCompanyName { get; set; }
         [Required]
         public byte[] AboutImage1 { get; set; }
@@ -18,7 +20,7 @@ namespace RestaurantAPI.Entities
         [Required]
         public string AboutDesc { get; set; }
         [Required]
-        [MaxLength(500)]
+        [Column(TypeName = "nvarchar(500)")]
         public string AboutWhyChoose { get; set; }
         [Required]
         public byte[] AboutReportImage { get; set; }

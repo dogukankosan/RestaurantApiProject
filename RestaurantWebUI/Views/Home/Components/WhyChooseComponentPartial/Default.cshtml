@@ -1,7 +1,7 @@
-﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+﻿@model string
 
 @{
-    if (Model == null || string.IsNullOrWhiteSpace(Model.AboutWhyChoose))
+    if (Model == null || string.IsNullOrWhiteSpace(Model))
     {
         <div class="why-box">
             <h3>Neden Biz ?</h3>
@@ -9,7 +9,7 @@
         </div>
         return;
     }
-    string rawText = Model.AboutWhyChoose.Trim();
+    string rawText = Model.Trim();
     string encoded = System.Net.WebUtility.HtmlEncode(rawText);
     string formattedText = encoded
         .Replace("\r\n", "<br/>")

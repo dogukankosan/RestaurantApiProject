@@ -5,39 +5,30 @@
     if (Model == null || !Model.Any())
     {
         <section id="why-us" class="why-us section light-background">
-            <div class="container text-center py-5">
+            <div class="container section-title" data-aos="fade-up">
                 <h3>Neden Biz ?</h3>
                 <p>Henüz sunulacak servis bulunmuyor.</p>
             </div>
         </section>
         return;
     }
-    Func<string, string> safeText = txt => Html.Encode(txt ?? "");
-    Func<string, string> safeIconClass = cls =>
-    {
-        return System.Text.RegularExpressions.Regex.IsMatch(cls ?? "", @"^bi-[a-z0-9\-]+$")
-            ? cls
-            : "bi-question-circle"; 
-    };
 }
 <section id="why-us" class="why-us section light-background">
     <div class="container">
         <div class="row gy-4">
             <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-              @await Component.InvokeAsync("WhyChooseComponentPartial")
+                @await Component.InvokeAsync("WhyChooseComponentPartial")
             </div>
             <div class="col-lg-8 d-flex align-items-stretch">
                 <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
-                    @foreach (var item in Model)
+                    @foreach (ResultServiceDto item in Model)
                     {
-                        var iconClass = safeIconClass(item.ServiceIconUrl);
-                        var title = safeText(item.ServiceTitle);
-                        var desc = safeText(item.ServiceDescription);
+                        string iconClass = item.ServiceIconUrl;
                         <div class="col-xl-4">
                             <div class="icon-box d-flex flex-column justify-content-center align-items-center">
                                 <i class="@iconClass"></i>
-                                <h4>@title</h4>
-                                <p>@desc</p>
+                                <h4>@item.ServiceTitle</h4>
+                                <p>@item.ServiceDescription</p>
                             </div>
                         </div>
                     }

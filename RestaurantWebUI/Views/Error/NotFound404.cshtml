@@ -4,94 +4,78 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Sayfa Bulunamadı</title>
-    <link rel="icon" href="/userThema/assets/img/favicon.png">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="description" content="Aradığınız sayfa bulunamadı. Ana sayfaya dönerek restoranımızın lezzetli dünyasını keşfetmeye devam edin.">
-    <meta name="author" content="Doğukan Koşan">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:;">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <link rel="shortcut icon" type="image/x-icon" href="/adminThema/assets/img/favicon.ico" />
+    <title>:( – Sayfa Bulunamadı</title>
     <style>
-        ::selection {
-            background-color: red;
-            color: white;
-        }
-        * {
-            box-sizing: border-box;
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #fff4f4;
-            color: #333;
+            background-color: #0078D7;
+            color: #ffffff;
+            font-family: Consolas, "Courier New", monospace;
             display: flex;
-            flex-direction: column;
-            min-height: 100vh;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 2rem;
+            box-sizing: border-box;
         }
-        .error-container {
+        .container {
             max-width: 600px;
+            padding: 1rem;
         }
-        .error-code {
+        .emoji {
             font-size: 6rem;
-            font-weight: 700;
-            color: #e63946;
+            line-height: 1;
         }
-        .error-message {
-            font-size: 1.5rem;
+        .headline {
+            font-size: 2rem;
             margin: 1rem 0;
         }
-        .suggestion {
-            margin-bottom: 2rem;
-            color: #555;
+        .message {
+            font-size: 1rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
         }
-        .home-btn {
+        .btn-return {
             display: inline-block;
-            background-color: #e63946;
-            color: #fff;
+            margin-top: 1rem;
+            background-color: #0078D7;
+            color: #ffffff;
             padding: 0.75rem 1.5rem;
+            border: none;
             border-radius: 8px;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 1rem;
+            font-weight: bold;
             text-decoration: none;
-            font-weight: 600;
+            cursor: pointer;
             transition: background-color 0.3s ease;
         }
-            .home-btn:hover {
-                background-color: #d62828;
+            .btn-return:hover {
+                background-color: #e1e1e1;
             }
-        .error-img {
-            margin-top: 2rem;
-            max-width: 100%;
-            height: auto;
-        }
-        @@media (max-width: 480px) {
-            .error-code
-
-        {
-            font-size: 4rem;
-        }
-        .error-message {
-            font-size: 1.25rem;
-        }
-        }
     </style>
 </head>
 <body>
-    <div class="error-container">
-        <div class="error-code">404</div>
-        <div class="error-message">Oops! Sayfa Bulunamadı.</div>
-        <div class="suggestion">Aradığınız lezzet burada değil gibi görünüyor... Ama ana sayfadan yeniden başlayabilirsiniz!</div>
-        <a href="/" class="home-btn">Ana Sayfaya Dön</a>
+    <div class="container">
+        <div class="emoji">:(</div>
+        <div class="headline">Maalesef, erişmeye çalıştığınız sayfa bulunamadı.</div>
+        <div class="message">Bir süre sonra tekrar deneyin veya ana sayfaya geri dönün.</div>
+        <div class="message"><strong>HATA KODU: 404</strong></div>
+        <div class="message">
+            Sorunu bildirmek isterseniz:
+            <a href="mailto:admin@dogukankosan.com.tr" class="error-mail">admin@dogukankosan.com.tr</a>
+        </div>
+        <a class="btn-return" href="/">
+            <u>Web Sitesine Dön</u>
+        </a>
     </div>
 </body>
 </html>

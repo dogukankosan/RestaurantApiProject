@@ -1,0 +1,43 @@
+﻿@model RestaurantWebUI.Dtos.CategoryDtos.UpdateCategoryDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Kategori Güncelleme İşlemi</title>
+<h2>Kategori Güncelleme İşlemi</h2>
+<hr />
+<div class="col-12 col-md-6 col-lg-6">
+    <div class="card">
+        <form asp-action="Update" asp-controller="AdminCategory" method="post">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(x => x.CategoryID) 
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="CategoryName" class="form-label">Kategori Adı</label>
+                    <input asp-for="CategoryName"
+                           class="form-control"
+                           required
+                           minlength="3"
+                           maxlength="100"
+                           autofocus
+                           placeholder="Kategori adını girin" />
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kategori Durum</label>
+                    <div class="input-group">
+                        <select asp-for="CategoryStatus" class="form-select">
+                            <option value="true">🟢 Aktif</option>
+                            <option value="false">🔴 Pasif</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="CategoryStatus" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="submit" class="btn btn-success">Güncelle</button>
+                <a asp-action="Index" asp-controller="AdminCategory" class="btn btn-secondary ms-2">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>

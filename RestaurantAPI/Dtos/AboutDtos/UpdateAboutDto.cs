@@ -3,6 +3,7 @@
     public class UpdateAboutDto
     {
         public int AboutID { get; set; }
+        public byte[] AboutCompanyLogo { get; set; }
         public string AboutCompanyName { get; set; }
         public byte[] AboutImage1 { get; set; }
         public byte[] AboutImage2 { get; set; }

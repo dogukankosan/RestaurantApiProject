@@ -10,14 +10,14 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ReservationID { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ReservationNameSurname { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         [EmailAddress]
         public string ReservationEmail { get; set; }
         [Required]
-        [MaxLength(20)]
+        [Column(TypeName = "nvarchar(20)")]
         public string ReservationPhone { get; set; }
         [Column(TypeName = "smalldatetime")]
         [Required]
@@ -28,5 +28,7 @@ namespace RestaurantAPI.Entities
         public string ReservationMessage { get; set; }
         [DefaultValue(false)]
         public bool ReservationStatus { get; set; } = false;
+        [DefaultValue(false)]
+        public bool ReservationIsRead { get; set; } = false;
     }
 }

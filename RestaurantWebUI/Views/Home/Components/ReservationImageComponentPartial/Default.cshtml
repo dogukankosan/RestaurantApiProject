@@ -1,13 +1,13 @@
-﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+﻿@model byte[]
 
 @{
-    string placeholder = Url.Content("~/userThema/assets/img/reservation.jpg");
+    string placeholder = Url.Content("~/userThema/assets/img/gallery/gallery-7.jpg");
     string reservationImgSrc = placeholder;
-    if (Model?.AboutRezervationImage != null && Model.AboutRezervationImage.Length > 0)
+    if (Model != null && Model.Length > 0)
     {
         try
         {
-            reservationImgSrc = $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutRezervationImage)}";
+            reservationImgSrc = $"data:image/jpeg;base64,{Convert.ToBase64String(Model)}";
         }
         catch
         {

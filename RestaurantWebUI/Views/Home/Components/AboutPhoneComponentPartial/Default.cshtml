@@ -1,7 +1,7 @@
-﻿@model RestaurantWebUI.Dtos.CompanyInfoDtos.ResultCompanyInfoDto
+﻿@model string?
 
 @{
-    if (Model?.CompanyInfoPhone == null)
+    if (Model == null)
     {
         <div class="book-a-table">
             <h3>Rezervasyon</h3>
@@ -9,18 +9,18 @@
         </div>
         return;
     }
-    string formattedPhone = Model.CompanyInfoPhone;
+    string formattedPhone = Model;
     try
     {
         formattedPhone = RestaurantWebUI.HelpersMethod.PhoneFormatter
-            .ToPrettyPhone(Model.CompanyInfoPhone);
+            .ToPrettyPhone(Model);
     }
     catch
     {
 
     }
     string phoneDigits = new string(
-        (formattedPhone ?? Model.CompanyInfoPhone)
+        (formattedPhone ?? Model)
         .Where(char.IsDigit)
         .ToArray());
 }

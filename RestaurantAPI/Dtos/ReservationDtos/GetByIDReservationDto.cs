@@ -10,5 +10,6 @@
         public int ReservationCountOfPeople { get; set; }
         public string ReservationMessage { get; set; }
         public bool ReservationStatus { get; set; }
+        public bool ReservationIsRead { get; set; }
     }
 }

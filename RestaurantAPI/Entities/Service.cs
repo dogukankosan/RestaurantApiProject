@@ -10,12 +10,12 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ServiceID { get; set; } 
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ServiceTitle { get; set; }
-        [MaxLength(1000)]
+        [Column(TypeName = "nvarchar(1000)")]
         public string ServiceDescription { get; set; }
         [Required]
-        [MaxLength(200)]
+        [Column(TypeName = "nvarchar(200)")]
         public string ServiceIconUrl { get; set; }
 
         [DefaultValue(true)] 

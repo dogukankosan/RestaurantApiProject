@@ -62,6 +62,7 @@ namespace RestaurantAPI.Controllers
                 return NotFound("Kategori bulunamadı");
             Category entity = await _context.Categories.FindAsync(id)!;
             _mapper.Map(dto, entity);
+            _context.Categories.Update(entity);
             await _context.SaveChangesAsync();
             return Ok("Kategori güncelleme işlemi başarılı");
         }

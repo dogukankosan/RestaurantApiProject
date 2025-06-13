@@ -1,13 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using FluentValidation;
+﻿using FluentValidation;
 using RestaurantAPI.Dtos.ServiceDtos;
 
 namespace RestaurantAPI.ValidationRules
 {
     public class CreateServiceValidator : AbstractValidator<CreateServiceDto>
     {
-        private static readonly Regex BootstrapIconPattern =
-            new Regex(@"^bi-[a-z0-9]+(?:-[a-z0-9]+)*$", RegexOptions.Compiled);
         public CreateServiceValidator()
         {
             RuleFor(x => x.ServiceTitle)
@@ -23,9 +20,7 @@ namespace RestaurantAPI.ValidationRules
 
             RuleFor(x => x.ServiceIconUrl)
                 .NotEmpty().WithMessage("İkon sınıfı boş geçilemez")
-                .MaximumLength(200).WithMessage("İkon sınıfı en fazla 200 karakter olabilir")
-                .Must(icon => BootstrapIconPattern.IsMatch(icon))
-                .WithMessage("Geçerli bir Bootstrap icon sınıfı giriniz (örn. bi-alarm-fill)");
+                .MaximumLength(200).WithMessage("İkon sınıfı en fazla 200 karakter olabilir");
         }
     }
 }

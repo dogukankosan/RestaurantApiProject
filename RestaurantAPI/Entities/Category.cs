@@ -11,7 +11,7 @@ namespace RestaurantAPI.Entities
         public int CategoryID { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string CategoryName { get; set; }
 
         [DefaultValue(true)]

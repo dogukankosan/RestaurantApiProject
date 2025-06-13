@@ -6,8 +6,6 @@ namespace RestaurantAPI.ValidationRules
 {
     public class CreateReservationValidator : AbstractValidator<CreateReservationDto>
     {
-        private static readonly TimeSpan DateTolerance = TimeSpan.FromMinutes(5);
-
         public CreateReservationValidator()
         {
             RuleFor(x => x.ReservationNameSurname)
@@ -31,8 +29,8 @@ namespace RestaurantAPI.ValidationRules
 
             RuleFor(x => x.ReservationDate)
                 .NotNull().WithMessage("Rezervasyon tarihi zorunlu")
-                .Must(date => date >= DateTime.Now.Subtract(DateTolerance))
-                    .WithMessage("Geçmiş tarihe rezervasyon yapılamaz");
+                .Must(date => date.ToUniversalTime() >= DateTime.UtcNow)
+                .WithMessage("Geçmiş tarihe rezervasyon yapılamaz");
 
             RuleFor(x => x.ReservationCountOfPeople)
                 .GreaterThan(0).WithMessage("Kişi sayısı 0'dan büyük olmalıdır")

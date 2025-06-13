@@ -18,6 +18,44 @@ namespace RestaurantAPI.Context
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking); 
             }
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<About>().HasData(new About
+            {
+                AboutID = 1,
+                AboutCompanyLogo = new byte[0],
+                AboutCompanyName = string.Empty,
+                AboutImage1 = new byte[0],
+                AboutImage2 = new byte[0],
+                AboutDesc = string.Empty,
+                AboutWhyChoose = string.Empty,
+                AboutReportImage = new byte[0],
+                AboutRezervationImage = new byte[0]
+            });
+            modelBuilder.Entity<CompanyInfo>().HasData(new CompanyInfo
+            {
+                CompanyInfoID = 1,
+                CompanyInfoAddress = string.Empty,
+                CompanyInfoPhone = string.Empty,
+                CompanyInfoMail = string.Empty,
+                CompanyInfoOpenClosed = string.Empty,
+                CompanyInfoGithubLink = string.Empty,
+                CompanyInfoWebSiteLink = string.Empty,
+                CompanyInfoInstagramLink = string.Empty,
+                CompanyInfoLinkedinLink = string.Empty,
+                CompanyInfoIFrame = string.Empty
+            });
+            modelBuilder.Entity<Feature>().HasData(new Feature
+            {
+                FeatureID = 1,
+                FeatureTitle = string.Empty,
+                FeatureSubTitle = string.Empty,
+                FeatureDescription = string.Empty,
+                FeatureVideoUrl = string.Empty,
+                FeatureImageData = new byte[0]
+            });
+        }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Chef> Chefs { get; set; }
         public DbSet<Feature> Features { get; set; }

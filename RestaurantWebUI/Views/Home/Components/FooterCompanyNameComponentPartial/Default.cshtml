@@ -1,9 +1,9 @@
-﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+﻿@model string?
 
 @{
-    string companyName = string.IsNullOrWhiteSpace(Model?.AboutCompanyName)
-        ? "Restoran"
-        : Model.AboutCompanyName;  
+    string companyName = string.IsNullOrWhiteSpace(Model)
+        ? "Site Adı Girilmemiş"
+        : Model;  
 int year = DateTime.Now.Year;
 }
 <div class="container copyright text-center mt-4">

@@ -9,7 +9,7 @@ namespace RestaurantAPI.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ImageID { get; set; }
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ImageTitle { get; set; }
         [Required]
         public byte[] ImageByte { get; set; }

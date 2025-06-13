@@ -17,7 +17,6 @@
             : HttpUtility.HtmlEncode(text)
                  .Replace("\r\n", "<br />")
                  .Replace("\n", "<br />");
-
     string rawPhone = Model.CompanyInfoPhone ?? "";
     string phoneDigits = new string(rawPhone.Where(char.IsDigit).ToArray());
     string prettyPhone;
@@ -30,7 +29,6 @@
     {
         prettyPhone = HttpUtility.HtmlEncode(rawPhone);
     }
-
     string SafeUrl(string url) =>
         Uri.TryCreate(url, UriKind.Absolute, out var u)
             && (u.Scheme == Uri.UriSchemeHttp || u.Scheme == Uri.UriSchemeHttps)
@@ -48,7 +46,14 @@
                 <i class="bi bi-geo-alt icon"></i>
                 <div class="address">
                     <h4>Adres</h4>
-                    <p>@Html.Raw(FormatMultiline(Model.CompanyInfoAddress))</p>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoAddress))
+                    {
+                        <p>@Html.Raw(FormatMultiline(Model.CompanyInfoAddress))</p>
+                    }
+                    else
+                    {
+                        <p>Adres bilgisi yok.</p>
+                    }
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 d-flex">
@@ -57,10 +62,6 @@
                     <h4>İletişim</h4>
                     @if (!string.IsNullOrEmpty(phoneDigits))
                     {
-                        <p class="mb-1">
-                            <strong>Telefon: </strong>
-                            <a href="tel:@phoneDigits">@prettyPhone</a>
-                        </p>
                         <p>
                             <strong>WhatsApp: </strong>
                             <a href="https://wa.me/@phoneDigits" target="_blank" rel="noopener">
@@ -81,13 +82,23 @@
                             </a>
                         </p>
                     }
+                    else
+                    {
+                        <p>Email bilgisi yok.</p>
+                    }
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 d-flex">
                 <i class="bi bi-clock icon"></i>
                 <div>
                     <h4>Açılış Saati</h4>
-                    <p>@Html.Raw(FormatMultiline(Model.CompanyInfoOpenClosed))</p>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoOpenClosed))
+                    {
+                        <p>@Html.Raw(FormatMultiline(Model.CompanyInfoOpenClosed))</p>
+                    }
+                    else{
+                    <p>Açılış kapanış saati yok.</p>
+                        }
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">

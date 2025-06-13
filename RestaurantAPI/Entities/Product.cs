@@ -10,9 +10,9 @@ namespace RestaurantAPI.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProductID { get; set; }
         [Required]
-        [MaxLength(100)]
+        [Column(TypeName = "nvarchar(100)")]
         public string ProductName { get; set; }
-        [MaxLength(1000)]
+        [Column(TypeName = "nvarchar(1000)")]
         public string ProductDescription { get; set; }
         [Required]
         [Range(1, 999999)]
