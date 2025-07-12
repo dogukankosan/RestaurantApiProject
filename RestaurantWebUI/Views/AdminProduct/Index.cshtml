@@ -1,0 +1,123 @@
+﻿@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+@using RestaurantWebUI.Dtos.ProductDtos
+@model List<RestaurantWebUI.Dtos.ProductDtos.ResultProductDto>
+<title>Admin Ürünler Listesi</title>
+<br />
+<h4 class="card-title">Ürünler Listesi</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered" id="yourTableId">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ürün Adı</th>
+                <th>Ürün Kategorisi</th>
+                <th>Ürün Açıklaması</th>
+                <th>Ürün Fiyat</th>
+                <th>Ürün Resim</th>
+                <th>Ürün Durum</th>
+                <th class="no-export">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultProductDto item in Model)
+            {
+                <tr>
+                    <td>@item.ProductID</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.CategoryName</td>
+                    <td>@item.ProductDescription</td>
+                    <td>@item.ProductPrice @item.ProductPriceSembol</td>
+                    <td>
+                        @if (item.ProductImageData != null)
+                        {
+                            <img src="@(item.ProductImageData != null && item.ProductImageData.Length > 0 
+                                          ? $"data:image/jpeg;base64,{Convert.ToBase64String(item.ProductImageData)}" 
+                                                                           : "/adminThema/assets/img/user.png")"
+                                 alt="@item.ProductName"
+                                 width="60"
+                                 height="60"
+                                 loading="lazy"
+                                 decoding="async"
+                                 class="img-thumbnail rounded shadow-sm object-fit-cover" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Yok</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="DurumGuncelle" asp-controller="AdminUrun" asp-route-id="@item.ProductID" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="newStatus" value="@(item.ProductStatus ? "false" : "true")" />
+                            <button type="submit" class="badge @(item.ProductStatus ? "bg-success" : "bg-danger")" style="border:none; color:white; cursor:pointer;">
+                                @(item.ProductStatus ? "Aktif" : "Pasif")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-info btn-sm"
+                           href="@Url.Action("Guncelle", "AdminUrun", new { id = item.ProductID })"
+                           title="Güncelle">
+                            <i data-feather="edit-2"></i>
+                        </a>
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm ms-1"
+                                onclick="confirmDelete(@item.ProductID)">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminUrun/Ekle" class="btn btn-success">Yeni Ürün Ekle</a>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const type = '@TempData["Type"]';
+            const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+            const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+
+            if (type && message && navigationType === "navigate") {
+                Swal.fire({
+                    icon: type === 'success' ? 'success' : 'error',
+                    title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                    text: message,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    </script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Emin misin?',
+            text: "Bu ürünü silmek üzeresin!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/AdminUrun/Sil/${id}`;
+            }
+        });
+    }
+</script>

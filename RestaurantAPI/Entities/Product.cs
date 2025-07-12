@@ -22,6 +22,9 @@ namespace RestaurantAPI.Entities
         [DefaultValue(true)]
         public bool ProductStatus { get; set; } = true;
         [Required]
+        [Column(TypeName = "nchar(1)")]
+        public char ProductPriceSembol { get; set; }
+        [Required]
         public int CategoryID { get; set; }
         public Category Category { get; set; }
     }

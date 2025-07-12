@@ -12,7 +12,7 @@ using RestaurantAPI.Context;
 namespace RestaurantAPI.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20250613095847_mig1")]
+    [Migration("20250705170755_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -415,6 +415,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<decimal>("ProductPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductPriceSembol")
+                        .IsRequired()
+                        .HasColumnType("nchar(1)");
 
                     b.Property<bool>("ProductStatus")
                         .HasColumnType("bit");

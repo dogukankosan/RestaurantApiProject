@@ -1,0 +1,56 @@
+﻿@model RestaurantWebUI.Dtos.EventDtos.CreateEventDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Yeni Etkinlik Ekle</title>
+<h2 class="fw-bold">Yeni Etkinlik Ekle</h2>
+<hr />
+<div class="col-12 col-md-8 col-lg-6">
+    <div class="card">
+        <form asp-action="Ekle" asp-controller="AdminEtkinlik" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="card-body">
+
+                <div class="form-group mb-3">
+                    <label asp-for="EventName" class="form-label">Etkinlik Adı *</label>
+                    <input asp-for="EventName" class="form-control" required maxlength="150" placeholder="Etkinlik adını giriniz" />
+                    <span asp-validation-for="EventName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EventPrice" class="form-label">Fiyat *</label>
+                    <input asp-for="EventPrice" class="form-control" type="number" step="0.01" required min="0" />
+                    <span asp-validation-for="EventPrice" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EventDetails" class="form-label">Detaylar *</label>
+                    <textarea asp-for="EventDetails" class="form-control" rows="3" required maxlength="1000" placeholder="Etkinlik açıklaması giriniz."></textarea>
+                    <span asp-validation-for="EventDetails" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EventImageFile" class="form-label">Görsel *</label>
+                    <input asp-for="EventImageFile" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" required />
+                    <span asp-validation-for="EventImageFile" class="text-danger"></span>
+                    <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp (max 5MB)</small>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="EventStatus" class="form-label">Durum *</label>
+                    <select asp-for="EventStatus" class="form-control" required>
+                        <option value="">-- Durum Seçiniz --</option>
+                        <option value="true">🟢 Aktif</option>
+                        <option value="false">🔴 Pasif</option>
+                    </select>
+                    <span asp-validation-for="EventStatus" class="text-danger"></span>
+                </div>
+
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                    <a asp-action="Liste" asp-controller="AdminEtkinlik" class="btn btn-secondary ms-2">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -15,7 +15,6 @@ namespace RestaurantAPI.Context
                     {
                         sqlOptions.CommandTimeout(30);  
                     });
-                optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking); 
             }
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,5 +69,6 @@ namespace RestaurantAPI.Context
         public DbSet<About> Abouts { get; set; }
         public DbSet<AdminLog> AdminLogs { get; set; }
         public DbSet<WebLog> WebLogs { get; set; }
+        public DbSet<Icon> Icons { get; set; }
     }
 }

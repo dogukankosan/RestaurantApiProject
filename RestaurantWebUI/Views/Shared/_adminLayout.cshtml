@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/adminThema/assets/css/style.css">
   <link rel="stylesheet" href="/adminThema/assets/css/components.css">
   <link rel="stylesheet" href="/adminThema/assets/css/custom.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel='shortcut icon' type='image/x-icon' href='/adminThema/assets/img/favicon.ico' />
   <link href="~/AdminThema/table/style.css" rel="stylesheet" />
@@ -52,7 +53,7 @@
                 <ul class="sidebar-menu">
                     <li class="menu-header">Menüler</li>
                     <li class="dropdown active">
-                        <a href="index.html" class="nav-link"><i data-feather="monitor"></i><span>Ana Sayfa</span></a>
+                            <a href="/Admin/Anasayfa" class="nav-link"><i data-feather="monitor"></i><span>Ana Sayfa</span></a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="copy"></i><span>Sayfalar
@@ -60,8 +61,42 @@
                         <ul class="dropdown-menu">
                             <li><a class="nav-link" href="/AdminKategori/Liste">Kategoriler</a></li>
                         </ul>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="/AdminUrun/Liste">Ürünler</a></li>
+                        </ul>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="/AdminSirket/Liste">Şirket Bilgileri</a></li>
+                        </ul>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="/AdminOzellik/Liste">Özellik</a></li>
+                        </ul>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="/AdminGaleri/Liste">Galeri</a></li>
+                        </ul>
+                        <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/AdminReferans/Liste">Referanslar</a></li>
+                        </ul>
+                         <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/AdminServis/Liste">Servisler</a></li>
+                         </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/AdminEtkinlik/Liste">Etkinlikler</a></li>
+                            </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/AdminHakkimizda/Liste">Hakkımızda</a></li>
+                        </ul>
                     </li>
 
+                    <li class="dropdown">
+                        <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="settings"></i><span>Ayarlar
+                        </span></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="nav-link" href="/">Siteye Dön</a></li>
+                        </ul>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/AdminIcon/Liste">İkonlar</a></li>
+                            </ul>
+                    </li>
                 </ul>
             </aside>
         </div>

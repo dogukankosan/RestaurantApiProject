@@ -349,6 +349,26 @@ namespace RestaurantAPI.Migrations
                     b.ToTable("GalleryImages");
                 });
 
+            modelBuilder.Entity("RestaurantAPI.Entities.Icon", b =>
+                {
+                    b.Property<int>("IconID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IconID"), 1L, 1);
+
+                    b.Property<bool>("IconStatus")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IconURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("IconID");
+
+                    b.ToTable("Icons");
+                });
+
             modelBuilder.Entity("RestaurantAPI.Entities.Message", b =>
                 {
                     b.Property<int>("MessageID")
@@ -413,6 +433,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<decimal>("ProductPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductPriceSembol")
+                        .IsRequired()
+                        .HasColumnType("nchar(1)");
 
                     b.Property<bool>("ProductStatus")
                         .HasColumnType("bit");

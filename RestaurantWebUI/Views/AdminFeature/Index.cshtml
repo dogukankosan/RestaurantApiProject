@@ -1,0 +1,100 @@
+﻿@model RestaurantWebUI.Dtos.FeatureDtos.UpdateFeatureDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Özellik Bilgileri</title>
+<br />
+<h4 class="card-title fw-bold">Özellik Bilgileri</h4>
+<hr />
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 250px;">Alan</th>
+                <th>İçerik</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Başlık</strong></td>
+                <td>@Model.FeatureTitle</td>
+            </tr>
+            <tr>
+                <td><strong>Alt Başlık</strong></td>
+                <td>@Model.FeatureSubTitle</td>
+            </tr>
+            <tr>
+                <td><strong>Açıklama</strong></td>
+                <td>@Model.FeatureDescription</td>
+            </tr>
+        <tr>
+            <td><strong>Tanıtım Videosu</strong></td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(Model.FeatureVideoUrl) && Model.FeatureVideoUrl.Contains("youtube.com"))
+                {
+                    var uri = new Uri(Model.FeatureVideoUrl);
+                    var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+                    string videoId = query["v"].ToString();
+                    if (!string.IsNullOrEmpty(videoId))
+                    {
+                        <a href="@Model.FeatureVideoUrl" target="_blank" class="d-block" style="max-width: 320px;">
+                            <img src="https://img.youtube.com/vi/@videoId/hqdefault.jpg"
+                                 alt="Video Önizleme"
+                                 class="img-fluid img-thumbnail shadow-sm"
+                                 style="max-height: 180px; object-fit: cover;" />
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Video ID çözümlenemedi</span>
+                    }
+                }
+                else if (!string.IsNullOrWhiteSpace(Model.FeatureVideoUrl))
+                {
+                    <a href="@Model.FeatureVideoUrl" target="_blank" class="text-primary">
+                        Video bağlantısını aç
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">Video bağlantısı yok</span>
+                }
+            </td>
+        </tr>
+            <tr>
+                <td><strong>Görsel</strong></td>
+                <td>
+                    @if (Model.FeatureImageData != null && Model.FeatureImageData.Length > 0)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.FeatureImageData)"
+                             class="img-thumbnail shadow-sm"
+                             style="max-height: 180px; object-fit: cover;"
+                             alt="Özellik Görseli"
+                             loading="lazy" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Görsel bulunamadı</span>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminOzellik/Guncelle/@Model.FeatureID" class="btn btn-info">Bilgileri Güncelle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>

@@ -1,0 +1,159 @@
+﻿@using RestaurantWebUI.Dtos.EventDtos
+@model List<ResultEventDto>
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Admin Etkinlikler</title>
+<br />
+<h4 class="card-title">Etkinlik Listesi</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📅 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖰 Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered" id="yourTableId">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Adı</th>
+                <th>Fiyat</th>
+                <th>Açıklama</th>
+                <th>Resim</th>
+                <th>Durum</th>
+                <th class="no-export">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultEventDto item in Model)
+            {
+                <tr>
+                    <td>@item.EventID</td>
+                    <td>@item.EventName</td>
+                    <td>@item.EventPrice.ToString("C")</td>
+                    <td>@item.EventDetails</td>
+                    <td>
+                        @if (item.EventImage != null && item.EventImage.Length > 0)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.EventImage)"
+                                 alt="Etkinlik Resmi"
+                                 class="img-thumbnail"
+                                 style="height: 60px; width: 60px; object-fit: cover;" loading="lazy" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Yok</span>
+                        }
+                    </td>
+                    <td>
+                        <button type="button"
+                                class="badge btn-change-status @(item.EventStatus ? "bg-success" : "bg-danger")"
+                                data-id="@item.EventID"
+                                data-new-status="@(!item.EventStatus)"
+                                style="border:none; color:white; cursor:pointer;">
+                            @(item.EventStatus ? "Aktif" : "Pasif")
+                        </button>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-info btn-sm"
+                           href="@Url.Action("Guncelle", "AdminEtkinlik", new { id = item.EventID })"
+                           title="Güncelle">
+                            <i data-feather="edit-2"></i>
+                        </a>
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm ms-1"
+                                onclick="confirmDelete(@item.EventID)">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminEtkinlik/Ekle" class="btn btn-success">Yeni Etkinlik Ekle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+        if (type && message && navigationType === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Emin misin?',
+            text: "Bu etkinliği silmek i silmek \u00fzeresin!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/AdminEtkinlik/Sil/${id}`;
+            }
+        });
+    }
+</script>
+<script>
+    document.querySelectorAll('.btn-change-status').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const newStatus = this.dataset.newStatus === "true";
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Etkinliğin durumu değiştirilecek.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Evet, değiştir',
+                cancelButtonText: 'İptal',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/AdminEtkinlik/DurumGuncelle/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            eventID: parseInt(id),
+                            isActive: newStatus
+                        })
+                    })
+                        .then(res => {
+                            if (res.ok) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Güncellendi',
+                                    text: 'Durum başarıyla değiştirildi',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => location.reload());
+                            } else {
+                                res.text().then(msg => {
+                                    Swal.fire('Hata', msg, 'error');
+                                });
+                            }
+                        });
+                }
+            });
+        });
+    });
+</script>

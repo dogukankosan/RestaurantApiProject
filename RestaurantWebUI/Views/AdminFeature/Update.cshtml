@@ -1,0 +1,87 @@
+﻿@model RestaurantWebUI.Dtos.FeatureDtos.UpdateFeatureDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Özellik Güncelle</title>
+
+<h2>Özellik Güncelle</h2>
+<hr />
+<div class="col-12 col-md-8 col-lg-8">
+    <div class="card">
+        <form asp-action="Guncelle" asp-controller="AdminOzellik" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="FeatureTitle" class="form-label">Başlık *</label>
+                    <input asp-for="FeatureTitle" class="form-control" maxlength="150" minlength="3" required />
+                    <span asp-validation-for="FeatureTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FeatureSubTitle" class="form-label">Alt Başlık *</label>
+                    <input asp-for="FeatureSubTitle" class="form-control" maxlength="150" minlength="3" required />
+                    <span asp-validation-for="FeatureSubTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FeatureDescription" class="form-label">Açıklama *</label>
+                    <textarea asp-for="FeatureDescription" class="form-control" rows="4" maxlength="1000" required></textarea>
+                    <span asp-validation-for="FeatureDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FeatureVideoUrl" class="form-label">Video URL *</label>
+                    <input asp-for="FeatureVideoUrl" class="form-control" maxlength="300" pattern="https?://.+" required />
+                    <span asp-validation-for="FeatureVideoUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Görsel *</label>
+                    <input asp-for="FeatureImageFile" type="file" accept=".jpg,.jpeg,.png,.webp" class="form-control" />
+                    <div id="previewContainer" class="mt-2" style="@(string.IsNullOrWhiteSpace(Model.FeatureImageBase64) ? "display:none;" : "")">
+                        <img id="previewImage"
+                             src="@Model.FeatureImageBase64"
+                             alt="Özellik Görseli"
+                             class="img-thumbnail shadow-sm border"
+                             loading="lazy"
+                             style="max-height: 140px; object-fit: cover; border-radius: 5px;" />
+                    </div>
+                    <input type="hidden" name="FeatureImageBase64" id="FeatureImageBase64" value="@Html.Raw(Model.FeatureImageBase64)" />
+                    <span asp-validation-for="FeatureImageFile" class="text-danger"></span>
+                    <small class="text-muted">Desteklenen: .jpg, .jpeg, .png, .webp – Max 5 MB</small>
+                </div>
+            </div>
+
+            <div class="card-footer text-end">
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <a asp-action="Index" asp-controller="AdminFeature" class="btn btn-secondary ms-2">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const imageInput = document.querySelector('input[type="file"][name="FeatureImageFile"]');
+    const previewImage = document.getElementById('previewImage');
+    const previewContainer = document.getElementById('previewContainer');
+    const hiddenInput = document.getElementById('FeatureImageBase64');
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Geçersiz dosya!',
+                text: 'Sadece görsel dosyası yükleyebilirsiniz.',
+                confirmButtonColor: '#d33'
+            });
+            this.value = '';
+            previewImage.src = '';
+            previewContainer.style.display = 'none';
+            hiddenInput.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+            hiddenInput.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>

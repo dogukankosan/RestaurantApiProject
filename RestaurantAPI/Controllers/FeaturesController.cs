@@ -25,26 +25,62 @@ namespace RestaurantAPI.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync();
             if (feature == null)
-                return NotFound("Özellik bulunamadı.");
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Özellik Bulunamadı",
+                    Detail = "Veritabanında kayıtlı bir özellik bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
             ResultFeatureDto result = _mapper.Map<ResultFeatureDto>(feature);
             return Ok(result);
         }
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateFeatureDto dto)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateFeatureDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            if (id != dto.FeatureID)
-                return BadRequest("Gönderilen ID ile DTO içindeki ID eşleşmiyor.");
+                return ValidationProblem(ModelState);
             Feature? exists = await _context.Features
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.FeatureID == id);
+                .FirstOrDefaultAsync();
             if (exists == null)
-                return NotFound("Özellik bulunamadı.");
-            Feature entity = await _context.Features.FindAsync(id)!;
-            _mapper.Map(dto, entity);
-            await _context.SaveChangesAsync();
-            return Ok("Özellik güncelleme işlemi başarılı");
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Özellik Bulunamadı",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            try
+            {
+                Feature? entity = await _context.Features.FirstOrDefaultAsync();
+                if (entity == null)
+                {
+                    return NotFound(new ProblemDetails
+                    {
+                        Title = "Özellik Bulunamadı",
+                        Status = StatusCodes.Status404NotFound
+                    });
+                }
+                _mapper.Map(dto, entity);
+                _context.Features.Update(entity);
+                await _context.SaveChangesAsync();
+                return Ok(new
+                {
+                    Message = "Özellik başarıyla güncellendi.",
+                    UpdatedFeatureID = entity.FeatureID
+                });
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Veritabanı Hatası",
+                    Detail = ex.InnerException?.Message ?? ex.Message,
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
     }
 }

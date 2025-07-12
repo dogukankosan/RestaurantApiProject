@@ -1,0 +1,109 @@
+﻿@using RestaurantWebUI.Dtos.AboutDtos
+@model ResultAboutDto
+
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Hakkımızda Bilgileri</title>
+<br />
+<h4 class="card-title fw-bold">Hakkımızda Bilgileri</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+@{
+    string Placeholder = "/adminThema/assets/img/blog/img1.png";
+    string logo = Model.AboutCompanyLogo?.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutCompanyLogo)}"
+        : Placeholder;
+    string img1 = Model.AboutImage1?.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutImage1)}"
+        : Placeholder;
+    string img2 = Model.AboutImage2?.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutImage2)}"
+        : Placeholder;
+    string reportImg = Model.AboutReportImage?.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutReportImage)}"
+        : Placeholder;
+    string rezervasyonImg = Model.AboutRezervationImage?.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutRezervationImage)}"
+        : Placeholder;
+}
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 250px;">Bilgi Türü</th>
+                <th>Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Firma Adı</strong></td>
+                <td>@Model.AboutCompanyName</td>
+            </tr>
+            <tr>
+                <td><strong>Logo</strong></td>
+                <td>
+                    <img src="@logo" width="60" height="60" class="img-thumbnail rounded-circle" style="object-fit: cover;" alt="Logo" />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Neden Biz Açıklama</strong></td>
+                <td>@Model.AboutDesc</td>
+            </tr>
+            <tr>
+                <td><strong>Neden Biz Görsel 1</strong></td>
+                <td>
+                    <img src="@img1" width="100" height="100" class="img-thumbnail" style="object-fit: cover;" alt="Görsel 1" />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Neden Biz Görsel 2</strong></td>
+                <td>
+                    <img src="@img2" width="100" height="100" class="img-thumbnail" style="object-fit: cover;" alt="Görsel 2" />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Neden Biz?</strong></td>
+                <td>@Model.AboutWhyChoose</td>
+            </tr>
+            <tr>
+                <td><strong>Rapor Görseli</strong></td>
+                <td>
+                    <img src="@reportImg" width="100" height="100" class="img-thumbnail" style="object-fit: cover;" alt="Rapor Görseli" />
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Rezervasyon Görseli</strong></td>
+                <td>
+                    <img src="@rezervasyonImg" width="100" height="100" class="img-thumbnail" style="object-fit: cover;" alt="Rezervasyon Görseli" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminHakkimizda/Guncelle/@Model.AboutID" class="btn btn-info">Bilgileri Güncelle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>

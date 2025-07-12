@@ -12,66 +12,64 @@ namespace RestaurantWebUI.Controllers
         {
             _httpClientFactory = httpClientFactory;
         }
+
         [HttpGet("Liste")]
         public async Task<IActionResult> Index()
         {
-            List<ResultCategoryDto> categories = new();
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                List<ResultCategoryDto>? data = await client.GetFromJsonAsync<List<ResultCategoryDto>>("api/Categories");
-                categories = data ?? new List<ResultCategoryDto>();
+                 List< ResultCategoryDto> categories = await client.GetFromJsonAsync<List<ResultCategoryDto>>("api/Categories");
+                return View(categories ?? new List<ResultCategoryDto>());
             }
             catch (Exception ex)
             {
+                // TODO: Logla (ex)
                 TempData["Type"] = "error";
-                TempData["Message"] = "Kategoriler yüklenirken bir problem oluştu.";
-                // TODO: Loglanacak - API'den kategori listesi çekilirken hata
+                TempData["Message"] = "Kategoriler yüklenirken bir hata oluştu.";
+                return View(new List<ResultCategoryDto>());
             }
-            return View(categories);
         }
         [HttpGet("Ekle")]
         public IActionResult Add()
-            => View(new CreateCategoryDto());
+        {
+            return View(new CreateCategoryDto());
+        }
         [HttpPost("Ekle")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CreateCategoryDto createDto)
         {
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
-            HttpResponseMessage response;
             try
             {
-                response = await client.PostAsJsonAsync("api/Categories", createDto);
+                HttpResponseMessage response = await client.PostAsJsonAsync("api/Categories", createDto);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Type"] = "success";
+                    TempData["Message"] = "Kategori başarıyla eklendi.";
+                    return RedirectToAction("Index");
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+                    if (problem?.Errors != null)
+                    {
+                        foreach (var error in problem.Errors)
+                            foreach (string msg in error.Value)
+                                ModelState.AddModelError(error.Key, msg);
+                        // TODO: Logla - validasyon hataları
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Kategori eklenemedi.");
+                    // TODO: Logla - bilinmeyen ekleme hatası
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Sunucuyla iletişimde hata oluştu.");
-                // TODO: Loglanacak - API'ye bağlanılamadı
-                return View(createDto);
-            }
-            if (response.IsSuccessStatusCode)
-            {
-                TempData["Type"] = "success";
-                TempData["Message"] = "Kategori başarıyla eklendi.";
-                return RedirectToAction("Index");
-            }
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-                if (problem?.Errors != null)
-                {
-                    foreach (var kv in problem.Errors)
-                    {
-                        foreach (var msg in kv.Value)
-                            ModelState.AddModelError(kv.Key, msg);
-                        // TODO: Loglanacak - API validasyon hatası
-                    }
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("", "Kategori ekleme başarısız oldu.");
-                // TODO: Loglanacak - API bilinmeyen hata
+                // TODO: Logla (ex)
+                ModelState.AddModelError("", "Sunucuyla bağlantı kurulamadı.");
             }
             return View(createDto);
         }
@@ -81,7 +79,7 @@ namespace RestaurantWebUI.Controllers
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                UpdateCategoryDto? category = await client.GetFromJsonAsync<UpdateCategoryDto>($"api/Categories/{id}");
+                UpdateCategoryDto category = await client.GetFromJsonAsync<UpdateCategoryDto>($"api/Categories/{id}");
                 if (category == null)
                 {
                     TempData["Type"] = "error";
@@ -92,9 +90,9 @@ namespace RestaurantWebUI.Controllers
             }
             catch (Exception ex)
             {
+                // TODO: Logla (ex)
                 TempData["Type"] = "error";
                 TempData["Message"] = "Kategori bilgisi alınırken bir hata oluştu.";
-                // TODO: Loglanacak - Kategori detayları çekilemedi
                 return RedirectToAction("Index");
             }
         }
@@ -103,42 +101,81 @@ namespace RestaurantWebUI.Controllers
         public async Task<IActionResult> Update(int id, UpdateCategoryDto updateDto)
         {
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
-            HttpResponseMessage response;
             try
             {
-                response = await client.PutAsJsonAsync($"api/Categories/{id}", updateDto);
+                HttpResponseMessage response = await client.PutAsJsonAsync($"api/Categories/{id}", updateDto);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Type"] = "success";
+                    TempData["Message"] = "Kategori başarıyla güncellendi.";
+                    return RedirectToAction("Index");
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    ValidationProblemDetails problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+                    if (problem?.Errors != null)
+                    {
+                        foreach (var error in problem.Errors)
+                            foreach (string msg in error.Value)
+                                ModelState.AddModelError(error.Key, msg);
+                        // TODO: Logla - validasyon hataları
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Kategori güncellenemedi.");
+                    // TODO: Logla - bilinmeyen güncelleme hatası
+                }
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Sunucuyla iletişimde hata oluştu.");
-                // TODO: Loglanacak - API'ye güncelleme isteği atılamadı
-                return View(updateDto);
-            }
-            if (response.IsSuccessStatusCode)
-            {
-                TempData["Type"] = "success";
-                TempData["Message"] = "Kategori başarıyla güncellendi.";
-                return RedirectToAction("Index");
-            }
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                ValidationProblemDetails ? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
-                if (problem?.Errors != null)
-                {
-                    foreach (var kv in problem.Errors)
-                    {
-                        foreach (var msg in kv.Value)
-                            ModelState.AddModelError(kv.Key, msg);
-                        // TODO: Loglanacak - Güncelleme validasyon hatası
-                    }
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("", "Kategori güncelleme başarısız oldu.");
-                // TODO: Loglanacak - API bilinmeyen güncelleme hatası
+                // TODO: Logla (ex)
+                ModelState.AddModelError("", "Sunucuyla bağlantı kurulamadı.");
             }
             return View(updateDto);
+        }
+        [HttpPost("DurumGuncelle/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id, string newStatus)
+        {
+            if (!bool.TryParse(newStatus, out bool parsedStatus))
+            {
+                TempData["Type"] = "error";
+                TempData["Message"] = "Geçersiz durum değeri gönderildi.";
+                return RedirectToAction("Index");
+            }
+            HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
+            UpdateCategoryStatusDto statusDto = new UpdateCategoryStatusDto
+            {
+                CategoryID = id,
+                CategoryStatus = parsedStatus
+            };
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Patch, $"api/Categories/{id}/Status")
+            {
+                Content = JsonContent.Create(statusDto)
+            };
+            try
+            {
+                HttpResponseMessage response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Type"] = "success";
+                    TempData["Message"] = "Kategori durumu başarıyla güncellendi.";
+                }
+                else
+                {
+                    TempData["Type"] = "error";
+                    TempData["Message"] = "Kategori durumu güncellenemedi.";
+                    // TODO: Logla - durum güncelleme hatası
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO: Logla (ex)
+                TempData["Type"] = "error";
+                TempData["Message"] = "Durum güncelleme sırasında bir hata oluştu.";
+            }
+            return RedirectToAction("Index");
         }
     }
 }

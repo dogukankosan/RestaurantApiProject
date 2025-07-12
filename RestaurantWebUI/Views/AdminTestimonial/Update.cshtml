@@ -1,0 +1,118 @@
+﻿@model RestaurantWebUI.Dtos.TestimonialDtos.UpdateTestimonialDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Referans Güncelle</title>
+<h2>Referans Güncelle</h2>
+<hr />
+<div class="col-12 col-md-6 col-lg-6">
+    <div class="card">
+        <form asp-action="Guncelle" asp-controller="AdminReferans" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="card-body">
+                <input type="hidden" asp-for="TestimonialID" />
+                <div class="form-group">
+                    <label asp-for="TestimonialNameSurname" class="form-label">Ad Soyad *</label>
+                    <input asp-for="TestimonialNameSurname"
+                           class="form-control"
+                           required minlength="3"
+                           maxlength="100"
+                           pattern="^\S+(\s+\S+)+$"
+                           placeholder="Ad Soyad giriniz" />
+                    <span asp-validation-for="TestimonialNameSurname" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TestimonialTitle" class="form-label">Başlık</label>
+                    <input asp-for="TestimonialTitle"
+                           class="form-control"
+                           maxlength="100"
+                           placeholder="Örn: CEO - Firma Adı" />
+                    <span asp-validation-for="TestimonialTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TestimonialComment" class="form-label">Yorum *</label>
+                    <textarea asp-for="TestimonialComment"
+                              class="form-control"
+                              rows="4"
+                              required
+                              maxlength="1000"
+                              placeholder="Referans yorumunu yazınız."></textarea>
+                    <span asp-validation-for="TestimonialComment" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Görsel *</label>
+                    <input asp-for="TestimonialImageFile"
+                           type="file"
+                           accept="image/jpeg, image/png, image/webp"
+                           class="form-control" />
+                    <div id="previewContainer" class="mt-2" style="@(string.IsNullOrWhiteSpace(Model.TestimonialImageBase64) ? "display:none;" : "")">
+                        <img id="previewImage"
+                             src="@Model.TestimonialImageBase64"
+                             alt="Görsel Önizleme"
+                             class="img-thumbnail shadow-sm border"
+                             style="max-height: 140px; object-fit: cover; border-radius: 5px;" />
+                    </div>
+                    <input type="hidden" name="TestimonialImageBase64" id="TestimonialImageBase64" value="@Html.Raw(Model.TestimonialImageBase64)" />
+                    <span asp-validation-for="TestimonialImageFile" class="text-danger"></span>
+                    <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp (max 5 MB)</small>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TestimonialStatus" class="form-label">Durum *</label>
+                    <select asp-for="TestimonialStatus" class="form-control" required>
+                        <option value="">-- Durum Seçiniz --</option>
+                        <option value="true" selected="@Model.TestimonialStatus">🟢 Aktif</option>
+                        <option value="false" selected="@(!Model.TestimonialStatus)">🔴 Pasif</option>
+                    </select>
+                    <span asp-validation-for="TestimonialStatus" class="text-danger"></span>
+                </div>
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Liste" asp-controller="AdminReferans" class="btn btn-secondary ms-2">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const imageInput = document.querySelector('input[type="file"][name="TestimonialImageFile"]');
+    const previewImage = document.getElementById('previewImage');
+    const previewContainer = document.getElementById('previewContainer');
+    const hiddenInput = document.getElementById('TestimonialImageBase64');
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Geçersiz dosya!',
+                text: 'Sadece .jpg, .jpeg, .png veya .webp dosyası yükleyebilirsiniz.',
+                confirmButtonColor: '#d33'
+            });
+            this.value = '';
+            previewImage.src = '';
+            previewContainer.style.display = 'none';
+            hiddenInput.value = '';
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Dosya çok büyük!',
+                text: 'Maksimum 5 MB boyutunda görsel yükleyebilirsiniz.',
+                confirmButtonColor: '#d33'
+            });
+            this.value = '';
+            previewImage.src = '';
+            previewContainer.style.display = 'none';
+            hiddenInput.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+            hiddenInput.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>

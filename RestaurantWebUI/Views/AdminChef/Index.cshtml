@@ -1,0 +1,196 @@
+﻿@using RestaurantWebUI.Dtos.ChefDtos
+@model List<ResultChefDto>
+
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<style>
+    .custom-link {
+        color: #0d6efd;
+        font-weight: 600;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+    }
+        .custom-link:hover {
+            color: white !important;
+        }
+</style>
+<title>Admin Şef Listesi</title>
+<br />
+<h4 class="card-title fw-bold">Şef Listesi</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle" id="yourTableId">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>İsim Soyisim</th>
+                <th>Ünvan</th>
+                <th>Açıklama</th>
+                <th>Twitter</th>
+                <th>Facebook</th>
+                <th>Instagram</th>
+                <th>Linkedin</th>
+                <th>Resim</th>
+                <th>Durum</th>
+                <th class="no-export">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultChefDto item in Model)
+            {
+                <tr>
+                    <td>@item.ChefID</td>
+                    <td>@item.ChefNameSurname</td>
+                    <td>@item.ChefTitle</td>
+                    <td>@item.ChefDescription</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ChefTwitterLink))
+                        {
+                            <a class="custom-link"href="@item.ChefTwitterLink" target="_blank" >Twitter</a>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ChefFacebookLink))
+                        {
+                            <a class="custom-link"href="@item.ChefFacebookLink" target="_blank" >Facebook</a>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ChefInstagramLink))
+                        {
+                            <a class="custom-link"href="@item.ChefInstagramLink" target="_blank" >Instagram</a>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ChefLinkedinLink))
+                        {
+                            <a href="@item.ChefLinkedinLink"
+                               target="_blank"
+                               class="custom-link">
+                                Linkedin
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @if (item.ChefImage != null && item.ChefImage.Length > 0)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.ChefImage)" alt="Şef Resmi" class="img-thumbnail" style="height: 60px; width: 60px; object-fit: cover;" loading="lazy" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Yok</span>
+                        }
+                    </td>
+                    <td>
+                        <form id="form-@item.ChefID"
+                              asp-action="DurumGuncelle"
+                              asp-controller="AdminSef"
+                              asp-route-id="@item.ChefID"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="newStatus" value="@(item.ChefStatus ? "false" : "true")" />
+                            <button type="button"
+                                    class="badge @(item.ChefStatus ? "bg-success" : "bg-danger") btn-change-status"
+                                    data-chef-id="@item.ChefID"
+                                    style="border:none; cursor:pointer;">
+                                @(item.ChefStatus ? "Aktif" : "Pasif")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-info btn-sm"
+                           href="@Url.Action("Guncelle", "AdminSef", new { id = item.ChefID })"
+                           title="Güncelle">
+                            <i data-feather="edit-2"></i>
+                        </a>
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm ms-1"
+                                onclick="confirmDelete(@item.ChefID)">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminSef/Ekle" class="btn btn-success">Yeni Şef Ekle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('.btn-change-status').forEach(button => {
+        button.addEventListener('click', function () {
+            const chefId = this.getAttribute('data-chef-id');
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Şef durumu değiştirilecek. Emin misiniz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, değiştir',
+                cancelButtonText: 'Hayır'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`form-${chefId}`).submit();
+                }
+            });
+        });
+    });
+</script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Emin misin?',
+            text: "Şefi silmek üzeresin!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/AdminSef/Sil/${id}`;
+                const token = document.querySelector('input[name="__RequestVerificationToken"]');
+                if (token) {
+                    const hiddenToken = document.createElement('input');
+                    hiddenToken.type = 'hidden';
+                    hiddenToken.name = '__RequestVerificationToken';
+                    hiddenToken.value = token.value;
+                    form.appendChild(hiddenToken);
+                }
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+</script>

@@ -1,0 +1,175 @@
+﻿@using RestaurantWebUI.Dtos.IconDtos
+@model List<ResultIconDto>
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Admin İkon Listesi</title>
+<br />
+<h4 class="card-title fw-bold">İkon Listesi</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle" id="yourTableId">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>İkon</th>
+                <th>Durum</th>
+                <th class="no-export">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultIconDto item in Model)
+            {
+                <tr>
+                    <td>@item.IconID</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.IconURL))
+                        {
+                            <i class="@item.IconURL" style="font-size: 1.5rem;"></i>
+                            <small class="d-block text-muted">@item.IconURL</small>
+                        }
+                        else
+                        {
+                            <span class="text-muted">İkon yok</span>
+                        }
+                    </td>
+                    <td>
+                        <form id="form-@item.IconID"
+                              asp-action="DurumGuncelle"
+                              asp-controller="AdminIcon"
+                              asp-route-id="@item.IconID"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="newStatus" value="@(item.IconStatus ? "false" : "true")" />
+                            <button type="button"
+                                    class="badge @(item.IconStatus ? "bg-success" : "bg-danger") btn-change-status"
+                                    data-id="@item.IconID"
+                                    data-new-status="@(item.IconStatus ? "false" : "true")"
+                                    style="border:none; cursor:pointer;">
+                                @(item.IconStatus ? "Aktif" : "Pasif")
+                            </button>
+
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-info btn-sm"
+                           href="@Url.Action("Guncelle", "AdminIcon", new { id = item.IconID })"
+                           title="Güncelle">
+                            <i data-feather="edit-2"></i>
+                        </a>
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm ms-1"
+                                onclick="confirmDelete(@item.IconID)">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminIcon/Ekle" class="btn btn-success">Yeni İkon Ekle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>
+<script>
+       document.querySelectorAll('.btn-change-status').forEach(button => {
+        button.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const isActive = this.getAttribute('data-new-status');
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "İkon durumu değiştirilecek. Emin misiniz?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, değiştir',
+                cancelButtonText: 'Hayır'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/AdminIcon/DurumGuncelle/${id}`, {
+                        method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]').value
+    },
+                        body: JSON.stringify({
+                            iconID: parseInt(id),
+                            IconStatus : isActive === "true"
+                        })
+                    })
+                    .then(res => {
+                        if (res.ok) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Güncellendi',
+                                text: 'Durum başarıyla güncellendi',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            res.text().then(text => {
+                                Swal.fire('Hata', text, 'error');
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    });
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Emin misin?',
+            text: "Bu ikonu silmek üzeresiniz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/AdminIcon/Sil/${id}`;
+                const token = document.querySelector('input[name="__RequestVerificationToken"]');
+                if (token) {
+                    const hiddenToken = document.createElement('input');
+                    hiddenToken.type = 'hidden';
+                    hiddenToken.name = '__RequestVerificationToken';
+                    hiddenToken.value = token.value;
+                    form.appendChild(hiddenToken);
+                }
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+</script>

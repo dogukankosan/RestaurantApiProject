@@ -29,20 +29,27 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model)
+        @foreach (ResultCategoryDto item in Model)
         {
             <tr>
                 <td>@item.CategoryID</td>
                 <td>@item.CategoryName</td>
                 <td>
-                    @if (item.CategoryStatus)
-                    {
-                        <a href=""><span style="color:white" class="badge bg-success">Aktif</span></a>
-                    }
-                    else
-                    {
-                        <a href=""><span style="color:white" class="badge bg-danger">Pasif</span></a>
-                    }
+                    <form id="form-@item.CategoryID"
+                          asp-action="DurumGuncelle"
+                          asp-controller="AdminKategori"
+                          asp-route-id="@item.CategoryID"
+                          method="post"
+                          style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="newStatus" value="@(item.CategoryStatus ? "false" : "true")" />
+                        <button type="button"
+                                class="badge @(item.CategoryStatus ? "bg-success" : "bg-danger") btn-change-status"
+                                data-category-id="@item.CategoryID"
+                                style="border:none; color:white; cursor:pointer;">
+                            @(item.CategoryStatus ? "Aktif" : "Pasif")
+                        </button>
+                    </form>
                 </td>
                 <td>
                     <a class="btn btn-outline-info btn-sm"
@@ -71,5 +78,26 @@
                 showConfirmButton: false
             });
         }
+    });
+</script>
+<script>
+    document.querySelectorAll('.btn-change-status').forEach(button => {
+        button.addEventListener('click', function () {
+            const categoryId = this.getAttribute('data-category-id');
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: "Kategori durumu değiştirilecek. Bağlı tüm ürünlerin durumu da aynı olacaktır!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, değiştir',
+                cancelButtonText: 'Hayır'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`form-${categoryId}`).submit();
+                }
+            });
+        });
     });
 </script>

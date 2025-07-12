@@ -1,0 +1,115 @@
+﻿@using System.Linq.Expressions
+@model RestaurantWebUI.Dtos.ChefDtos.UpdateChefDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Şef Güncelle</title>
+<h2 class="fw-bold mb-4">Şef Güncelle</h2>
+<hr class="mb-4" />
+<div class="col-12 col-xl-8">
+    <div class="card shadow-sm">
+        <form asp-action="Guncelle" asp-controller="AdminSef" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div class="card-body row g-4">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ChefNameSurname" class="form-label fw-bold">İsim Soyisim *</label>
+                        <input asp-for="ChefNameSurname" class="form-control" required maxlength="100" />
+                        <span asp-validation-for="ChefNameSurname" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ChefTitle" class="form-label fw-bold">Ünvan *</label>
+                        <input asp-for="ChefTitle" class="form-control" required maxlength="200" />
+                        <span asp-validation-for="ChefTitle" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="ChefDescription" class="form-label fw-bold">Açıklama</label>
+                        <textarea asp-for="ChefDescription" class="form-control" rows="3" maxlength="500"></textarea>
+                        <span asp-validation-for="ChefDescription" class="text-danger small"></span>
+                    </div>
+                </div>
+                @{
+                    var linkFields = new (string Label, Expression<Func<RestaurantWebUI.Dtos.ChefDtos.UpdateChefDto, string>> Property, string Placeholder)[]
+                    {
+                                ("Twitter", m => m.ChefTwitterLink, "https://twitter.com/..."),
+                                ("Facebook", m => m.ChefFacebookLink, "https://facebook.com/..."),
+                                ("Instagram", m => m.ChefInstagramLink, "https://instagram.com/..."),
+                                ("Linkedin", m => m.ChefLinkedinLink, "https://linkedin.com/...")
+                    };
+                }
+                @foreach (var link in linkFields)
+                {
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label class="form-label fw-bold">@link.Label Link</label>
+                            @Html.TextBoxFor(link.Property, new { @class = "form-control", placeholder = link.Placeholder })
+                            @Html.ValidationMessageFor(link.Property, "", new { @class = "text-danger small" })
+                        </div>
+                    </div>
+                }
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="form-label fw-bold">Şef Görseli *</label>
+                        <input asp-for="ChefImageFile" id="chefImageInput" type="file" accept="image/*" class="form-control" />
+                        <span asp-validation-for="ChefImageFile" class="text-danger small"></span>
+                        <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp desteklenmektedir.</small>
+                        <div class="mt-3">
+                            <img id="chefImagePreview"
+                                 src="@(!string.IsNullOrEmpty(Model.ChefImageBase64) ? Model.ChefImageBase64 : "/adminTheme/img/no-image.png")"
+                                 class="img-thumbnail shadow-sm border"
+                                 style="max-height: 140px; object-fit: cover;"
+                                 loading="lazy" alt="Önizleme" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ChefStatus" class="form-label fw-bold">Durum *</label>
+                        <select asp-for="ChefStatus" class="form-control">
+                            <option value="true">🟢 Aktif</option>
+                            <option value="false">🔴 Pasif</option>
+                        </select>
+                        <span asp-validation-for="ChefStatus" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" asp-for="ChefImageBase64" />
+            <input type="hidden" asp-for="ChefID" />
+            <div class="card-footer text-end">
+                <button type="submit" class="btn btn-primary px-4">Güncelle</button>
+                <a asp-action="Liste" asp-controller="AdminSef" class="btn btn-secondary ms-2">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const fileInput = document.getElementById("chefImageInput");
+    const preview = document.getElementById("chefImagePreview");
+    const base64Field = document.querySelector("input[name='ChefImageBase64']");
+    fileInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+            this.value = "";
+            preview.src = "/adminTheme/img/no-image.png";
+            base64Field.value = "";
+            Swal.fire({
+                icon: "error",
+                title: "Hatalı Dosya",
+                text: "Lütfen sadece resim dosyası seçin.",
+                confirmButtonColor: "#d33"
+            });
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            base64Field.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>

@@ -1,6 +1,5 @@
 ﻿@using RestaurantWebUI.Dtos.GalleryImageDtos
 @model List<ResultGalleryImageDto>
-
 @{
     if (Model == null || !Model.Any())
     {
@@ -14,7 +13,7 @@
     }
     string placeholderUrl = Url.Content("~/userThema/assets/img/gallery/gallery-5.jpg");
     List<string> slides = new List<string>();
-    foreach (var img in Model)
+    foreach (ResultGalleryImageDto img in Model)
     {
         if (img.ImageByte?.Length > 0)
         {

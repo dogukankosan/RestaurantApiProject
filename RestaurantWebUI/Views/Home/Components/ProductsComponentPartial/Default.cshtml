@@ -1,0 +1,34 @@
+﻿@using RestaurantWebUI.Dtos.ProductDtos
+@model List<RestaurantWebUI.Dtos.ProductDtos.ResultProductDto>
+
+@if (Model == null || Model.Count == 0)
+{
+    <section id="menu" class="menu section">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Menü</h2>
+            <p>Henüz Yemek Eklenmemiştir.</p>
+        </div>
+    </section>
+}
+else
+{
+    @foreach (ResultProductDto product in Model)
+    {
+        string base64Image = product.ProductImageData != null && product.ProductImageData.Length > 0
+            ? $"data:image/jpeg;base64,{Convert.ToBase64String(product.ProductImageData)}"
+            : "/userThema/assets/img/menu/menu-item-1.png";
+        <div style="margin-top:15px" class="col-lg-4 menu-item">
+            <a href="@base64Image" class="glightbox">
+                <img
+                    src="@base64Image"
+                    alt="@product.ProductName"
+                    class="menu-img img-fluid lazyload shadow-sm"
+                    style="width: 100%; height: 220px; border-radius: 12px; object-fit: cover;"
+                    loading="lazy"/>
+            </a>
+            <h4>@product.ProductName</h4>
+            <p class="ingredients">@product.ProductDescription</p>
+            <p class="price">@product.ProductPrice @product.ProductPriceSembol</p>
+        </div>
+    }
+}

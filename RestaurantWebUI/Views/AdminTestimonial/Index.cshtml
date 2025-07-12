@@ -1,0 +1,116 @@
+﻿@using RestaurantWebUI.Dtos.TestimonialDtos
+@model List<RestaurantWebUI.Dtos.TestimonialDtos.ResultTestimonialDto>
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Admin Referanslar</title>
+<br />
+<h4 class="card-title">Referanslar Listesi</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered" id="yourTableId">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ad Soyad</th>
+                <th>Başlık</th>
+                <th>Yorum</th>
+                <th>Görsel</th>
+                <th>Durum</th>
+                <th class="no-export">İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultTestimonialDto item in Model)
+            {
+                <tr>
+                    <td>@item.TestimonialID</td>
+                    <td>@item.TestimonialNameSurname</td>
+                    <td>@item.TestimonialTitle</td>
+                    <td>@item.TestimonialComment</td>
+                    <td>
+                        @if (item.TestimonialImage != null && item.TestimonialImage.Length > 0)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.TestimonialImage)"
+                                 alt="@item.TestimonialNameSurname"
+                                 width="60"
+                                 height="60"
+                                 loading="lazy"
+                                 decoding="async"
+                                 class="img-thumbnail rounded shadow-sm object-fit-cover" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">Yok</span>
+                        }
+                    </td>
+                    <td>
+                        <form asp-action="DurumGuncelle" asp-controller="AdminReferans" asp-route-id="@item.TestimonialID" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="newStatus" value="@(item.TestimonialStatus ? "false" : "true")" />
+                            <button type="submit" class="badge @(item.TestimonialStatus ? "bg-success" : "bg-danger")" style="border:none; color:white; cursor:pointer;">
+                                @(item.TestimonialStatus ? "Aktif" : "Pasif")
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-outline-info btn-sm"
+                           href="@Url.Action("Guncelle", "AdminReferans", new { id = item.TestimonialID })"
+                           title="Güncelle">
+                            <i data-feather="edit-2"></i>
+                        </a>
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm ms-1"
+                                onclick="confirmDelete(@item.TestimonialID)">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminReferans/Ekle" class="btn btn-success">Yeni Referans Ekle</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+        if (type && message && navigationType === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Emin misin?',
+            text: "Bu referansı silmek üzeresin!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/AdminReferans/Sil/${id}`;
+            }
+        });
+    }
+</script>

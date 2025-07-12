@@ -21,26 +21,61 @@ namespace RestaurantAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            About abouts = await _context.Abouts.FirstOrDefaultAsync();
-            if (abouts == null)
-                return NotFound("Hakkında kaydı bulunamadı");
-            ResultAboutDto result = _mapper.Map<ResultAboutDto>(abouts);
+            About? about = await _context.Abouts.AsNoTracking().FirstOrDefaultAsync();
+            if (about == null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Hakkında Kaydı Bulunamadı",
+                    Detail = "Veritabanında herhangi bir 'About' kaydı bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            ResultAboutDto result = _mapper.Map<ResultAboutDto>(about);
             return Ok(result);
         }
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateAboutDto dto)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateAboutDto dto)
         {
-            if (id != dto.AboutID)
-                return BadRequest("Gönderilen ID ile DTO içindeki ID eşleşmiyor.");
-            var exists = await _context.Abouts
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.AboutID == id);
-            if (exists == null)
-                return NotFound("Hakkında kaydı bulunamadı.");
-            var entity = await _context.Abouts.FindAsync(id)!;
-            _mapper.Map(dto, entity);
-            await _context.SaveChangesAsync();
-            return Ok("Hakkında güncelleme işlemi başarılı");
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+            About? about = await _context.Abouts.FirstOrDefaultAsync();
+            if (about == null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Güncelleme Başarısız",
+                    Detail = "Güncellenecek 'About' kaydı bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            _mapper.Map(dto, about);
+            try
+            {
+                _context.Abouts.Update(about);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                // TODO: Loglama yapılmalı (ex)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Veritabanı Hatası",
+                    Detail = "Veri kaydedilirken bir hata oluştu.",
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
+            catch (Exception ex)
+            {
+                // TODO: Loglama yapılmalı (ex)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Sunucu Hatası",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
     }
 }

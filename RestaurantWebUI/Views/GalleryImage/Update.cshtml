@@ -1,0 +1,85 @@
+﻿@model RestaurantWebUI.Dtos.GalleryImageDtos.UpdateGalleryImageDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Galeri Görseli Güncelle</title>
+<h2 class="fw-bold mb-4">Galeri Görseli Güncelle</h2>
+<hr class="mb-4" />
+<div class="col-12 col-xl-8">
+    <div class="card shadow-sm">
+        <form asp-action="Guncelle" asp-controller="AdminGaleri" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ImageID" />
+            <div class="card-body row g-4">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label asp-for="ImageTitle" class="form-label fw-bold">Görsel Başlığı *</label>
+                        <input asp-for="ImageTitle" class="form-control" maxlength="100" required placeholder="Başlık giriniz" />
+                        <span asp-validation-for="ImageTitle" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-group">
+                        <label class="form-label fw-bold">Görsel *</label>
+                        <input asp-for="ImageFile" id="imageInput" type="file" accept="image/*" class="form-control" />
+                        <span asp-validation-for="ImageFile" class="text-danger small"></span>
+                        <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp desteklenmektedir.</small>
+                        <input type="hidden" name="ImageBase64" id="ImageBase64" value="@Model.ImageBase64" />
+                        <div class="mt-3">
+                            <img id="imagePreview"
+                                 src="@(Model.ImageBase64 ?? "/adminTheme/img/no-image.png")"
+                                 class="img-thumbnail shadow-sm border"
+                                 style="max-height: 140px; object-fit: cover; width: auto; display: block; max-width: 100%;"
+                                 loading="lazy"
+                                 decoding="async"
+                                 alt="@(!string.IsNullOrEmpty(Model.ImageTitle) ? Model.ImageTitle : "Önizleme")" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ImageStatus" class="form-label fw-bold">Durum *</label>
+                        <select asp-for="ImageStatus" class="form-control">
+                            <option value="true">🟢 Aktif</option>
+                            <option value="false">🔴 Pasif</option>
+                        </select>
+                        <span asp-validation-for="ImageStatus" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="submit" class="btn btn-primary px-4">Güncelle</button>
+                <a asp-action="Liste" asp-controller="AdminGaleri" class="btn btn-secondary ms-2">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const fileInput = document.getElementById("imageInput");
+    const preview = document.getElementById("imagePreview");
+    const base64Field = document.getElementById("ImageBase64");
+    fileInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (!file.type.startsWith("image/")) {
+            this.value = "";
+            preview.src = "/adminTheme/img/no-image.png";
+            base64Field.value = "";
+            Swal.fire({
+                icon: "error",
+                title: "Hatalı Dosya",
+                text: "Lütfen sadece resim dosyası seçin.",
+                confirmButtonColor: "#d33"
+            });
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            base64Field.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>

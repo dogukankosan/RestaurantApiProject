@@ -1,0 +1,170 @@
+﻿@model RestaurantWebUI.Dtos.ProductDtos.CreateProductDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Yeni Ürün Ekle</title>
+<h2>Yeni Ürün Ekle</h2>
+<hr />
+<div class="col-12 col-md-6 col-lg-6">
+    <div class="card">
+        <form asp-action="Ekle" asp-controller="AdminUrun" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="ProductName" class="form-label">Ürün Adı *</label>
+                    <input asp-for="ProductName" class="form-control" placeholder="Ürün adını giriniz." required minlength="3" maxlength="100" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductDescription" class="form-label">Açıklama</label>
+                    <textarea asp-for="ProductDescription" class="form-control" rows="3" maxlength="1000" placeholder="Ürün açıklaması giriniz."></textarea>
+                    <span asp-validation-for="ProductDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductPrice" class="form-label">Fiyat *</label>
+                    <input asp-for="ProductPrice"
+                           type="text"
+                           class="form-control"
+                           id="priceInput"
+                           required
+                           pattern="^\d{1,6}(,\d{1,2})?$"
+                           value="@(Model?.ProductPrice > 0 ? Model.ProductPrice.ToString("0.##") : "1")" />
+                    <span asp-validation-for="ProductPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Para Birimi *</label>
+                    <select asp-for="ProductPriceSembol" class="form-control" required>
+                        <option value="">-- Sembol Seçiniz --</option>
+                        <option value="₺">₺ (Türk Lirası)</option>
+                        <option value="$">$ (Amerikan Doları)</option>
+                        <option value="€">€ (Euro)</option>
+                        <option value="₽">₽ (Rus Rublesi)</option>
+                        <option value="₼">₼ (Azerbaycan Manatı)</option>
+                        <option value="£">£ (İngiliz Sterlini)</option>
+                        <option value="₹">₹ (Hindistan Rupisi)</option>
+                        <option value="¥">¥ (Çin Yuanı / Japon Yeni)</option>
+                        <option value="₩">₩ (Güney Kore Wonu)</option>
+                        <option value="฿">฿ (Tayland Bahtı)</option>
+                        <option value="₦">₦ (Nijerya Nairası)</option>
+                        <option value="₪">₪ (İsrail Şekeli)</option>
+                        <option value="₫">₫ (Vietnam Dongu)</option>
+                        <option value="₱">₱ (Filipin Pezosu)</option>
+                    </select>
+                    <span asp-validation-for="ProductPriceSembol" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ürün Resmi *</label>
+                    <input asp-for="ProductImageFile"  type="file" accept="image/*" class="form-control" />
+                    <div id="previewContainer" class="mt-2" style="@(string.IsNullOrWhiteSpace(Model.ProductImageBase64) ? "display:none;" : "")">
+                        <img id="previewImage"
+                             src="@Model.ProductImageBase64"
+                             alt="Ürün Görseli Önizleme"
+                             class="img-thumbnail shadow-sm border"
+                             loading="lazy"
+                             style="max-height: 140px; object-fit: cover; border-radius: 5px;" />
+                    </div>
+                    <input type="hidden" name="ProductImageBase64" id="ProductImageBase64" value="@Html.Raw(Model.ProductImageBase64)" />
+                    <span asp-validation-for="ProductImageFile" class="text-danger"></span>
+                    <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp desteklenmektedir.</small>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductStatus">Durum *</label>
+                    <select asp-for="ProductStatus" class="form-control" required>
+                        <option value="">-- Durum Seçiniz --</option>
+                        <option value="true">🟢 Aktif</option>
+                        <option value="false">🔴 Pasif</option>
+                    </select>
+                    <span asp-validation-for="ProductStatus" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryID">Kategori *</label>
+                    <select asp-for="CategoryID" class="form-control" asp-items="@(new SelectList(Model.CategoryList, "CategoryID", "CategoryName"))" required>
+                        <option value="">-- Kategori Seçiniz --</option>
+                    </select>
+                    <span asp-validation-for="CategoryID" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <button type="submit" class="btn btn-primary">Ekle</button>
+                <a asp-action="Liste" asp-controller="AdminUrun" class="btn btn-secondary ms-2">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    document.getElementById('priceInput').addEventListener('input', function () {
+        let value = this.value.replace(/[^0-9,]/g, '');
+        const parts = value.split(',');
+        if (parts.length > 2) {
+            value = parts[0] + ',' + parts[1];
+        }
+        this.value = value;
+    });
+    const imageInput = document.querySelector('input[type="file"][name="ProductImageFile"]');
+    const previewImage = document.getElementById('previewImage');
+    const previewContainer = document.getElementById('previewContainer');
+    const hiddenInput = document.getElementById('ProductImageBase64');
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+        if (!file.type.startsWith('image/')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Geçersiz dosya!',
+                text: 'Sadece resim dosyası seçebilirsiniz.',
+                confirmButtonColor: '#d33'
+            });
+            this.value = '';
+            previewImage.src = '';
+            previewContainer.style.display = 'none';
+            hiddenInput.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+            hiddenInput.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>
+<script>
+    const priceInput = document.getElementById('priceInput');
+    priceInput.addEventListener('input', function () {
+        let value = this.value.replace(/[^0-9,]/g, '');
+        const parts = value.split(',');
+        if (parts.length > 2) {
+            value = parts[0] + ',' + parts[1];
+        }
+        if (parts.length === 2) {
+            parts[1] = parts[1].substring(0, 2);
+            value = parts[0] + ',' + parts[1];
+        }
+        this.value = value;
+        const numeric = parseFloat(value.replace(',', '.'));
+        if (isNaN(numeric) || numeric < 1 || numeric > 999999) {
+            this.classList.add("is-invalid");
+        } else {
+            this.classList.remove("is-invalid");
+        }
+    });
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const raw = priceInput.value.replace(',', '.');
+        const numeric = parseFloat(raw);
+        if (isNaN(numeric) || numeric < 1 || numeric > 999999) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Fiyat geçersiz!',
+                text: 'Fiyat 1 ile 999999 arasında olmalı.',
+                confirmButtonColor: '#d33'
+            });
+            priceInput.focus();
+        }
+    });
+    priceInput.addEventListener('blur', function () {
+        this.value = this.value.replace('.', ',');
+    });
+</script>

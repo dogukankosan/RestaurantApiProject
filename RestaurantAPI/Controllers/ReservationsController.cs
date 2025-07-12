@@ -61,8 +61,9 @@ namespace RestaurantAPI.Controllers
                 .FirstOrDefaultAsync(x => x.ReservationID == id);
             if (exists == null)
                 return NotFound("Rezervasyon bulunamadı.");
-            Reservation entity = await _context.Reservations.FindAsync(id)!;
+            Reservation? entity = await _context.Reservations.FindAsync(id)!;
             _mapper.Map(dto, entity);
+            _context.Reservations.Update(entity);
             await _context.SaveChangesAsync();
             return Ok("Rezervasyon güncelleme işlemi başarılı");
         }

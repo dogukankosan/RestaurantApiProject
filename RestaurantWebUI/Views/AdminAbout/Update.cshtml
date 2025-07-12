@@ -1,0 +1,111 @@
+﻿@model RestaurantWebUI.Dtos.AboutDtos.UpdateAboutDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+    string GetImageSrc(byte[]? img) => img != null && img.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(img)}"
+        : "/adminTheme/img/no-image.png";
+}
+<title>Hakkımızda Güncelle</title>
+<h2 class="mb-4 fw-bold">Hakkımızda Güncelle</h2>
+<hr />
+<div class="card shadow-sm">
+    <form asp-action="Guncelle" asp-controller="AdminHakkimizda" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+        <input type="hidden" asp-for="AboutID" />
+        <div class="card-body row g-4">
+            <div class="col-md-6 mb-3">
+                <div class="form-group">
+                    <label asp-for="AboutCompanyName" class="form-label fw-bold">Firma Adı *</label>
+                    <input asp-for="AboutCompanyName" placeholder="Firma adı giriniz." class="form-control" maxlength="100" required />
+                    <span asp-validation-for="AboutCompanyName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <div class="form-group">
+                    <label asp-for="AboutDesc" class="form-label fw-bold">Açıklama *</label>
+                    <textarea asp-for="AboutDesc" placeholder="Neden biz açıklaması giriniz." class="form-control" rows="4" maxlength="2000" required></textarea>
+                    <span asp-validation-for="AboutDesc" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-12 mb-3">
+                <div class="form-group">
+                    <label asp-for="AboutWhyChoose" class="form-label fw-bold">Neden Biz? *</label>
+                    <textarea asp-for="AboutWhyChoose" placeholder="Neden biz giriniz." class="form-control" rows="3" maxlength="500" required></textarea>
+                    <span asp-validation-for="AboutWhyChoose" class="text-danger"></span>
+                </div>
+            </div>
+            @{
+                var images = new[]
+                {
+                        new { Label = "Firma Logo", File = "AboutCompanyLogoFile", Data = Model.AboutCompanyLogo, Base64 = Model.AboutCompanyLogoBase64, Id = "logo" },
+                        new { Label = "Neden Biz Görsel 1", File = "AboutImage1File", Data = Model.AboutImage1, Base64 = Model.AboutImage1Base64, Id = "img1" },
+                        new { Label = "Neden Biz Görsel 2", File = "AboutImage2File", Data = Model.AboutImage2, Base64 = Model.AboutImage2Base64, Id = "img2" },
+                        new { Label = "Rapor Görseli", File = "AboutReportImageFile", Data = Model.AboutReportImage, Base64 = Model.AboutReportImageBase64, Id = "report" },
+                        new { Label = "Rezervasyon Görseli", File = "AboutRezervationImageFile", Data = Model.AboutRezervationImage, Base64 = Model.AboutRezervationImageBase64, Id = "rez" }
+                        };
+            }
+            @foreach (var img in images)
+            {
+                string previewId = $"preview-{img.Id}";
+                string fieldName = img.File;
+                <div class="col-md-4 mb-3">
+                    <div class="form-group">
+                        <label class="form-label fw-bold">@img.Label *</label>
+                        <div class="mb-2">
+                            <img id="@previewId"
+                                 src="@GetImageSrc(img.Data)"
+                                 class="img-fluid rounded border shadow-sm"
+                                 style="max-height: 140px; width: 100%; object-fit: cover;"
+                                 loading="lazy"
+                                 alt="@img.Label" />
+                        </div>
+                        <input type="file"
+                               name="@fieldName"
+                               accept="image/*"
+                               class="form-control file-input"
+                               data-preview="@previewId" />
+                        <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp desteklenmektedir.</small>
+                        <input type="hidden" name="@fieldName.Replace("File", "Base64")" value="@img.Base64" />
+                        @{
+                            if (ViewData.ModelState.TryGetValue(fieldName, out var entry) && entry.Errors.Count > 0)
+                            {
+                                foreach (var error in entry.Errors)
+                                {
+                                    <span class="text-danger">@error.ErrorMessage</span>
+                                }
+                            }
+                        }
+                    </div>
+                </div>
+            }
+       </div>
+        <div class="card-footer text-end">
+            <button type="submit" class="btn btn-success px-4">Güncelle</button>
+            <a asp-action="Liste" asp-controller="AdminHakkimizda" class="btn btn-secondary ms-2">İptal</a>
+        </div>
+    </form>
+</div>
+<script>
+    document.querySelectorAll('.file-input').forEach(input => {
+        input.addEventListener('change', function () {
+            const file = this.files[0];
+            const preview = document.getElementById(this.dataset.preview);
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Geçersiz Dosya',
+                    text: 'Lütfen yalnızca resim dosyası seçiniz.',
+                    confirmButtonColor: '#d33'
+                });
+                this.value = "";
+                preview.src = "/adminTheme/img/no-image.png";
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = e => preview.src = e.target.result;
+            reader.readAsDataURL(file);
+        });
+    });
+</script>

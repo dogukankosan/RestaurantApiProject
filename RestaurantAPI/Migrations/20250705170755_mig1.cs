@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace RestaurantAPI.Migrations
 {
     public partial class mig1 : Migration
@@ -249,6 +251,7 @@ namespace RestaurantAPI.Migrations
                     ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ProductImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     ProductStatus = table.Column<bool>(type: "bit", nullable: false),
+                    ProductPriceSembol = table.Column<string>(type: "nchar(1)", nullable: false),
                     CategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -33,8 +33,15 @@ namespace RestaurantAPI.Controllers
             GalleryImage? image = await _context.GalleryImages
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.ImageID == id);
-            if (image == null)
-                return NotFound("Resim bulunamadı.");
+            if (image is null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Resim Bulunamadı",
+                    Detail = $"ID: {id} ile eşleşen bir resim bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
             ResultGalleryImageDto result = _mapper.Map<ResultGalleryImageDto>(image);
             return Ok(result);
         }
@@ -42,38 +49,141 @@ namespace RestaurantAPI.Controllers
         public async Task<IActionResult> Add([FromBody] CreateGalleryImageDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            GalleryImage entity = _mapper.Map<GalleryImage>(dto);
-            await _context.GalleryImages.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return Ok("Resim ekleme işlemi başarılı");
+                return ValidationProblem(ModelState);
+            GalleryImage? entity = _mapper.Map<GalleryImage>(dto);
+            try
+            {
+                await _context.GalleryImages.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetById), new { id = entity.ImageID }, null);
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Veritabanı Hatası",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateGalleryImageDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+                return ValidationProblem(ModelState);
             if (id != dto.ImageID)
-                return BadRequest("Gönderilen ID ile DTO içindeki ID eşleşmiyor.");
-            GalleryImage? exists = await _context.GalleryImages
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.ImageID == id);
-            if (exists == null)
-                return NotFound("Resim bulunamadı.");
-            GalleryImage entity = await _context.GalleryImages.FindAsync(id)!;
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "ID Uyuşmazlığı",
+                    Detail = $"URL'deki ID ({id}) ile DTO içindeki ID ({dto.ImageID}) uyuşmuyor.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+            GalleryImage? entity = await _context.GalleryImages.FindAsync(id);
+            if (entity is null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Resim Bulunamadı",
+                    Detail = $"ID: {id} ile eşleşen resim bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
             _mapper.Map(dto, entity);
-            await _context.SaveChangesAsync();
-            return Ok("Resim güncelleme işlemi başarılı");
+            try
+            {
+                _context.GalleryImages.Update(entity);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Güncelleme Hatası",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             GalleryImage? entity = await _context.GalleryImages.FindAsync(id);
-            if (entity == null)
-                return NotFound("Resim bulunamadı.");
-            _context.GalleryImages.Remove(entity);
-            await _context.SaveChangesAsync();
-            return Ok("Resim silme işlemi başarılı");
+            if (entity is null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Resim Bulunamadı",
+                    Detail = $"ID: {id} ile eşleşen silinecek resim bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            try
+            {
+                _context.GalleryImages.Remove(entity);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Silme Hatası",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
+        }
+        [HttpPatch("{id:int}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateGalleryImageStatusDto dto)
+        {
+            if (id != dto.ImageID)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "ID Uyuşmazlığı",
+                    Detail = "URL ID ile DTO ID uyuşmuyor.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+            GalleryImage? gallery = await _context.GalleryImages.FindAsync(id);
+            if (gallery is null)
+            {
+                return NotFound(new ProblemDetails
+                {
+                    Title = "Resim Bulunamadı",
+                    Detail = $"ID: {id} ile eşleşen resim bulunamadı.",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            if (gallery.ImageStatus == dto.ImageStatus)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Durum Zaten Güncel",
+                    Detail = $"Şef zaten {(dto.ImageStatus ? "aktif" : "pasif")} durumda.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
+            gallery.ImageStatus = dto.ImageStatus;
+            try
+            {
+                _context.GalleryImages.Update(gallery);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Durum Güncelleme Hatası",
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
     }
 }

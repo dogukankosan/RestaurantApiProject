@@ -7,6 +7,8 @@
         public string FeatureSubTitle { get; set; }
         public string FeatureDescription { get; set; }
         public string FeatureVideoUrl { get; set; }
-        public byte[] FeatureImageData { get; set; }
+        public IFormFile? FeatureImageFile { get; set; }
+        public byte[]? FeatureImageData { get; set; }
+        public string? FeatureImageBase64 { get; set; }
     }
 }

@@ -1,0 +1,60 @@
+﻿@model RestaurantWebUI.Dtos.IconDtos.CreateIconDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Yeni İkon Ekle</title>
+<h2>Yeni İkon Ekle</h2>
+<hr />
+<div class="col-12 col-md-6 col-lg-6">
+    <div class="card">
+        <form asp-action="Ekle" asp-controller="AdminIcon" method="post">
+            @Html.AntiForgeryToken()
+            <div class="card-body">
+                <div class="form-group mb-3">
+                    <label asp-for="IconURL" class="form-label">İkon Class *</label>
+                    <input asp-for="IconURL"
+                           class="form-control"
+                           placeholder="Örn: bi bi-gear"
+                           required
+                           maxlength="100"
+                           id="iconInput" />
+                    <span asp-validation-for="IconURL" class="text-danger"></span>
+                    <small class="text-muted">Bootstrap Icons kullanılır. <a href="https://icons.getbootstrap.com/" target="_blank">Tüm ikonlar</a></small>
+                    <div class="mt-3" id="iconPreviewContainer" style="display:none;">
+                        <span class="badge bg-light border">
+                            <i id="iconPreview" class="" style="font-size: 2rem;"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="IconStatus" class="form-label">Durum *</label>
+                    <select asp-for="IconStatus" class="form-control" required>
+                        <option value="">-- Durum Seçiniz --</option>
+                        <option value="true">🟢 Aktif</option>
+                        <option value="false">🔴 Pasif</option>
+                    </select>
+                    <span asp-validation-for="IconStatus" class="text-danger"></span>
+                </div>
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                    <a asp-action="Liste" asp-controller="AdminIcon" class="btn btn-secondary ms-2">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+    <script>
+        const iconInput = document.getElementById('iconInput');
+        const preview = document.getElementById('iconPreview');
+        const container = document.getElementById('iconPreviewContainer');
+        iconInput.addEventListener('input', function () {
+            const val = this.value.trim();
+            if (val !== "") {
+                preview.className = val;
+                container.style.display = "block";
+            } else {
+                preview.className = "";
+                container.style.display = "none";
+            }
+        });
+    </script>

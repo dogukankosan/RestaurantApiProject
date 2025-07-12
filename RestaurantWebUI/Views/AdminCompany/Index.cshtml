@@ -1,0 +1,133 @@
+﻿@model RestaurantWebUI.Dtos.CompanyInfoDtos.ResultCompanyInfoDto
+
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Şirket Bilgileri</title>
+<br />
+<h4 class="card-title fw-bold">Şirket Bilgileri</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle" id="yourTableId">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 250px;">Bilgi Türü</th>
+                <th>Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Adres</strong></td>
+                <td>@Model.CompanyInfoAddress</td>
+            </tr>
+            <tr>
+                <td><strong>Telefon</strong></td>
+                <td>@Model.CompanyInfoPhone</td>
+            </tr>
+            <tr>
+                <td><strong>E-Posta</strong></td>
+                <td>@Model.CompanyInfoMail</td>
+            </tr>
+            <tr>
+                <td><strong>Açılış / Kapanış</strong></td>
+                <td>@Model.CompanyInfoOpenClosed</td>
+            </tr>
+            <tr>
+                <td><strong>Web Sitesi</strong></td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoWebSiteLink))
+                    {
+                        <a href="@Model.CompanyInfoWebSiteLink" class="custom-link" target="_blank">Web Sitesi</a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>GitHub</strong></td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoGithubLink))
+                    {
+                        <a href="@Model.CompanyInfoGithubLink" class="custom-link" target="_blank">GitHub</a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Instagram</strong></td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoInstagramLink))
+                    {
+                        <a href="@Model.CompanyInfoInstagramLink" class="custom-link" target="_blank">Instagram</a>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Linkedin</strong></td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoLinkedinLink))
+                    {
+                        <a href="@Model.CompanyInfoLinkedinLink" class="custom-link" target="_blank">Linkedin</a>
+                    }
+                </td>
+            </tr>
+        <tr>
+            <td><strong>Harita IFrame</strong></td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoIFrame))
+                {
+                    <div class="ratio ratio-16x9">
+                        <iframe src="@Model.CompanyInfoIFrame"
+                                width="500"
+                                height="100"
+                                style="border:0;"
+                                allowfullscreen
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                }
+                else
+                {
+                    <span class="text-muted">Harita bağlantısı bulunamadı.</span>
+                }
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminSirket/Guncelle" class="btn btn-info">Bilgileri Güncelle</a>
+</div>
+<style>
+    .custom-link {
+        color: #0d6efd;
+        font-weight: 600;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+    }
+        .custom-link:hover {
+            color: white !important;
+        }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>

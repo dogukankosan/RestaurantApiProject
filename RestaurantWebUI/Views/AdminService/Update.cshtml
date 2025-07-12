@@ -1,0 +1,63 @@
+﻿@model RestaurantWebUI.Dtos.ServiceDtos.UpdateServiceDto
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<title>Servis Güncelle</title>
+<h2>Servis Güncelle</h2>
+<hr />
+<div class="col-12 col-md-6 col-lg-6">
+    <div class="card">
+        <form asp-action="Guncelle" asp-controller="AdminServis" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="ServiceID" />
+            <div class="card-body">
+                <div class="form-group">
+                    <label asp-for="ServiceTitle" class="form-label">Servis Başlığı *</label>
+                    <input asp-for="ServiceTitle" class="form-control" required maxlength="150" placeholder="Servis başlığını giriniz." />
+                    <span asp-validation-for="ServiceTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ServiceDescription" class="form-label">Açıklama *</label>
+                    <textarea asp-for="ServiceDescription" class="form-control" rows="3" required maxlength="1000" placeholder="Servis açıklaması giriniz."></textarea>
+                    <span asp-validation-for="ServiceDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ServiceIconUrl" class="form-label">İkon Seç *</label>
+                    <select asp-for="ServiceIconUrl" class="form-control" required id="iconSelect">
+                        <option value="">-- İkon Seçiniz --</option>
+                        @foreach (var item in Model.IconOptions)
+                        {
+                            <option value="@item.Value" selected="@(item.Value == Model.ServiceIconUrl)">
+                                @Html.Raw(item.Text)
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="ServiceIconUrl" class="text-danger"></span>
+                    <div class="mt-2">
+                        <i id="iconPreview" class="@Model.ServiceIconUrl" style="font-size: 2rem;"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ServiceStatus" class="form-label">Durum *</label>
+                    <select asp-for="ServiceStatus" class="form-control" required>
+                        <option value="">-- Durum Seçiniz --</option>
+                        <option value="true" selected="@Model.ServiceStatus">🟢 Aktif</option>
+                        <option value="false" selected="@(!Model.ServiceStatus)">🔴 Pasif</option>
+                    </select>
+                    <span asp-validation-for="ServiceStatus" class="text-danger"></span>
+                </div>
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-warning">Güncelle</button>
+                    <a asp-action="Liste" asp-controller="AdminServis" class="btn btn-secondary ms-2">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    const iconSelect = document.getElementById("iconSelect");
+    const iconPreview = document.getElementById("iconPreview");
+    iconSelect.addEventListener("change", function () {
+        iconPreview.className = this.value;
+    });
+</script>

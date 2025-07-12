@@ -21,16 +21,12 @@ namespace RestaurantAPI.Entities
         [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string CompanyInfoOpenClosed { get; set; }
-        [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string CompanyInfoGithubLink { get; set; }
-        [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string CompanyInfoWebSiteLink { get; set; }
-        [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string CompanyInfoInstagramLink { get; set; }
-        [Required]
         [Column(TypeName = "nvarchar(100)")]
         public string CompanyInfoLinkedinLink { get; set; }
         [Required]

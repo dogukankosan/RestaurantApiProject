@@ -7,6 +7,7 @@ using RestaurantAPI.Dtos.CompanyInfoDtos;
 using RestaurantAPI.Dtos.EventDtos;
 using RestaurantAPI.Dtos.FeatureDtos;
 using RestaurantAPI.Dtos.GalleryImageDtos;
+using RestaurantAPI.Dtos.IconDtos;
 using RestaurantAPI.Dtos.MessageDtos;
 using RestaurantAPI.Dtos.ProductDtos;
 using RestaurantAPI.Dtos.ReservationDtos;
@@ -81,6 +82,11 @@ namespace RestaurantAPI.Mapping
 
             CreateMap<WebLog, CreateWebLogDto>().ReverseMap();
             CreateMap<WebLog, ResultWebLogDto>().ReverseMap();
+
+            CreateMap<Icon, ResultIconDto>().ReverseMap();
+            CreateMap<Icon, CreateIconDto>().ReverseMap();
+            CreateMap<Icon, UpdateIconDto>().ReverseMap();
+            CreateMap<Icon, GetByIDIconDto>().ReverseMap();
         }
     }
 }

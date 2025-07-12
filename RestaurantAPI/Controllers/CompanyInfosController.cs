@@ -21,30 +21,51 @@ namespace RestaurantAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            CompanyInfo? companyInfo = await _context.CompanyInfos
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
-            if (companyInfo == null)
-                return NotFound("Şirket bilgileri bulunamadı");
-            ResultCompanyInfoDto result = _mapper.Map<ResultCompanyInfoDto>(companyInfo);
-            return Ok(result);
+            try
+            {
+                CompanyInfo? companyInfo = await _context.CompanyInfos
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync();
+                if (companyInfo == null)
+                    return NotFound(new { Message = "Şirket bilgileri bulunamadı." });
+                ResultCompanyInfoDto result = _mapper.Map<ResultCompanyInfoDto>(companyInfo);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[CompanyInfo-Get] Hata: {ex.Message}");
+                return StatusCode(500, new { Message = "Sunucu hatası oluştu." });
+            }
         }
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateCompanyInfoDto dto)
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] UpdateCompanyInfoDto dto)
         {
+            dto.CompanyInfoWebSiteLink ??= string.Empty;
+            dto.CompanyInfoGithubLink ??= string.Empty;
+            dto.CompanyInfoInstagramLink ??= string.Empty;
+            dto.CompanyInfoLinkedinLink ??= string.Empty;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            if (id != dto.CompanyInfoID)
-                return BadRequest("Gönderilen ID ile DTO içindeki ID eşleşmiyor.");
-            CompanyInfo? exists = await _context.CompanyInfos
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.CompanyInfoID == id);
-            if (exists == null)
-                return NotFound("Şirket bilgileri bulunamadı");
-            CompanyInfo entity = await _context.CompanyInfos.FindAsync(id)!;
-            _mapper.Map(dto, entity);
-            await _context.SaveChangesAsync();
-            return Ok("Şirket bilgileri güncelleme işlemi başarılı");
+            try
+            {
+                CompanyInfo? entity = await _context.CompanyInfos.FirstOrDefaultAsync();
+                if (entity == null)
+                    return NotFound(new { Message = "Güncellenecek şirket bilgisi bulunamadı." });
+                _mapper.Map(dto, entity);
+                _context.Entry(entity).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return Ok(new { Message = "Şirket bilgileri başarıyla güncellendi." });
+            }
+            catch (DbUpdateException dbEx)
+            {
+                Console.WriteLine($"[CompanyInfo-Update] DB Hatası: {dbEx.Message}");
+                return StatusCode(500, new { Message = "Veritabanı güncelleme sırasında bir hata oluştu." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[CompanyInfo-Update] Genel Hata: {ex.Message}");
+                return StatusCode(500, new { Message = "Sunucu hatası oluştu." });
+            }
         }
     }
 }

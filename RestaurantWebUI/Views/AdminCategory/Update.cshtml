@@ -2,7 +2,7 @@
 @{
     Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
-<title>Kategori Güncelleme İşlemi</title>
+<title>Kategori Güncelleme</title>
 <h2>Kategori Güncelleme İşlemi</h2>
 <hr />
 <div class="col-12 col-md-6 col-lg-6">
@@ -12,8 +12,8 @@
             @Html.HiddenFor(x => x.CategoryID) 
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <div class="card-body">
-                <div class="mb-3">
-                    <label asp-for="CategoryName" class="form-label">Kategori Adı</label>
+                <div class="form-group">
+                    <label asp-for="CategoryName" class="form-label">Kategori Adı *</label>
                     <input asp-for="CategoryName"
                            class="form-control"
                            required
@@ -23,14 +23,12 @@
                            placeholder="Kategori adını girin" />
                     <span asp-validation-for="CategoryName" class="text-danger"></span>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Kategori Durum</label>
-                    <div class="input-group">
-                        <select asp-for="CategoryStatus" class="form-select">
+                <div class="form-group">
+                    <label class="form-label">Kategori Durum *</label>
+                    <select asp-for="CategoryStatus" class="form-control">
                             <option value="true">🟢 Aktif</option>
                             <option value="false">🔴 Pasif</option>
                         </select>
-                    </div>
                     <span asp-validation-for="CategoryStatus" class="text-danger"></span>
                 </div>
             </div>
