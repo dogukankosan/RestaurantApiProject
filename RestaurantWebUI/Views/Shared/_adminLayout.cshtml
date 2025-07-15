@@ -50,54 +50,56 @@
                 @await Component.InvokeAsync("_AdminCompanyNameComponentPartial")
                 <br/>
                 <hr/>
-                <ul class="sidebar-menu">
-                    <li class="menu-header">Menüler</li>
-                    <li class="dropdown active">
-                            <a href="/Admin/Anasayfa" class="nav-link"><i data-feather="monitor"></i><span>Ana Sayfa</span></a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="copy"></i><span>Sayfalar
-                        </span></a>
-                        <ul class="dropdown-menu">
-                            <li><a class="nav-link" href="/AdminKategori/Liste">Kategoriler</a></li>
-                        </ul>
-                        <ul class="dropdown-menu">
-                            <li><a class="nav-link" href="/AdminUrun/Liste">Ürünler</a></li>
-                        </ul>
-                        <ul class="dropdown-menu">
-                            <li><a class="nav-link" href="/AdminSirket/Liste">Şirket Bilgileri</a></li>
-                        </ul>
-                        <ul class="dropdown-menu">
-                            <li><a class="nav-link" href="/AdminOzellik/Liste">Özellik</a></li>
-                        </ul>
-                        <ul class="dropdown-menu">
-                            <li><a class="nav-link" href="/AdminGaleri/Liste">Galeri</a></li>
-                        </ul>
-                        <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="/AdminReferans/Liste">Referanslar</a></li>
-                        </ul>
-                         <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="/AdminServis/Liste">Servisler</a></li>
-                         </ul>
-                            <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="/AdminEtkinlik/Liste">Etkinlikler</a></li>
-                            </ul>
-                            <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="/AdminHakkimizda/Liste">Hakkımızda</a></li>
-                        </ul>
-                    </li>
+                    <ul class="sidebar-menu">
+                        <li class="menu-header">Menüler</li>
 
-                    <li class="dropdown">
-                        <a href="#" class="menu-toggle nav-link has-dropdown"><i data-feather="settings"></i><span>Ayarlar
-                        </span></a>
-                        <ul class="dropdown-menu">
-                            <li><a class="nav-link" href="/">Siteye Dön</a></li>
-                        </ul>
+                        <li class="dropdown">
+                            <a href="/Admin/Anasayfa" class="nav-link">
+                                <i data-feather="monitor"></i><span>Ana Sayfa</span>
+                            </a>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown">
+                                <i data-feather="copy"></i><span>Sayfalar</span>
+                            </a>
                             <ul class="dropdown-menu">
-                                <li><a class="nav-link" href="/AdminIcon/Liste">İkonlar</a></li>
+                                <li><a class="nav-link" href="/AdminKategori/Liste">📂 Kategoriler</a></li>
+                                <li><a class="nav-link" href="/AdminUrun/Liste">🍽️ Ürünler</a></li>
+                                <li><a class="nav-link" href="/AdminSirket/Liste">🏢 Şirket Bilgileri</a></li>
+                                <li><a class="nav-link" href="/AdminOzellik/Liste">🔧 Özellikler</a></li>
+                                <li><a class="nav-link" href="/AdminSef/Liste">👩‍🍳 Şefler</a></li>
+                                <li><a class="nav-link" href="/AdminGaleri/Liste">🖼️ Galeri</a></li>
+                                <li><a class="nav-link" href="/AdminReferans/Liste">🤝 Referanslar</a></li>
+                                <li><a class="nav-link" href="/AdminServis/Liste">🛎️ Servisler</a></li>
+                                <li><a class="nav-link" href="/AdminEtkinlik/Liste">🎉 Etkinlikler</a></li>
+                                <li><a class="nav-link" href="/AdminHakkimizda/Liste">ℹ️ Hakkımızda</a></li>
                             </ul>
-                    </li>
-                </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown">
+                                <i data-feather="settings"></i><span>Ayarlar</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/">🌐 Siteye Dön</a></li>
+                                <li><a class="nav-link" href="/AdminSiteyeGiren/Liste">📸 Siteye Girenler</a></li>
+                                <li><a class="nav-link" href="/AdminIcon/Liste">🎯 İkonlar</a></li>
+                                <li><a class="nav-link" href="/AdminEMail/Liste">✉️ Mail Ayarları</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="menu-toggle nav-link has-dropdown">
+                                <i data-feather="mail"></i><span>Rezervasyon - İletişim</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="nav-link" href="/AdminRezervasyon/Liste">📅 Rezervasyonlar</a></li>
+                                <li><a class="nav-link" href="/AdminMesaj/Liste">✉️ İletişim Mesajları</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
             </aside>
         </div>
         <div class="main-content">

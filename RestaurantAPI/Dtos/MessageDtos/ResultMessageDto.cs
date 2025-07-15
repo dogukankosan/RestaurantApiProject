@@ -8,6 +8,9 @@
         public string MessagePhone { get; set; }
         public string MessageSubject { get; set; }
         public string MessageDetails { get; set; }
+        public string WebLogUserIPAdress { get; set; }
+        public string WebLogUserInfo { get; set; }
+        public string WebLogUserGeo { get; set; }
         public DateTime MessageSendDate { get; set; }
         public bool MessageIsRead { get; set; }
     }

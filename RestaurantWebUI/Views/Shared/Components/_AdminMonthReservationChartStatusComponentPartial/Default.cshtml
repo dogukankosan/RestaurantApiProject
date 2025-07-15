@@ -1,0 +1,86 @@
+﻿@model List<RestaurantWebUI.Dtos.ReportDtos.ResultAdminMonthlyReservationStatusDto>
+@using Newtonsoft.Json
+<div class="col-12 col-xl-6 d-flex">
+    <div class="card shadow flex-fill">
+        <div class="card-header bg-warning text-dark d-flex align-items-center">
+
+            <h4 class="mb-0">📊 Aylık Onay / Red / Bekleme Rezervasyon Durumu</h4>
+        </div>
+        <div class="card-body bg-white">
+            @if (Model.All(x => x.Approved == 0 && x.Rejected == 0 && x.Pending == 0))
+            {
+                <div class="alert alert-info mb-0">
+                    Bu yıl için rezervasyon durumu verisi bulunamadı.
+                </div>
+            }
+            else
+            {
+                <canvas id="monthlyReservationStatusChart" height="150"></canvas>
+            }
+        </div>
+    </div>
+</div>
+@if (!Model.All(x => x.Approved == 0 && x.Rejected == 0 && x.Pending == 0))
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('monthlyReservationStatusChart')?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.Month))),
+                    datasets: [
+                        {
+                            label: 'Onaylandı',
+                            data: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.Approved))),
+                            backgroundColor: 'rgba(40, 167, 69, 0.8)'
+                        },
+                        {
+                            label: 'Reddedildi',
+                            data: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.Rejected))),
+                            backgroundColor: 'rgba(220, 53, 69, 0.8)'
+                        },
+                        {
+                            label: 'Beklemede',
+                            data: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.Pending))),
+                            backgroundColor: 'rgba(255, 193, 7, 0.8)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 13
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Aylık Rezervasyon Statüleri',
+                            font: {
+                                size: 18
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: '#f1f1f1' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

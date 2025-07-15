@@ -10,32 +10,75 @@
         <form asp-action="Ekle" asp-controller="AdminEtkinlik" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <div class="card-body">
-
                 <div class="form-group mb-3">
                     <label asp-for="EventName" class="form-label">Etkinlik Adı *</label>
-                    <input asp-for="EventName" class="form-control" required maxlength="150" placeholder="Etkinlik adını giriniz" />
+                    <input asp-for="EventName" class="form-control" required minlength="3" maxlength="100" placeholder="Etkinlik adını giriniz" />
                     <span asp-validation-for="EventName" class="text-danger"></span>
                 </div>
-
                 <div class="form-group mb-3">
                     <label asp-for="EventPrice" class="form-label">Fiyat *</label>
-                    <input asp-for="EventPrice" class="form-control" type="number" step="0.01" required min="0" />
+                    <input asp-for="EventPrice"
+                           class="form-control"
+                           id="priceInput"
+                           required
+                           pattern="^\d{1,6}(,\d{1,2})?$"
+                           value="@(Model?.EventPrice > 0 ? Model.EventPrice.ToString("0.##") : "1")" />
                     <span asp-validation-for="EventPrice" class="text-danger"></span>
                 </div>
-
+                <div class="form-group mb-3">
+                    <label asp-for="EventPriceSembol" class="form-label">Para Birimi *</label>
+                    <select asp-for="EventPriceSembol" class="form-control" required>
+                        <option value="">-- Sembol Seçiniz --</option>
+                        <option value="₺">₺ (Türk Lirası)</option>
+                        <option value="$">$ (Amerikan Doları)</option>
+                        <option value="€">€ (Euro)</option>
+                        <option value="₽">₽ (Rus Rublesi)</option>
+                        <option value="₼">₼ (Azerbaycan Manatı)</option>
+                        <option value="£">£ (İngiliz Sterlini)</option>
+                        <option value="₹">₹ (Hindistan Rupisi)</option>
+                        <option value="¥">¥ (Çin Yuanı / Japon Yeni)</option>
+                        <option value="₩">₩ (Güney Kore Wonu)</option>
+                        <option value="฿">฿ (Tayland Bahtı)</option>
+                        <option value="₦">₦ (Nijerya Nairası)</option>
+                        <option value="₪">₪ (İsrail Şekeli)</option>
+                        <option value="₫">₫ (Vietnam Dongu)</option>
+                        <option value="₱">₱ (Filipin Pezosu)</option>
+                        <option value="د.إ">د.إ (BAE Dirhemi)</option>
+                        <option value="ر.س">ر.س (Suudi Riyali)</option>
+                        <option value="د.ك">د.ك (Kuveyt Dinarı)</option>
+                        <option value="د.ب">د.ب (Bahreyn Dinarı)</option>
+                        <option value="د.ع">د.ع (Irak Dinarı)</option>
+                        <option value="ل.ل">ل.ل (Lübnan Lirası)</option>
+                        <option value="د.م.">د.م. (Fas Dirhemi)</option>
+                        <option value="د.ت">د.ت (Tunus Dinarı)</option>
+                        <option value="ج.م">ج.م (Mısır Lirası)</option>
+                        <option value="د.ج">د.ج (Cezayir Dinarı)</option>
+                        <option value="س.و">س.و (Suriye Lirası)</option>
+                        <option value="د.ي">د.ي (Yemen Riyali)</option>
+                        <option value="ش.ج">ش.ج (Sudan Lirası)</option>
+                    </select>
+                    <span asp-validation-for="EventPriceSembol" class="text-danger"></span>
+                </div>
                 <div class="form-group mb-3">
                     <label asp-for="EventDetails" class="form-label">Detaylar *</label>
-                    <textarea asp-for="EventDetails" class="form-control" rows="3" required maxlength="1000" placeholder="Etkinlik açıklaması giriniz."></textarea>
+                    <textarea asp-for="EventDetails" class="form-control" rows="3" maxlength="500" placeholder="Etkinlik açıklaması giriniz."></textarea>
                     <span asp-validation-for="EventDetails" class="text-danger"></span>
                 </div>
-
                 <div class="form-group mb-3">
                     <label asp-for="EventImageFile" class="form-label">Görsel *</label>
-                    <input asp-for="EventImageFile" type="file" accept="image/jpeg,image/png,image/webp" class="form-control" required />
+                    <input asp-for="EventImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="form-control" />
+                    <div id="previewContainer" class="mt-2" style="@(string.IsNullOrWhiteSpace(Model.EventImageBase64) ? "display:none;" : "")">
+                        <img id="previewImage"
+                             src="@Model.EventImageBase64"
+                             alt="Etkinlik Görseli Önizleme"
+                             class="img-thumbnail shadow-sm border"
+                             loading="lazy"
+                             style="max-height: 140px; object-fit: cover; border-radius: 5px;" />
+                    </div>
+                    <input type="hidden" name="EventImageBase64" id="EventImageBase64" value="@Html.Raw(Model.EventImageBase64)" />
                     <span asp-validation-for="EventImageFile" class="text-danger"></span>
-                    <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp (max 5MB)</small>
+                    <small class="text-muted">Sadece .jpg, .jpeg, .png, .webp, .gif (max 5MB)</small>
                 </div>
-
                 <div class="form-group mb-3">
                     <label asp-for="EventStatus" class="form-label">Durum *</label>
                     <select asp-for="EventStatus" class="form-control" required>
@@ -45,7 +88,6 @@
                     </select>
                     <span asp-validation-for="EventStatus" class="text-danger"></span>
                 </div>
-
                 <div class="text-end mt-3">
                     <button type="submit" class="btn btn-primary">Ekle</button>
                     <a asp-action="Liste" asp-controller="AdminEtkinlik" class="btn btn-secondary ms-2">İptal</a>
@@ -54,3 +96,65 @@
         </form>
     </div>
 </div>
+<script>
+    const priceInput = document.getElementById('priceInput');
+    priceInput.addEventListener('input', function () {
+        let value = this.value.replace(/[^0-9,]/g, '');
+        const parts = value.split(',');
+        if (parts.length > 2) {
+            value = parts[0] + ',' + parts[1];
+        }
+        if (parts.length === 2) {
+            parts[1] = parts[1].substring(0, 2);
+            value = parts[0] + ',' + parts[1];
+        }
+        this.value = value;
+        const numeric = parseFloat(value.replace(',', '.'));
+        this.classList.toggle("is-invalid", isNaN(numeric) || numeric < 1 || numeric > 999999);
+    });
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const numeric = parseFloat(priceInput.value.replace(',', '.'));
+        if (isNaN(numeric) || numeric < 1 || numeric > 999999) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'error',
+                title: 'Fiyat geçersiz!',
+                text: 'Fiyat 1 ile 999999 arasında olmalı.',
+                confirmButtonColor: '#d33'
+            });
+            priceInput.focus();
+        }
+    });
+    priceInput.addEventListener('blur', function () {
+        this.value = this.value.replace('.', ',');
+    });
+    const imageInput = document.querySelector('input[type="file"][name="EventImageFile"]');
+    const previewImage = document.getElementById('previewImage');
+    const previewContainer = document.getElementById('previewContainer');
+    const hiddenInput = document.getElementById('EventImageBase64');
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Geçersiz dosya!',
+                text: 'Sadece resim dosyası seçebilirsiniz.',
+                confirmButtonColor: '#d33'
+            });
+            this.value = '';
+            previewImage.src = '';
+            previewContainer.style.display = 'none';
+            hiddenInput.value = '';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewContainer.style.display = 'block';
+            hiddenInput.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+</script>

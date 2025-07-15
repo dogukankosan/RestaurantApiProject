@@ -47,7 +47,7 @@ namespace RestaurantWebUI.Controllers
             }
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
-                ValidationProblemDetails problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
+                ValidationProblemDetails? problem = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>();
                 if (problem?.Errors != null)
                 {
                     foreach (var err in problem.Errors)

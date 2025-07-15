@@ -163,7 +163,7 @@ namespace RestaurantAPI.Controllers
                     Status = StatusCodes.Status400BadRequest
                 });
             }
-            Category category = await _context.Categories.FindAsync(id);
+            Category? category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound(new ProblemDetails

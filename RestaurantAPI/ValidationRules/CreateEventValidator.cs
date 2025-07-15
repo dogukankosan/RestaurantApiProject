@@ -23,6 +23,18 @@ namespace RestaurantAPI.ValidationRules
             RuleFor(x => x.EventImage)
                 .NotNull().WithMessage("Resim dosyası zorunlu.")
                 .Must(ValidatorMethod.BeValidImage).WithMessage("Geçerli bir görsel dosyası (.jpg/.png/.gif, max 5MB) yükleyiniz.");
+            RuleFor(x => x.EventPriceSembol)
+           .NotEmpty().WithMessage("Fiyat para birimi sembolü seçilmelidir.")
+           .Must((symbol) =>
+           {
+               string[] allowedSymbols = new string[]
+               {
+            "₺", "$", "€", "₽", "₼", "£", "₹", "¥", "₩", "฿", "₦", "₪", "₫", "₱",
+            "د.إ", "ر.س", "د.ك", "د.ب", "د.ع", "ل.ل", "د.م.", "د.ت", "ج.م", "د.ج", "س.و", "د.ي", "ش.ج"
+               };
+               return allowedSymbols.Contains(symbol);
+           })
+           .WithMessage("Geçersiz bir para birimi sembolü seçtiniz.");
         }
     }
 }

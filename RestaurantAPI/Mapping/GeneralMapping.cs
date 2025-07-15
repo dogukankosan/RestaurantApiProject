@@ -4,6 +4,7 @@ using RestaurantAPI.Dtos.AdminLogDtos;
 using RestaurantAPI.Dtos.CategoryDtos;
 using RestaurantAPI.Dtos.ChefDtos;
 using RestaurantAPI.Dtos.CompanyInfoDtos;
+using RestaurantAPI.Dtos.EmailDtos;
 using RestaurantAPI.Dtos.EventDtos;
 using RestaurantAPI.Dtos.FeatureDtos;
 using RestaurantAPI.Dtos.GalleryImageDtos;
@@ -43,7 +44,6 @@ namespace RestaurantAPI.Mapping
 
             CreateMap<Message, ResultMessageDto>().ReverseMap();
             CreateMap<Message, CreateMessageDto>().ReverseMap();
-            CreateMap<Message, UpdateMessageDto>().ReverseMap();
             CreateMap<Message, GetByIDMessageDto>().ReverseMap();
 
             CreateMap<Product, ResultProductDto>().ForMember(x => x.CategoryName, y => y.MapFrom(z => z.Category.CategoryName)).ReverseMap();
@@ -53,7 +53,6 @@ namespace RestaurantAPI.Mapping
 
             CreateMap<Reservation, ResultReservationDto>().ReverseMap();
             CreateMap<Reservation, CreateReservationDto>().ReverseMap();
-            CreateMap<Reservation, UpdateReservationDto>().ReverseMap();
             CreateMap<Reservation, GetByIDReservationDto>().ReverseMap();
 
             CreateMap<Service, ResultServiceDto>().ReverseMap();
@@ -87,6 +86,10 @@ namespace RestaurantAPI.Mapping
             CreateMap<Icon, CreateIconDto>().ReverseMap();
             CreateMap<Icon, UpdateIconDto>().ReverseMap();
             CreateMap<Icon, GetByIDIconDto>().ReverseMap();
+
+            CreateMap<Email, ResultEmailDto>().ReverseMap();
+            CreateMap<UpdateEmailDto, Email>()
+        .ForMember(dest => dest.EmailID, opt => opt.Ignore());
         }
     }
 }

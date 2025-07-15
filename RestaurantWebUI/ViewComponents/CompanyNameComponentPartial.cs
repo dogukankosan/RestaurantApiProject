@@ -23,8 +23,7 @@ namespace RestaurantWebUI.ViewComponents
                 // TODO: loglama ekle
                 aboutDto = null;
             }
-            string? companyName = aboutDto?.AboutCompanyName;
-            return View("Default",companyName);
+            return View("Default", aboutDto);
         }
     }
 }

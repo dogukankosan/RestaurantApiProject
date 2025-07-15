@@ -12,7 +12,7 @@ namespace RestaurantAPI.Entities
         [Column(TypeName = "nvarchar(200)")]
         public string CompanyInfoAddress { get; set; } 
         [Required]
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "nvarchar(25)")]
         public string CompanyInfoPhone { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(100)")]

@@ -1,0 +1,98 @@
+﻿@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+@using RestaurantWebUI.Dtos.WebLogDtos
+@model List<ResultWebLogDto>
+<title>Admin Web Log Listesi</title>
+<h4 class="card-title">Ziyaretçi Web Log Kayıtları</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered" id="yourTableId">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>IP Adresi</th>
+                <th>Tarayıcı</th>
+                <th>Konum</th>
+                <th>Tarih</th>
+                <th class="no-export">İşlem</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultWebLogDto item in Model)
+            {
+                <tr>
+                    <td>@item.WebLogID</td>
+                    <td>@item.WebLogUserIPAdress</td>
+                    <td>
+                        <span title="@item.WebLogUserInfo">
+                            @(item.WebLogUserInfo?.Length > 30 ? item.WebLogUserInfo[..30] + "..." : item.WebLogUserInfo)
+                        </span>
+                    </td>
+                    <td>@item.WebLogUserGeo</td>
+                    <td>@item.WebLogDate.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <form id="deleteForm-@item.WebLogID"
+                              asp-controller="AdminSiteyeGiren"
+                              asp-action="Sil"
+                              asp-route-id="@item.WebLogID"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="button" class="btn btn-outline-danger btn-sm" title="Sil"
+                                    onclick="confirmDelete('@item.WebLogID')">
+                                <i data-feather="trash-2"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Log kaydı silinsin mi?',
+            text: "Bu işlem geri alınamaz!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.getElementById(`deleteForm-${id}`);
+                if (form) form.submit();
+            }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        const navType = performance.getEntriesByType("navigation")[0]?.type;
+        if (type && message && navType === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı' : 'Hata',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+        if (window.feather) {
+            feather.replace();
+        }
+    });
+</script>

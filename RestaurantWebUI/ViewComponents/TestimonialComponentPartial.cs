@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantWebUI.Dtos.TestimonialDtos;
+using System.Net.Http.Json;
 
 namespace RestaurantWebUI.ViewComponents
 {
@@ -16,12 +17,13 @@ namespace RestaurantWebUI.ViewComponents
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                testimonials = await client.GetFromJsonAsync<List<ResultTestimonialDto>>("api/Testimonials")
-                               ?? new List<ResultTestimonialDto>();
+                List<ResultTestimonialDto> response = await client.GetFromJsonAsync<List<ResultTestimonialDto>>("api/Testimonials");
+                testimonials = response?
+                    .Where(t => t.TestimonialStatus) 
+                    .ToList() ?? new List<ResultTestimonialDto>();
             }
             catch (HttpRequestException)
             {
-                // TODO: add logging here
                 testimonials = new List<ResultTestimonialDto>();
             }
             return View(testimonials);

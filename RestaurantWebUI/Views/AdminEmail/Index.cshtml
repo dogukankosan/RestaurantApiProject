@@ -1,0 +1,176 @@
+﻿@using RestaurantWebUI.Dtos.EmailDtos
+@model UpdateEmailDto
+
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+    string placeholder = "/adminThema/assets/img/blog/img1.png";
+    string imageSrc = Model.EmailImage?.Length > 0
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.EmailImage)}"
+        : placeholder;
+    string CleanPhone(string phone)
+    {
+        return new string(phone.Where(char.IsDigit).ToArray());
+    }
+    string whatsappNumber = CleanPhone(Model.EmailPhone);
+    string whatsappUrl = !string.IsNullOrWhiteSpace(whatsappNumber)
+        ? $"https://wa.me/{whatsappNumber}"
+        : "#";
+
+    string mailtoUrl = !string.IsNullOrWhiteSpace(Model.EmailBox)
+        ? $"mailto:{Model.EmailBox}"
+        : "#";
+}
+<title>Mail Ayarları</title>
+<br />
+<h4 class="card-title fw-bold">Mail Ayarları</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle" id="yourTableId">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 250px;">Alan</th>
+                <th>Değer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Mail Adresi</strong></td>
+                <td>
+                    <a href="@mailtoUrl" class="custom-link">@Model.EmailBox</a>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Şifre</strong></td>
+                <td>***</td>
+            </tr>
+            <tr>
+                <td><strong>Sunucu</strong></td>
+                <td>@Model.EmailServer</td>
+            </tr>
+            <tr>
+                <td><strong>SSL Durumu</strong></td>
+                <td>
+                    @if (Model.EmailSSl == 1)
+                    {
+                        <span class="badge bg-success">SSL Var</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">SSL Yok</span>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Port</strong></td>
+                <td>@Model.EmailPort</td>
+            </tr>
+            <tr>
+                <td><strong>Firma Adı</strong></td>
+                <td>@Model.EmailCompanyName</td>
+            </tr>
+            <tr>
+                <td><strong>Adres</strong></td>
+                <td>@Model.EmailAddress</td>
+            </tr>
+            <tr>
+                <td><strong>Telefon</strong></td>
+                <td>
+                    <a href="@whatsappUrl" class="custom-link" target="_blank">@Model.EmailPhone</a>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Firma Görseli</strong></td>
+                <td>
+                    <img src="@imageSrc"
+                         width="100"
+                         height="100"
+                         class="img-thumbnail"
+                         style="object-fit: cover;"
+                         alt="Firma Görseli"
+                         loading="lazy"
+                         decoding="async"
+                         referrerpolicy="no-referrer" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br />
+    <a href="/AdminEMail/Guncelle" style="color:black !important" class="btn btn-info">Bilgileri Güncelle</a>
+    <form id="resetForm" asp-action="Reset" method="post" class="d-inline">
+        @Html.AntiForgeryToken()
+        <button type="button" class="btn btn-warning btn-sm" onclick="confirmReset()">
+            <i data-feather="refresh-ccw"></i> Ayarları Sıfırla
+        </button>
+    </form>
+</div>
+<style>
+    .custom-link {
+        color: #0d6efd;
+        font-weight: 600;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+    }
+
+        .custom-link:hover {
+            color: white !important;
+        }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>
+<script>
+    function confirmReset() {
+        Swal.fire({
+            title: 'Mail ayarları sıfırlansın mı?',
+            text: "Bu işlem geri alınamaz. Varsayılan değerler yüklenecek.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ffc107',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sıfırla',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("resetForm").submit();
+            }
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        if (type && message && performance.getEntriesByType("navigation")[0].type === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+        if (window.feather) {
+            feather.replace();
+        }
+    });
+</script>

@@ -16,7 +16,7 @@ namespace RestaurantWebUI.ViewComponents
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                List<ResultProductDto> response = await client.GetFromJsonAsync<List<ResultProductDto>>("api/Products");
+                List<ResultProductDto>? response = await client.GetFromJsonAsync<List<ResultProductDto>>("api/Products");
                 if (response != null)
                 {
                     products = response

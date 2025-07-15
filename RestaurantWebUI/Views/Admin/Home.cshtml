@@ -1,8 +1,425 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Home";
     Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
-
-<h1>Home</h1>
-
+@model RestaurantWebUI.Dtos.ReportDtos.ResultAdminReportDto
+<div class="row ">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Beklemede Rezervasyon Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.PendingReservationCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/1.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15"> Bugün Rezervasyon Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.TodayReservationCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/2.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Bügün Gelecek Kişi Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.TodayComingPeopleCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/3.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">En Yakın Gelicek Müşteri</h5>
+                                <hr />
+                                <h2 class="mb-3 font-18">@Model.NextCustomerName</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/4.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* alt satır *@
+<div class="row ">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Onaylanan Rezervasyon Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.ApprovedReservationCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/9.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15"> Reddedilen Rezervasyon Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.RejectedReservationCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/10.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     height="150"
+                                     loading="lazy"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Gelen Rezervasyon Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.ArrivedReservationCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/7.png"
+                                     height="150"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Gelmeyen Rezervasyon Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.NotArrivedReservationCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/6.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* alt satır *@
+<div class="row ">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Bugün Gelen İletişim Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.TodayMessageCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/8.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">İletişim Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.TotalMessageCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/11.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Ürün Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.ProductCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/16.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Şef Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.ChefCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/15.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row ">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Kategori Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.CategoryCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/14.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Etkinlik Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.EventCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/13.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">Galeri Sayısı</h5><hr />
+                                <h2 class="mb-3 font-18">@Model.GalleryImageCount</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/12.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <div class="card">
+            <div class="card-statistic-4">
+                <div class="align-items-center justify-content-between">
+                    <div class="row ">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pr-0 pt-3">
+                            <div class="card-content">
+                                <h5 class="font-15">En Çok Ürünü Olan Kategori</h5>
+                                <hr />
+                                <h2 class="mb-3 font-18">@Model.MostProductCategoryName</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 pl-0">
+                            <div class="banner-img">
+                                <img src="/adminThema/assets/img/banner/7.png"
+                                     alt="Rezervasyon İstatistik Görseli"
+                                     loading="lazy" height="150"
+                                     decoding="async"
+                                     fetchpriority="low" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="row gx-4 gy-4 mt-4">
+        @await Component.InvokeAsync("_AdminMonthReservationChartComponentPartial")
+        @await Component.InvokeAsync("_AdminMonthReservationChartStatusComponentPartial")
+        @await Component.InvokeAsync("_AdminPeopleCountMonthComponentPartial")
+        @await Component.InvokeAsync("_AdminMessageReportComponentPartial")
+    </div>

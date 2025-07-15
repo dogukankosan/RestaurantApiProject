@@ -135,42 +135,27 @@ namespace RestaurantAPI.Controllers
             }
         }
         [HttpPatch("UpdateStatus/{id:int}")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateEventStatusDto dto)
+        public async Task<IActionResult> UpdateStatus(int id)
         {
-            if (id != dto.EventID)
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "ID Uyuşmazlığı",
-                    Detail = "URL'deki ID ile gönderilen verideki ID eşleşmiyor.",
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
             Event? evt = await _context.Events.FindAsync(id);
             if (evt is null)
             {
                 return NotFound(new ProblemDetails
                 {
                     Title = "Etkinlik Bulunamadı",
-                    Detail = $"ID'si {id} olan etkinlik sistemde mevcut değil.",
+                    Detail = $"ID'si {id} olan etkinlik bulunamadı.",
                     Status = StatusCodes.Status404NotFound
                 });
             }
-            if (evt.EventStatus == dto.IsActive)
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "Zaten Güncel",
-                    Detail = $"Etkinlik zaten {(dto.IsActive ? "aktif" : "pasif")} durumda.",
-                    Status = StatusCodes.Status400BadRequest
-                });
-            }
-            evt.EventStatus = dto.IsActive;
+            evt.EventStatus = !evt.EventStatus;
             try
             {
-                _context.Events.Update(evt);
                 await _context.SaveChangesAsync();
-                return NoContent();
+                return Ok(new
+                {
+                    message = $"Etkinlik {(evt.EventStatus ? "aktif" : "pasif")} yapıldı.",
+                    newStatus = evt.EventStatus
+                });
             }
             catch (DbUpdateException ex)
             {

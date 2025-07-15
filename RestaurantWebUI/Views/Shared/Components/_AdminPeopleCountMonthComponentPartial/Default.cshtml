@@ -1,0 +1,69 @@
+﻿@model List<RestaurantWebUI.Dtos.ReportDtos.ResultAdminMonthlyPeopleStatsDto>
+@using Newtonsoft.Json
+<div class="col-12 col-lg-6">
+    <div class="card mt-4 shadow">
+        <div class="card-header bg-success text-white d-flex align-items-center">
+            <i class="fas fa-users me-2"></i>
+            <h4 class="mb-0">👥 Aylık Gelen Kişi Sayısı</h4>
+        </div>
+        <div class="card-body bg-white">
+            @if (Model.All(x => x.PeopleCount == 0))
+            {
+                <div class="alert alert-info mb-0">
+                    Bu yıl için gelen kişi verisi bulunamadı.
+                </div>
+            }
+            else
+            {
+                <canvas id="monthlyPeopleChart" height="360"></canvas>
+            }
+        </div>
+    </div>
+</div>
+@if (!Model.All(x => x.PeopleCount == 0))
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('monthlyPeopleChart')?.getContext('2d');
+            if (!ctx) return;
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.Month))),
+                    datasets: [{
+                        label: 'Gelen Kişi Sayısı',
+                        data: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.PeopleCount))),
+                        backgroundColor: 'rgba(25, 135, 84, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Aylık Gelen Kişi Sayısı',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: '#f1f1f1' }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

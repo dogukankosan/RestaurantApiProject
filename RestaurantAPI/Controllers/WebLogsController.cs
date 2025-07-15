@@ -21,41 +21,82 @@ namespace RestaurantAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<WebLog> logs = await _context.WebLogs
-                .AsNoTracking()
-                .ToListAsync();
-            List<ResultWebLogDto> result = _mapper.Map<List<ResultWebLogDto>>(logs);
-            return Ok(result);
-        }
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            WebLog? logs = await _context.WebLogs.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.WebLogID == id);
-            if (logs == null)
-                return NotFound("Hata web log bulunamadı.");
-            ResultWebLogDto result = _mapper.Map<ResultWebLogDto>(logs);
-            return Ok(result);
+            try
+            {
+                List<WebLog> logs = await _context.WebLogs.AsNoTracking().ToListAsync();
+                List<ResultWebLogDto> result = _mapper.Map<List<ResultWebLogDto>>(logs);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Sunucu Hatası",
+                    Detail = "Web log kayıtları alınırken bir hata oluştu.",
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CreateWebLogDto dto)
         {
+            if (dto == null)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Geçersiz Veri",
+                    Detail = "Geçerli bir veri gönderilmelidir.",
+                    Status = StatusCodes.Status400BadRequest
+                });
+            }
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            WebLog entity = _mapper.Map<WebLog>(dto);
-            await _context.WebLogs.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return Ok("Web log ekleme işlemi başarılı");
+                return ValidationProblem(ModelState);
+            try
+            {
+                WebLog entity = _mapper.Map<WebLog>(dto);
+                await _context.WebLogs.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                ResultWebLogDto result = _mapper.Map<ResultWebLogDto>(entity);
+                return Created($"/api/weblogs", result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Sunucu Hatası",
+                    Detail = "Web log eklenirken bir hata oluştu.",
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            WebLog? entity = await _context.WebLogs.FindAsync(id);
-            if (entity == null)
-                return NotFound("Web log bulunamadı.");
-            _context.WebLogs.Remove(entity);
-            await _context.SaveChangesAsync();
-            return Ok("Web log silme işlemi başarılı");
+            try
+            {
+                WebLog? entity = await _context.WebLogs.FindAsync(id);
+                if (entity == null)
+                {
+                    return NotFound(new ProblemDetails
+                    {
+                        Title = "Silme Başarısız",
+                        Detail = $"ID'si {id} olan web log kaydı bulunamadı.",
+                        Status = StatusCodes.Status404NotFound
+                    });
+                }
+                _context.WebLogs.Remove(entity);
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
+                {
+                    Title = "Sunucu Hatası",
+                    Detail = "Silme işlemi sırasında bir hata oluştu.",
+                    Status = StatusCodes.Status500InternalServerError
+                });
+            }
         }
     }
 }

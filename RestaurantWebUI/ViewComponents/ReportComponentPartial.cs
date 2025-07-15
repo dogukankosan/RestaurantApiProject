@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RestaurantWebUI.Models;
+using RestaurantWebUI.Dtos.ReportDtos;
 namespace RestaurantWebUI.ViewComponents
 {
     public class ReportComponentPartial : ViewComponent
@@ -11,11 +11,11 @@ namespace RestaurantWebUI.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            Report? reportDto;
+            ResultUserReportDto? reportDto;
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                reportDto = await client.GetFromJsonAsync<Report>("api/Reports");
+                reportDto = await client.GetFromJsonAsync<ResultUserReportDto>("api/Reports/summary");
             }
             catch (HttpRequestException)
             {

@@ -17,8 +17,14 @@ namespace RestaurantAPI.Entities
         [EmailAddress]
         public string ReservationEmail { get; set; }
         [Required]
-        [Column(TypeName = "nvarchar(20)")]
+        [Column(TypeName = "nvarchar(25)")]
         public string ReservationPhone { get; set; }
+        [Column(TypeName = "nvarchar(25)")]
+        public string WebLogUserIPAdress { get; set; }
+        [Column(TypeName = "nvarchar(250)")]
+        public string WebLogUserInfo { get; set; }
+        [Column(TypeName = "nvarchar(75)")]
+        public string WebLogUserGeo { get; set; }
         [Column(TypeName = "smalldatetime")]
         [Required]
         public DateTime ReservationDate { get; set; }
@@ -26,9 +32,12 @@ namespace RestaurantAPI.Entities
         [Range(1, 999999)]
         public int ReservationCountOfPeople { get; set; }
         public string ReservationMessage { get; set; }
-        [DefaultValue(false)]
-        public bool ReservationStatus { get; set; } = false;
+        [DefaultValue(0)]
+        public int ReservationStatus { get; set; } = 0;
         [DefaultValue(false)]
         public bool ReservationIsRead { get; set; } = false;
+        [Column(TypeName = "smalldatetime")]
+        [Required]
+        public DateTime ReservationCreateDate { get; set; }
     }
 }

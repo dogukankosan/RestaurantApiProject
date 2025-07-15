@@ -30,9 +30,17 @@ namespace RestaurantAPI.ValidationRules
             RuleFor(x => x.CategoryID)
                 .GreaterThan(0).WithMessage("Geçerli bir kategori seçmelisiniz");
             RuleFor(x => x.ProductPriceSembol)
-                .NotEmpty().WithMessage("Fiyat para birimi sembolü seçilmelidir.")
-                .Must(sym => new[] { '₺', '$', '€', '₽', '₼', '£', '₹', '¥', '₩', '₫' }.Contains(sym))
-                .WithMessage("Geçersiz bir para birimi sembolü seçtiniz.");
+            .NotEmpty().WithMessage("Fiyat para birimi sembolü seçilmelidir.")
+            .Must((symbol) =>
+            {
+                string[] allowedSymbols = new string[]
+                {
+            "₺", "$", "€", "₽", "₼", "£", "₹", "¥", "₩", "฿", "₦", "₪", "₫", "₱",
+            "د.إ", "ر.س", "د.ك", "د.ب", "د.ع", "ل.ل", "د.م.", "د.ت", "ج.م", "د.ج", "س.و", "د.ي", "ش.ج"
+                };
+                return allowedSymbols.Contains(symbol);
+            })
+            .WithMessage("Geçersiz bir para birimi sembolü seçtiniz.");
         }
     }
 }

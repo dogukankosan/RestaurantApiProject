@@ -6,8 +6,18 @@
 <br />
 <h4 class="card-title fw-bold">Özellik Bilgileri</h4>
 <hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📥 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
 <div class="table-responsive">
-    <table class="table table-hover table-bordered align-middle">
+    <table class="table table-hover table-bordered align-middle" id="yourTableId">
         <thead class="table-light">
             <tr>
                 <th style="width: 250px;">Alan</th>

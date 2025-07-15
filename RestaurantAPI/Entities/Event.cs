@@ -16,6 +16,9 @@ namespace RestaurantAPI.Entities
         [Column(TypeName = "decimal(18,2)")]
         [Range(0.01, 999999)]
         public decimal EventPrice { get; set; }
+        [Required]
+        [Column(TypeName = "nvarchar(5)")]
+        public string EventPriceSembol { get; set; }
         [Column(TypeName = "nvarchar(500)")]
         public string EventDetails { get; set; }
         [Required]

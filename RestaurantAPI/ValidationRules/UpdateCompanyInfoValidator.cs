@@ -19,10 +19,11 @@ namespace RestaurantAPI.ValidationRules
                 .MaximumLength(200).WithMessage("Adres en fazla 200 karakter olabilir");
 
             RuleFor(x => x.CompanyInfoPhone)
-                .NotEmpty().WithMessage("Telefon numarası boş olamaz")
-                .Must(p => Regex.IsMatch(p, @"^\+?\d{10,20}$"))
-                    .WithMessage("Telefon numarası sadece rakam ve isteğe bağlı + içermeli (10–20 hane)")
-                .MaximumLength(20).WithMessage("Telefon numarası en fazla 20 karakter olabilir");
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("Telefon numarası boş geçilemez.")
+                .MaximumLength(25).WithMessage("Telefon numarası en fazla 25 karakter olabilir.")
+                .Matches(@"^\+?[0-9 ]{7,25}$")
+                    .WithMessage("Telefon yalnızca rakam ve boşluk içermeli, isteğe bağlı '+' ile başlayabilir.");
 
             RuleFor(x => x.CompanyInfoOpenClosed)
                 .NotEmpty().WithMessage("Çalışma saatleri boş olamaz")

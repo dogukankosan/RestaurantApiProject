@@ -1,0 +1,65 @@
+﻿@model List<RestaurantWebUI.Dtos.ReportDtos.ResultAdminMonthlyMessageStatsDto>
+@using Newtonsoft.Json
+<div class="col-12 col-xl-6 d-flex">
+    <div class="card shadow flex-fill">
+        <div class="card-header bg-warning text-dark d-flex align-items-center">
+            <h4 class="mb-0">📬 Aylık İletişim Sayıları</h4>
+        </div>
+        <div class="card-body bg-white">
+            @if (!Model.Any(x => x.MessageCount > 0))
+            {
+                <div class="alert alert-info mb-0">
+                    Bu yıl için iletişim verisi bulunamadı.
+                </div>
+            }
+            else
+            {
+                <canvas id="monthlyMessageChart" height="150"></canvas>
+            }
+        </div>
+    </div>
+</div>
+@if (Model.Any(x => x.MessageCount > 0))
+{
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('monthlyMessageChart')?.getContext('2d');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.Month))),
+                    datasets: [{
+                        label: 'Mesaj Sayısı',
+                        data: @Html.Raw(JsonConvert.SerializeObject(Model.Select(x => x.MessageCount))),
+                        backgroundColor: 'rgba(23, 162, 184, 0.7)',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Aylık Mesaj Sayısı',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: '#f1f1f1' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantWebUI.Dtos.EventDtos;
+using System.Net.Http.Json;
 
 namespace RestaurantWebUI.ViewComponents
 {
     public class EventsComponentPartial : ViewComponent
     {
         private readonly IHttpClientFactory _httpClientFactory;
+
         public EventsComponentPartial(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -16,12 +18,13 @@ namespace RestaurantWebUI.ViewComponents
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                events = await client.GetFromJsonAsync<List<ResultEventDto>>("api/Events")
-                         ?? new List<ResultEventDto>();
+                List<ResultEventDto>? response = await client.GetFromJsonAsync<List<ResultEventDto>>("api/Events");
+                events = response?
+                    .Where(e => e.EventStatus)
+                    .ToList() ?? new List<ResultEventDto>();
             }
             catch (HttpRequestException)
             {
-                // TODO: add logging here
                 events = new List<ResultEventDto>();
             }
             return View(events);

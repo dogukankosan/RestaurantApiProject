@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestaurantWebUI.Dtos.GalleryImageDtos;
+using System.Net.Http.Json;
 
 namespace RestaurantWebUI.ViewComponents
 {
     public class GalleryComponentPartial : ViewComponent
     {
         private readonly IHttpClientFactory _httpClientFactory;
+
         public GalleryComponentPartial(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -16,12 +18,13 @@ namespace RestaurantWebUI.ViewComponents
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
             try
             {
-                galleryImages = await client.GetFromJsonAsync<List<ResultGalleryImageDto>>("api/GalleryImages")
-                                ?? new List<ResultGalleryImageDto>();
+                List<ResultGalleryImageDto>? response = await client.GetFromJsonAsync<List<ResultGalleryImageDto>>("api/GalleryImages");
+                galleryImages = response?
+                    .Where(g => g.ImageStatus) 
+                    .ToList() ?? new List<ResultGalleryImageDto>();
             }
             catch (HttpRequestException)
             {
-                // TODO: add logging here
                 galleryImages = new List<ResultGalleryImageDto>();
             }
             return View(galleryImages);

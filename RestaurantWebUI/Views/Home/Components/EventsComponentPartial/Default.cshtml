@@ -63,7 +63,7 @@
                          loading="lazy">
                         <h3>@(item.EventName ?? "")</h3>
                         <div class="price align-self-start">
-                            ₺ @item.EventPrice.ToString("N2")
+                             @item.EventPrice @item.EventPriceSembol
                         </div>
                         <p class="description">
                             @(item.EventDetails ?? "")

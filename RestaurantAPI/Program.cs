@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Context;
 using RestaurantAPI.ValidationRules;
 using System.Reflection;
@@ -12,6 +13,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 WebApplication app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    APIContext? db = scope.ServiceProvider.GetRequiredService<APIContext>();
+    db.Database.Migrate();         
+    db.SeedIcons();              
+}
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();

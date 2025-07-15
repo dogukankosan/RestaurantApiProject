@@ -32,11 +32,25 @@
             </tr>
             <tr>
                 <td><strong>Telefon</strong></td>
-                <td>@Model.CompanyInfoPhone</td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoPhone))
+                    {
+                        var cleanedPhone = new string(Model.CompanyInfoPhone.Where(char.IsDigit).ToArray());
+                        <a href="https://wa.me/@cleanedPhone" class="custom-link" target="_blank">
+                            <i class="bi bi-whatsapp"></i> WhatsApp ile İletişime Geç
+                        </a>
+                        <span class="d-block text-muted mt-1">@Model.CompanyInfoPhone</span>
+                    }
+                </td>
             </tr>
             <tr>
                 <td><strong>E-Posta</strong></td>
-                <td>@Model.CompanyInfoMail</td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoMail))
+                    {
+                        <a href="mailto:@Model.CompanyInfoMail" class="custom-link">@Model.CompanyInfoMail</a>
+                    }
+                </td>
             </tr>
             <tr>
                 <td><strong>Açılış / Kapanış</strong></td>
@@ -74,32 +88,32 @@
                 <td>
                     @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoLinkedinLink))
                     {
-                        <a href="@Model.CompanyInfoLinkedinLink" class="custom-link" target="_blank">Linkedin</a>
+                        <a href="@Model.CompanyInfoLinkedinLink" class="custom-link" target="_blank">LinkedIn</a>
                     }
                 </td>
             </tr>
-        <tr>
-            <td><strong>Harita IFrame</strong></td>
-            <td>
-                @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoIFrame))
-                {
-                    <div class="ratio ratio-16x9">
-                        <iframe src="@Model.CompanyInfoIFrame"
-                                width="500"
-                                height="100"
-                                style="border:0;"
-                                allowfullscreen
-                                loading="lazy"
-                                referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-                    </div>
-                }
-                else
-                {
-                    <span class="text-muted">Harita bağlantısı bulunamadı.</span>
-                }
-            </td>
-        </tr>
+            <tr>
+                <td><strong>Harita IFrame</strong></td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(Model.CompanyInfoIFrame))
+                    {
+                        <div class="ratio ratio-16x9">
+                            <iframe src="@Model.CompanyInfoIFrame"
+                                    width="500"
+                                    height="100"
+                                    style="border:0;"
+                                    allowfullscreen
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Harita bağlantısı bulunamadı.</span>
+                    }
+                </td>
+            </tr>
         </tbody>
     </table>
     <br />

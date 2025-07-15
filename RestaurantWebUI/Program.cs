@@ -4,7 +4,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient("RestaurantApiClient", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7154/");
+    client.BaseAddress = new Uri("http://restoranapi.runasp.net/");
 });
 builder.Services.AddMemoryCache();
 WebApplication app = builder.Build();

@@ -10,9 +10,14 @@
     </a>
     <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
         <div class="dropdown-header">
-            Mesajlar
+            <span style="color:black"><u>Mesajlar</u></span>
             <div class="float-right">
-                <a asp-controller="" asp-action="">Tümünü Okundu İşaretle</a>
+                <form method="post" asp-controller="AdminMesaj" asp-action="TumunuOkunduYap" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-link p-0 text-danger" style="font-size: 0.875rem;">
+                        Tümünü Okundu Yap
+                    </button>
+                </form>
             </div>
         </div>
         <div class="dropdown-list-content dropdown-list-message">
@@ -24,36 +29,40 @@
             }
             else
             {
-                @foreach (var item in Model)
+                @foreach (ResultMessageDto item in Model)
                 {
-                    <a asp-controller=""
-                       asp-action=""
-                       asp-route-id="@item.MessageID"
-                       class="dropdown-item">
-                        <span class="dropdown-item-avatar text-white">
-                            <img alt="image"
-                                 src="/adminThema/assets/img/users/user-1.png"
-                                 class="rounded-circle" />
-                        </span>
-                        <span class="dropdown-item-desc">
-                            <span class="message-user">
-                                @item.MessageNameSurname
-                            </span>
-                            <span class="time message-text">
-                                @item.MessageSubject
-                            </span>
-                            <span class="time">
-                                @item.MessageSendDate.ToString("g")
-                            </span>
-                        </span>
+                    <a asp-controller="AdminMesaj"
+                       asp-action="Liste"
+                       class="dropdown-item py-2 border-bottom">
+                        <div class="d-flex flex-column">
+                            <strong>@item.MessageNameSurname</strong>
+                            <small class="text-muted">@item.MessageSubject</small>
+                            <small class="text-muted">@item.MessageSendDate.ToString("dd.MM.yyyy HH:mm")</small>
+                        </div>
                     </a>
                 }
             }
         </div>
         <div class="dropdown-footer text-center">
-            <a asp-controller="" asp-action="">
+            <a asp-controller="AdminMesaj" asp-action="Liste">
                 Tüm Mesajlar <i class="fas fa-chevron-right"></i>
             </a>
         </div>
     </div>
 </li>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const type = '@TempData["Type"]';
+        const message = @Html.Raw(Json.Serialize(TempData["Message"]));
+        const navType = performance.getEntriesByType("navigation")[0]?.type;
+        if (type && message && navType === "navigate") {
+            Swal.fire({
+                icon: type === 'success' ? 'success' : 'error',
+                title: type === 'success' ? 'Başarılı' : 'Hata',
+                text: message,
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>

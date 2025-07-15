@@ -14,7 +14,6 @@ namespace RestaurantWebUI.ViewComponents
         {
             List<ResultMessageDto>? messageDto = null;
             HttpClient client = _httpClientFactory.CreateClient("RestaurantApiClient");
-
             try
             {
                messageDto = await client.GetFromJsonAsync<List<ResultMessageDto>>("api/Messages");

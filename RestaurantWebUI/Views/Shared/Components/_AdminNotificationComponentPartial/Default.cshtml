@@ -6,7 +6,6 @@
     }
         .notification-toggle .headerBadge1 {
             position: absolute;
-            /* top’u % değil px ile ayarlayalım */
             top: 8px; /* burayı deneyerek artırıp/azaltabilirsin */
             right: 4px; /* istersen hafif sola da çekebilirsin */
             transform: translate(50%, 0); /* sadece sağa biraz taşı, dikeyde zaten px ile ayarladık */
@@ -26,23 +25,22 @@
         </span>
     </a>
     <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
-        <div class="dropdown-header">
+        <div class="dropdown-header" style="color:black">
             Yeni Rezervasyonlar (@Model.Count)
         </div>
         <div class="dropdown-list-content dropdown-list-icons">
             @if (!Model.Any())
             {
                 <div class="dropdown-item text-center">
-                    <em>Yeni rezervasyon yok.</em>
+                    <em style="color:black">Yeni rezervasyon yok.</em>
                 </div>
             }
             else
             {
-                @foreach (var r in Model)
+                @foreach (ResultReservationDto r in Model)
                 {
-                    <a asp-controller=""
-                       asp-action=""
-                       asp-route-id="@r.ReservationID"
+                    <a asp-controller="AdminRezervasyon"
+                       asp-action="Liste"
                        class="dropdown-item dropdown-item-unread">
                         <span class="dropdown-item-icon bg-primary text-white">
                             <i class="fas fa-calendar-alt"></i>
@@ -59,7 +57,7 @@
             }
         </div>
         <div class="dropdown-footer text-center">
-            <a asp-controller="" asp-action="">
+            <a asp-controller="AdminRezervasyon" asp-action="Liste">
                 Tüm Rezervasyonlar <i class="fas fa-chevron-right"></i>
             </a>
         </div>

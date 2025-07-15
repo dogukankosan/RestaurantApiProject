@@ -1,5 +1,48 @@
 ﻿@model RestaurantWebUI.Dtos.AboutDtos.ResultAboutDto
+<style>    .about-highlight-box {
+        background: linear-gradient(145deg, #red, #red);
+        border: 1px solid #eee;
+        border-radius: 16px;
+        padding: 30px 25px;
+        box-shadow: 0 0 12px 4px rgba(255, 0, 0, 0.3); 
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 15.5px;
+        color: #333;
+        transition: all 0.3s ease;
+    }
+        .about-highlight-box h5 {
+            font-size: 18px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .about-highlight-box p {
+            margin: 8px 0 16px;
+            line-height: 1.6;
+        }
+        .about-highlight-box .icon-red {
+            color:red;
+        }
+        .about-highlight-box .icon-brown {
+            color: red;
+        }
+        .about-highlight-box .icon-yellow {
+            color: red;
+        }
+        .about-highlight-box .icon-pink {
+            color: red;
+        }
+    @@media (max-width: 768px) {
+        .about-highlight-box
 
+    {
+        padding: 20px;
+    }
+    .about-highlight-box h5 {
+        font-size: 16px;
+    }
+    }</style>
 @{
     string placeholder = "/userThema/assets/img/gallery/gallery-1.jpg";
     string placeholder2 = "/userThema/assets/img/gallery/gallery-2.jpg";
@@ -25,6 +68,11 @@
 }
 else
 {
+    string rawText = Model.AboutDesc.Trim();
+    string encoded = System.Net.WebUtility.HtmlEncode(rawText);
+    string formattedText = encoded
+        .Replace("\r\n", "<br/>")
+        .Replace("\n", "<br/>");
     <section id="about" class="about section">
         <div class="container section-title" data-aos="fade-up">
             <h2>Hakkımızda<br /></h2>
@@ -40,14 +88,14 @@ else
                     @await Component.InvokeAsync("AboutPhoneComponentPartial")
                 </div>
                 <div class="col-lg-5" data-aos="fade-up" data-aos-delay="250">
-                    <div class="content ps-0 ps-lg-5">
-                        <p>@Model.AboutDesc</p>
-                        <div class="position-relative mt-4">
-                            <img src="@img2Src"
-                                 class="img-fluid"
-                                 alt="About Image 2"
-                                 loading="lazy" />
-                        </div>
+                    <div class="about-highlight-box">
+                        <p>@Html.Raw(formattedText)</p>
+                    </div>
+                    <div class="position-relative mt-4">
+                        <img src="@img2Src"
+                             class="img-fluid"
+                             alt="About Image 2"
+                             loading="lazy" />
                     </div>
                 </div>
             </div>

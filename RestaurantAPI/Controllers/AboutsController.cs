@@ -31,7 +31,7 @@ namespace RestaurantAPI.Controllers
                     Status = StatusCodes.Status404NotFound
                 });
             }
-            ResultAboutDto result = _mapper.Map<ResultAboutDto>(about);
+            ResultAboutDto? result = _mapper.Map<ResultAboutDto>(about);
             return Ok(result);
         }
         [HttpPut]
@@ -58,7 +58,7 @@ namespace RestaurantAPI.Controllers
             }
             catch (DbUpdateException ex)
             {
-                // TODO: Loglama yapılmalı (ex)
+                //TODO: Loglama yapılmalı (ex)
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "Veritabanı Hatası",
@@ -68,7 +68,7 @@ namespace RestaurantAPI.Controllers
             }
             catch (Exception ex)
             {
-                // TODO: Loglama yapılmalı (ex)
+                //TODO: Loglama yapılmalı (ex)
                 return StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {
                     Title = "Sunucu Hatası",

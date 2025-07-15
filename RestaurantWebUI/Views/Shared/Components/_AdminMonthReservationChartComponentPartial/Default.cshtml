@@ -1,0 +1,82 @@
+﻿@model List<RestaurantWebUI.Dtos.ReportDtos.ResultAdminMonthlyReservationStatsDto>
+<div class="col-12 col-xl-6 d-flex">
+    <div class="card shadow flex-fill">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+            📈 Aylık Rezervasyon Durumu
+        </div>
+        <div class="card-body bg-white">
+            @if (Model.All(x => x.Arrived == 0 && x.NotArrived == 0))
+            {
+                <div class="alert alert-info mb-0">
+                    Bu yıl için rezervasyon durumu verisi bulunamadı.
+                </div>
+            }
+            else
+            {
+                <canvas id="monthlyReservationChart" height="150"></canvas>
+            }
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = @Html.Raw(Json.Serialize(Model.Select(x => x.Month)));
+    const arrivedData = @Html.Raw(Json.Serialize(Model.Select(x => x.Arrived)));
+    const notArrivedData = @Html.Raw(Json.Serialize(Model.Select(x => x.NotArrived)));
+    const ctx = document.getElementById('monthlyReservationChart').getContext('2d');
+        new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Gelen',
+                    data: arrivedData,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#28a745',
+                    pointRadius: 4
+                },
+                {
+                    label: 'Gelmeyen',
+                    data: notArrivedData,
+                    borderColor: '#dc3545',
+                    backgroundColor: 'rgba(220, 53, 69, 0.2)',
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#dc3545',
+                    pointRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Aylık Gelen / Gelmeyen Rezervasyonlar',
+                    font: {
+                        size: 16
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 5
+                    }
+                }
+            }
+        }
+    });
+</script>

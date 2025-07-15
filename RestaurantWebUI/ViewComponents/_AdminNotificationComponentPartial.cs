@@ -25,7 +25,7 @@ namespace RestaurantWebUI.ViewComponents
                 rezDtos = null;
             }
             List<ResultReservationDto> unreadMessages = rezDtos?
-                                                            .Where(m => m.ReservationIsRead == false && m.ReservationStatus==false)
+                                                            .Where(m => m.ReservationIsRead == false)
                                                             .ToList()
                                                         ?? new List<ResultReservationDto>();
             return View(unreadMessages);

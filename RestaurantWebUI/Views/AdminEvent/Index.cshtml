@@ -4,8 +4,7 @@
     Layout = "~/Views/Shared/_adminLayout.cshtml";
 }
 <title>Admin Etkinlikler</title>
-<br />
-<h4 class="card-title">Etkinlik Listesi</h4>
+<h4 class="card-title mt-3">Etkinlik Listesi</h4>
 <hr />
 <div class="row mb-2">
     <div class="col text-right">
@@ -31,20 +30,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (ResultEventDto item in Model)
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>@item.EventID</td>
                     <td>@item.EventName</td>
-                    <td>@item.EventPrice.ToString("C")</td>
+                    <td>@item.EventPrice @item.EventPriceSembol</td>
                     <td>@item.EventDetails</td>
                     <td>
                         @if (item.EventImage != null && item.EventImage.Length > 0)
                         {
                             <img src="data:image/jpeg;base64,@Convert.ToBase64String(item.EventImage)"
-                                 alt="Etkinlik Resmi"
                                  class="img-thumbnail"
-                                 style="height: 60px; width: 60px; object-fit: cover;" loading="lazy" />
+                                 style="height:60px; width:60px; object-fit:cover;" />
                         }
                         else
                         {
@@ -76,28 +74,30 @@
             }
         </tbody>
     </table>
-    <br />
-    <a href="/AdminEtkinlik/Ekle" class="btn btn-success">Yeni Etkinlik Ekle</a>
+    <a href="/AdminEtkinlik/Ekle" class="btn btn-success mt-3">Yeni Etkinlik Ekle</a>
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const type = '@TempData["Type"]';
         const message = @Html.Raw(Json.Serialize(TempData["Message"]));
         const navigationType = performance.getEntriesByType("navigation")[0]?.type;
+
         if (type && message && navigationType === "navigate") {
             Swal.fire({
-                icon: type === 'success' ? 'success' : 'error',
-                title: type === 'success' ? 'Başarılı!' : 'Hata!',
+                icon: type === 'success' ? 'success' : (type === 'warning' ? 'warning' : 'error'),
+                title: type === 'success' ? 'Başarılı!' : (type === 'warning' ? 'Uyarı!' : 'Hata!'),
                 text: message,
                 timer: 3000,
                 showConfirmButton: false
             });
         }
     });
+</script>
+<script>
     function confirmDelete(id) {
         Swal.fire({
-            title: 'Emin misin?',
-            text: "Bu etkinliği silmek i silmek \u00fzeresin!",
+            title: 'Emin misiniz?',
+            text: "Bu etkinlik kalıcı olarak silinecek!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
@@ -116,8 +116,9 @@
         button.addEventListener('click', function () {
             const id = this.dataset.id;
             const newStatus = this.dataset.newStatus === "true";
+
             Swal.fire({
-                title: 'Emin misiniz?',
+                title: 'Durumu Değiştir?',
                 text: "Etkinliğin durumu değiştirilecek.",
                 icon: 'warning',
                 showCancelButton: true,
@@ -141,14 +142,14 @@
                             if (res.ok) {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Güncellendi',
-                                    text: 'Durum başarıyla değiştirildi',
+                                    title: 'Başarılı!',
+                                    text: 'Durum değiştirildi.',
                                     timer: 1500,
                                     showConfirmButton: false
                                 }).then(() => location.reload());
                             } else {
                                 res.text().then(msg => {
-                                    Swal.fire('Hata', msg, 'error');
+                                    Swal.fire('Hata!', msg, 'error');
                                 });
                             }
                         });

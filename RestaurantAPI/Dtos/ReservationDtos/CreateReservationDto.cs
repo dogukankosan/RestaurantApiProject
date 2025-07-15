@@ -10,7 +10,11 @@ namespace RestaurantAPI.Dtos.ReservationDtos
         public DateTime ReservationDate { get; set; }
         public int ReservationCountOfPeople { get; set; }
         public string ReservationMessage { get; set; }
-        public bool ReservationStatus { get; set; }
-        public bool ReservationIsRead { get; set; } 
+        public string WebLogUserIPAdress { get; set; }
+        public string WebLogUserInfo { get; set; }
+        public string WebLogUserGeo { get; set; }
+        public int ReservationStatus { get; set; }
+        public bool ReservationIsRead { get; set; }
+        public DateTime ReservationCreateDate { get; set; }
     }
 }

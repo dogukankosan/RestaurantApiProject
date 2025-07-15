@@ -1,0 +1,210 @@
+﻿@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+@using RestaurantWebUI.Dtos.ReservationDtos
+@model List<ResultReservationDto>
+<style>
+    .link-style {
+        color: #007bff;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s ease-in-out, text-decoration 0.2s;
+    }
+
+        .link-style:hover {
+            color: white !important;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+</style>
+<title>Admin Rezervasyon Listesi</title>
+<h4 class="card-title">Rezervasyonlar</h4>
+<hr />
+<div class="row mb-2">
+    <div class="col text-right">
+        <select id="exportOptions" class="form-control form-control-sm w-100 mb-2 d-md-inline-block">
+            <option value="">Dışa Aktar</option>
+            <option value="excel">📅 Excel</option>
+            <option value="pdf">📄 PDF</option>
+            <option value="print">🖨️ Yazdır</option>
+        </select>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered" id="yourTableId">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ad Soyad</th>
+                <th>E-Posta</th>
+                <th>Telefon</th>
+                <th>Tarih</th>
+                <th>Kisi Sayısı</th>
+                <th>Mesaj</th>
+                <th>Durum</th>
+                <th>Okundu</th>
+                <th>IP</th>
+                <th>Tarayıcı</th>
+                <th>Konum</th>
+                <th class="no-export">Sil</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ResultReservationDto item in Model)
+            {
+                <tr>
+                    <td>@item.ReservationID</td>
+                    <td>@item.ReservationNameSurname</td>
+                    <td>
+                        <a href="mailto:@item.ReservationEmail" title="Mail gönder" class="link-style">@item.ReservationEmail</a>
+                    </td>
+                    <td>
+                        <a href="https://wa.me/@item.ReservationPhone.Replace("+", "").Replace(" ", "")"
+                           target="_blank"
+                           title="WhatsApp ile mesaj gönder"
+                           class="link-style">
+                            @item.ReservationPhone
+                        </a>
+                    </td>
+                    <td>@item.ReservationDate.ToString("dd.MM.yyyy")</td>
+                    <td>@item.ReservationCountOfPeople</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="showMessage(`@item.ReservationMessage`)">
+                            Görüntüle
+                        </button>
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<int, string> statusOptions = new Dictionary<int, string>
+                                        {
+                                        { 0, "🕒 Beklemede" },
+                                        { 1, "✅ Onaylandı" },
+                                        { 2, "❌ Reddedildi" },
+                                        { 3, "👤 Geldi" },
+                                        { 4, "🚫 Gelmedi" }
+                                        };
+                        }
+                        <select class="form-select form-select-sm border border-secondary rounded-pill shadow-sm text-dark fw-semibold"
+                                style="min-width: 140px; padding-left: 0.75rem; padding-right: 0.75rem;"
+                                onchange="updateStatus(@item.ReservationID, this.value)">
+                            @foreach (var opt in statusOptions)
+                            {
+                                <option value="@opt.Key" selected="@(item.ReservationStatus == opt.Key ? "selected" : null)">
+                                    @opt.Value
+                                </option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <span class="badge text-white @(item.ReservationIsRead ? "bg-success" : "bg-danger")"
+                              style="cursor:pointer"
+                              onclick="toggleRead(@item.ReservationID)">
+                            @(item.ReservationIsRead ? "Okundu" : "Bekliyor")
+                        </span>
+
+                    </td>
+                    <td>@item.WebLogUserIPAdress</td>
+                    <td>
+                        <span title="@item.WebLogUserInfo">
+                            @(item.WebLogUserInfo?.Length > 25 ? item.WebLogUserInfo[..25] + "..." : item.WebLogUserInfo)
+                        </span>
+                    </td>
+                    <td>@item.WebLogUserGeo</td>
+                    <td>
+                        <button class="btn btn-outline-danger btn-sm" onclick="confirmDelete(@item.ReservationID)">
+                            <i data-feather="trash-2"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    function showMessage(msg) {
+        Swal.fire({
+            title: 'Rezervasyon Mesajı',
+            text: msg || "Mesaj yok.",
+            icon: 'info',
+            confirmButtonText: 'Kapat'
+        });
+    }
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Rezervasyon silinsin mi?',
+            text: "Bu işlemi geri alamazsınız!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Evet, sil',
+            cancelButtonText: 'Vazgeç'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = `/AdminRezervasyon/Sil/${id}`;
+            }
+        });
+    }
+     function updateStatus(id, newStatus) {
+        fetch(`/AdminRezervasyon/DurumGuncelle/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reservationID: id,
+                reservationStatus: parseInt(newStatus)
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Durum Güncellendi',
+                    text: data.message || 'Rezervasyon durumu başarıyla güncellendi.',
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => location.reload()); 
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Hata',
+                    text: data.message || 'Durum güncellenemedi'
+                });
+            }
+        })
+        .catch(() => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sunucu Hatası',
+                text: 'Rezervasyon durumu güncellenirken bir hata oluştu.'
+            });
+        });
+    }
+      function toggleRead(id) {
+        fetch(`/AdminRezervasyon/OkunduToggle/${id}`, {
+            method: 'POST'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Durum Güncellendi',
+                    text: data.message,
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => location.reload());
+            } else {
+                Swal.fire("Hata", data.message || "Güncelleme başarısız", "error");
+            }
+        })
+        .catch(() => {
+            Swal.fire("Hata", "Sunucuya bağlanırken hata oluştu", "error");
+        });
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        if (window.feather) feather.replace();
+    });
+</script>

@@ -224,7 +224,7 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("CompanyInfoPhone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("CompanyInfoWebSiteLink")
                         .IsRequired()
@@ -250,6 +250,61 @@ namespace RestaurantAPI.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RestaurantAPI.Entities.Email", b =>
+                {
+                    b.Property<int>("EmailID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmailID"), 1L, 1);
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EmailBox")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EmailCompanyName")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("EmailImage")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("EmailPassword")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EmailPhone")
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<int>("EmailPort")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EmailSSl")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmailServer")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("EmailID");
+
+                    b.ToTable("Emails");
+
+                    b.HasData(
+                        new
+                        {
+                            EmailID = 1,
+                            EmailAddress = "",
+                            EmailBox = "",
+                            EmailCompanyName = "",
+                            EmailImage = new byte[0],
+                            EmailPassword = "",
+                            EmailPhone = "",
+                            EmailPort = 0,
+                            EmailSSl = 0,
+                            EmailServer = ""
+                        });
+                });
+
             modelBuilder.Entity("RestaurantAPI.Entities.Event", b =>
                 {
                     b.Property<int>("EventID")
@@ -272,6 +327,10 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<decimal>("EventPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("EventPriceSembol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<bool>("EventStatus")
                         .HasColumnType("bit");
@@ -394,7 +453,7 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("MessagePhone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<DateTime>("MessageSendDate")
                         .HasColumnType("smalldatetime");
@@ -402,6 +461,18 @@ namespace RestaurantAPI.Migrations
                     b.Property<string>("MessageSubject")
                         .IsRequired()
                         .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("WebLogUserGeo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(75)");
+
+                    b.Property<string>("WebLogUserIPAdress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("WebLogUserInfo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("MessageID");
 
@@ -436,7 +507,7 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ProductPriceSembol")
                         .IsRequired()
-                        .HasColumnType("nchar(1)");
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<bool>("ProductStatus")
                         .HasColumnType("bit");
@@ -459,6 +530,9 @@ namespace RestaurantAPI.Migrations
                     b.Property<int>("ReservationCountOfPeople")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("ReservationCreateDate")
+                        .HasColumnType("smalldatetime");
+
                     b.Property<DateTime>("ReservationDate")
                         .HasColumnType("smalldatetime");
 
@@ -479,10 +553,22 @@ namespace RestaurantAPI.Migrations
 
                     b.Property<string>("ReservationPhone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(25)");
 
-                    b.Property<bool>("ReservationStatus")
-                        .HasColumnType("bit");
+                    b.Property<int>("ReservationStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WebLogUserGeo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(75)");
+
+                    b.Property<string>("WebLogUserIPAdress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<string>("WebLogUserInfo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("ReservationID");
 

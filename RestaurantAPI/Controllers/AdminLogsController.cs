@@ -21,7 +21,7 @@ namespace RestaurantAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            List<AdminLog> logs = await _context.AdminLogs
+            List<AdminLog>? logs = await _context.AdminLogs
                 .AsNoTracking()
                 .ToListAsync();
             List<ResultAdminLogDto> result = _mapper.Map<List<ResultAdminLogDto>>(logs);

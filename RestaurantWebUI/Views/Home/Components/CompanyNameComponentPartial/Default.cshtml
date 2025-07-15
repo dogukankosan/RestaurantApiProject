@@ -1,4 +1,6 @@
-﻿@model string?
+﻿@using RestaurantWebUI.Dtos.AboutDtos
+@model ResultAboutDto?
+
 @{
     if (Model == null)
     {
@@ -7,10 +9,16 @@
         </div>
         return;
     }
-    string companyName = string.IsNullOrWhiteSpace(Model)
+
+    string companyName = string.IsNullOrWhiteSpace(Model.AboutCompanyName)
         ? "Site Adı Girilmemiş"
-        : Model;
+        : Model.AboutCompanyName;
+
+    string logoSrc = (Model.AboutCompanyLogo != null && Model.AboutCompanyLogo.Length > 0)
+        ? $"data:image/jpeg;base64,{Convert.ToBase64String(Model.AboutCompanyLogo)}"
+        : "/userThema/assets/img/logo-placeholder.png"; // Yedek görsel (isteğe bağlı)
 }
+<img src="@logoSrc" width="50" height="50" alt="@companyName Logo" class="company-logo" data-aos="fade-in" data-aos-delay="50" />
 <div class="company-name" data-aos="fade-up" data-aos-delay="100">
     <h1>@companyName</h1>
 </div>
