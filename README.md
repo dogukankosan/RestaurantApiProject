@@ -115,5 +115,4 @@ MIT Lisansı – detaylar için `LICENSE` dosyasına göz atabilirsin.
 <p align="center">
   <img src="https://img.shields.io/badge/ASP.NET%20Core-API-blue?logo=dotnet" />
   <img src="https://img.shields.io/badge/SQL%20Server-Database-red?logo=microsoftsqlserver" />
-  <img src="https://img.shields.io/badge/Somee.com-Hosting-green" />
 </p>
