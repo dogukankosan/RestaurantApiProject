@@ -52,9 +52,7 @@ cd RestaurantApiProject
 ```
 
 ### 2. Veritabanı Ayarı
-
 - **connection string**: `appsettings.json` içinde ayarlı.
-- Canlı örnek (Somee.com üzerinde barındırılıyor):
 
 ```json
 "ConnectionStrings": {
@@ -72,12 +70,8 @@ cd RestaurantApiProject
 ---
 
 ## 📸 Ekran Görüntüleri
-
-| Admin Panel - Şef Listesi | Ürün Güncelleme Formu |
-|---------------------------|------------------------|
-| ![chef](screenshots/cheflist.png) | ![product](screenshots/productedit.png) |
-
-> **Not:** Ekran görüntüleri `/screenshots/` klasöründe yer almalıdır.
+<img width="1919" height="1039" alt="image" src="https://github.com/user-attachments/assets/16a52f20-2995-40af-9fe8-640a4b4dc33a" />
+<img width="1901" height="964" alt="image" src="https://github.com/user-attachments/assets/c587d161-cade-4d50-b07f-fccee5b341c4" />
 
 ---
 
